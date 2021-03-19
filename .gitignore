@@ -117,4 +117,5 @@ dmypy.json
 /bin
 /include
 .env
-.gitignore.swp
+lib64
+pyvenv.cfg
