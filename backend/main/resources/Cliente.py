@@ -1,5 +1,7 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, jsonify
+from .. import db
+from main.models import ClienteModel
 
 
 CLIENTES = {
@@ -10,31 +12,32 @@ CLIENTES = {
 
 class Cliente(Resource):
     def get(self, id):
-        if int(id) in CLIENTES:
-            return CLIENTES[int(id)]
-        return '', 404
+        cliente = db.session.query(ClienteModel).get_or_404(id)
+        return cliente.to_json()
 
     def delete(self, id):
-        if int(id) in CLIENTES:
-            del CLIENTES[int(id)]
-            return '', 204
-        return '', 404
+        cliente = db.session.query(ClienteModel).get_or_404(id)
+        db.session.delete(cliente)
+        de.session.commit()
+        return '', 204
 
     def put(self, id):
-        if int(id) in CLIENTES:
-            cliente = CLIENTES[int(id)]
-            data = request.get_json()
-            cliente.update(data)
-            return cliente, 201
-        return '', 404
+        cliente = db.session.query(ClienteModel).get_or_404(id)
+        data = request.get_json().items()
+        for key, value in data:
+            setattr(cliente, key, value)
+        db.session.add(cliente)
+        de.session.commit()
+        return cliente.to_json(), 201
 
 
 class Clientes(Resource):
     def get(self):
-        return CLIENTES
+        clientes = db.session.query(ClienteModel).all()
+        return jsonify([cliente.to_json() for cliente in clientes])
 
     def post(self):
-        cliente = request.get_json()
-        id = int(max(CLIENTES.keys())) + 1
-        CLIENTES[id] = cliente
-        return CLIENTES[id], 201
+        cliente = ClienteModel.from_json(request.get_json())
+        db.session.add(cliente)
+        db.session.commit()
+        return cliente.to_json(), 201

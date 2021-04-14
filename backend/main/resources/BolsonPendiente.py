@@ -1,6 +1,7 @@
 from flask_restful import Resource
-from flask import request
-
+from flask import request, jsonify
+from .. import db
+from main.models import BolsonModel
 
 BOLSONESPENDIENTES = {
     1: {'nombre:': 'Pendiente 1'},
@@ -10,31 +11,32 @@ BOLSONESPENDIENTES = {
 
 class BolsonPendiente(Resource):
     def get(self, id):
-        if int(id) in BOLSONESPENDIENTES:
-            return BOLSONESPENDIENTES[int(id)]
-        return '', 404
+        bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
+        return bolsonpendiente.to_json()
 
     def delete(self, id):
-        if int(id) in BOLSONESPENDIENTES:
-            del BOLSONESPENDIENTES[int(id)]
-            return '', 204
-        return '', 404
+        bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
+        db.session.delete(bolsonpendiente)
+        db.session.commit()
+        return '', 204
 
     def put(self, id):
-        if int(id) in BOLSONESPENDIENTES:
-            bolsonpendiente = BOLSONESPENDIENTES[int(id)]
-            data = request.get_json()
-            bolsonpendiente.update(data)
-            return bolsonpendiente, 201
-        return '', 204
+        bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
+        data = request.get_json().items()
+        for key, value in data:
+            setattr(bolsonpendiente, key, value)
+        db.session.add(bolsonpendiente)
+        db.session.commit()
+        return bolsonpendiente.to_json(), 201
 
 
 class BolsonesPendientes(Resource):
     def get(self):
-        return BOLSONESPENDIENTES
+        bolsonespendientes = db.session.query(BolsonModel).all()
+        return jsonify([bolsonpendiente.to_json() for bolsonpendiente in bolsonespendientes])
 
     def post(self):
-        bolsonpendiente = request.get_json()
-        id = int(max(BOLSONESPENDIENTES.keys())) + 1
-        BOLSONESPENDIENTES[id] = bolsonpendiente
-        return BOLSONESPENDIENTES[id], 201
+        bolsonpendiente = BolsonModel.from_json(request.get_json())
+        db.session.add(bolsonpendiente)
+        db.session.commit()
+        return bolsonpendiente.to_json(), 201
