@@ -3,11 +3,6 @@ from flask import request, jsonify
 from .. import db
 from main.models import BolsonModel
 
-BOLSONESPENDIENTES = {
-    1: {'nombre:': 'Pendiente 1'},
-    2: {'nombre:': 'Pendiente 2'},
-}
-
 
 class BolsonPendiente(Resource):
     def get(self, id):

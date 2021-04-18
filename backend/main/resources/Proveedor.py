@@ -4,12 +4,6 @@ from .. import db
 from main.models import ProveedorModel
 
 
-PROVEEDORES = {
-    1: {'nombre': 'Proveedor 1'},
-    2: {'nombre': 'Proveedor 2'},
-}
-
-
 class Proveedor(Resource):
     def get(self, id):
         proveedor = db.session.query(ProveedorModel).get_or_404(id)

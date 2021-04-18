@@ -4,12 +4,6 @@ from .. import db
 from main.models import ClienteModel
 
 
-CLIENTES = {
-    1: {'nombre': 'Cliente 1'},
-    2: {'nombre': 'Cliente 2'},
-}
-
-
 class Cliente(Resource):
     def get(self, id):
         cliente = db.session.query(ClienteModel).get_or_404(id)
@@ -18,7 +12,7 @@ class Cliente(Resource):
     def delete(self, id):
         cliente = db.session.query(ClienteModel).get_or_404(id)
         db.session.delete(cliente)
-        de.session.commit()
+        db.session.commit()
         return '', 204
 
     def put(self, id):
@@ -27,7 +21,7 @@ class Cliente(Resource):
         for key, value in data:
             setattr(cliente, key, value)
         db.session.add(cliente)
-        de.session.commit()
+        db.session.commit()
         return cliente.to_json(), 201
 
 
