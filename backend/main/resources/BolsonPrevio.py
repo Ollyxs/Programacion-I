@@ -2,12 +2,11 @@ from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
 from main.models import BolsonModel
+import datetime
 
 
-BOLSONESPREVIOS = {
-    1: {'nombre': 'BolsonPrevio 1'},
-    2: {'nombre': 'BolsonPrevio 2'},
-}
+hoy = datetime.datetime.now()
+fechaPrev = hoy - datetime.timedelta(weeks=1)
 
 
 class BolsonPrevio(Resource):
@@ -18,5 +17,5 @@ class BolsonPrevio(Resource):
 
 class BolsonesPrevios(Resource):
     def get(self):
-        bolsonesprevios = db.session.query(BolsonModel).all()
+        bolsonesprevios = db.session.query(BolsonModel).filter(BolsonModel.fecha <= fechaPrev).all()
         return jsonify([bolsonprevio.to_json() for bolsonprevio in bolsonesprevios])

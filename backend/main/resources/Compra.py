@@ -4,12 +4,6 @@ from .. import db
 from main.models import CompraModel
 
 
-COMPRAS = {
-    1: {'nombre': 'Compra 1'},
-    2: {'nombre': 'Compra 2'},
-}
-
-
 class Compra(Resource):
     def get(self, id):
         compra = db.session.query(CompraModel).get_or_404(id)

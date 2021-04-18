@@ -4,12 +4,6 @@ from .. import db
 from main.models import BolsonModel
 
 
-BOLSONESVENTAS = {
-    1: {'nombre': 'BolsonVenta 1'},
-    2: {'nombre': 'BolsonVenta 2'},
-}
-
-
 class BolsonVenta(Resource):
     def get(self, id):
         bolsonventa = db.session.query(BolsonModel).get_or_404(id)

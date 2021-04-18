@@ -4,12 +4,6 @@ from .. import db
 from main.models import ProductoModel
 
 
-PRODUCTOS = {
-    1: {'nombre': 'Producto 1'},
-    2: {'nombre': 'Producto 2'},
-}
-
-
 class Producto(Resource):
     def get(self, id):
         producto = db.session.query(ProductoModel).get_or_404(id)
