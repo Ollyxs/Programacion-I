@@ -15,7 +15,7 @@ class Bolson(db.Model):
             'id': self.id,
             'nombre': str(self.nombre),
             'aprobado': self.aprobado,
-            'fecha': self.date,
+            'fecha': self.fecha,
         }
         return bolson_json
 
@@ -28,5 +28,5 @@ class Bolson(db.Model):
         return Bolson(id=id,
                       nombre=nombre,
                       aprobado=aprobado,
-                      fecha=fecha
+                      fecha=fecha,
                       )

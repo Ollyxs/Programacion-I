@@ -34,7 +34,7 @@ class Producto(Resource):
 class Productos(Resource):
     def get(self):
         productos = db.session.query(ProductoModel).all()
-        return jsonify([productos.to_json() for producto in productos])
+        return jsonify([producto.to_json() for producto in productos])
 
     def post(self):
         producto = ProductoModel.from_json(request.get_json())

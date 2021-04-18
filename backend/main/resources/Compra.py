@@ -38,6 +38,6 @@ class Compras(Resource):
 
     def post(self):
         compra = CompraModel.from_json(request.get_json())
-        db.session.add(Compra)
+        db.session.add(compra)
         db.session.commit()
         return compra.to_json(), 201

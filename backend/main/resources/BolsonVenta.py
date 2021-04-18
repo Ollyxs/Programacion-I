@@ -18,5 +18,5 @@ class BolsonVenta(Resource):
 
 class BolsonesVentas(Resource):
     def get(self):
-        bolsonesventas = db.session.query(BolsonModel).all()
+        bolsonesventas = db.session.query(BolsonModel).filter_by(aprobado=True).all()
         return jsonify([bolsonventa.to_json() for bolsonventa in bolsonesventas])

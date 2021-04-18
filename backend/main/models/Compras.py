@@ -1,11 +1,12 @@
 from .. import db
+from datetime import datetime
 
 
 class Compra(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     clienteid = db.Column(db.Integer, nullable=False)
     bolsonid = db.Column(db.Integer, nullable=False)
-    fechaHoraCompra = db.Column(db.DateTime)
+    fechaHoraCompra = db.Column(db.DateTime, default=datetime.now)
     retirado = db.Column(db.Boolean)
 
     def __repr__(self):
@@ -16,7 +17,7 @@ class Compra(db.Model):
             'id': self.id,
             'clienteid': self.clienteid,
             'bolsonid': self.bolsonid,
-            'fechaHoraCompra': self.fechaHoraCompra,
+            'fechaHoraCompra': str(self.fechaHoraCompra),
             'retirado': self.retirado,
         }
         return compra_json

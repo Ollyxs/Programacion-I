@@ -19,7 +19,7 @@ class Proveedor(db.Model):
 
     @staticmethod
     def from_json(proveedor_json):
-        id = proveedor_json('id')
+        id = proveedor_json.get('id')
         nombbre = proveedor_json.get('nombre')
         telefono = proveedor_json.get('telefono')
         return Proveedor(id=id,
