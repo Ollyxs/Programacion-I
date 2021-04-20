@@ -7,6 +7,7 @@ class Cliente(db.Model):
     apellido = db.Column(db.String(100), nullable=False)
     telefono = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
+    compra = db.relationship('Compra', back_populates='cliente')
 
     def __repr__(self):
         return '<Cliente %r %r %r %r >' % (self.nombre, self.apellido, self.telefono, self.email)

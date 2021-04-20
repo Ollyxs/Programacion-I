@@ -4,8 +4,10 @@ from datetime import datetime
 
 class Compra(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    clienteid = db.Column(db.Integer, nullable=False)
-    bolsonid = db.Column(db.Integer, nullable=False)
+    clienteid = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=False)
+    cliente = db.relationship('Cliente', back_populates='compra')
+    bolsonid = db.Column(db.Integer, db.ForeignKey('bolson.id'), nullable=False)
+    bolson = db.relationship('Bolson', back_populates='compra')
     fechaHoraCompra = db.Column(db.DateTime, default=datetime.now)
     retirado = db.Column(db.Boolean)
 
@@ -15,8 +17,8 @@ class Compra(db.Model):
     def to_json(self):
         compra_json = {
             'id': self.id,
-            'clienteid': self.clienteid,
-            'bolsonid': self.bolsonid,
+            'cliente': self.cliente.nombre,
+            'bolson': self.bolson.nombre,
             'fechaHoraCompra': str(self.fechaHoraCompra),
             'retirado': self.retirado,
         }

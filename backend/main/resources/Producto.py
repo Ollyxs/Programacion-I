@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
-from main.models import ProductoModel
+from main.models import ProductoModel, ProveedorModel
 
 
 class Producto(Resource):
@@ -32,6 +32,7 @@ class Productos(Resource):
 
     def post(self):
         producto = ProductoModel.from_json(request.get_json())
+        proveedor = db.session.query(ProveedorModel).get_or_404(producto.proveedorid)
         db.session.add(producto)
         db.session.commit()
         return producto.to_json(), 201
