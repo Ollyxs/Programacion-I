@@ -7,7 +7,10 @@ from main.models import BolsonModel
 class BolsonPendiente(Resource):
     def get(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
-        return bolsonpendiente.to_json()
+        if bolsonpendiente.aprobado == 0:
+            return bolsonpendiente.to_json()
+        else:
+            return '', 404
 
     def delete(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)

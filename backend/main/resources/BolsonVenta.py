@@ -7,10 +7,13 @@ from main.models import BolsonModel
 class BolsonVenta(Resource):
     def get(self, id):
         bolsonventa = db.session.query(BolsonModel).get_or_404(id)
-        return bolsonventa.to_json()
+        if bolsonventa.aprobado == 1:
+            return bolsonventa.to_json()
+        else:
+            return '', 404
 
 
 class BolsonesVentas(Resource):
     def get(self):
-        bolsonesventas = db.session.query(BolsonModel).filter_by(aprobado=True).all()
+        bolsonesventas = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 1).all()
         return jsonify([bolsonventa.to_json() for bolsonventa in bolsonesventas])

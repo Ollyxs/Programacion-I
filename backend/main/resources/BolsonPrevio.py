@@ -12,7 +12,10 @@ fechaPrev = hoy - datetime.timedelta(weeks=1)
 class BolsonPrevio(Resource):
     def get(self, id):
         bolsonprevio = db.session.query(BolsonModel).get_or_404(id)
-        return bolsonprevio.to_json()
+        if bolsonprevio.fecha <= fechaPrev:
+            return bolsonprevio.to_json()
+        else:
+            return '', 404
 
 
 class BolsonesPrevios(Resource):
