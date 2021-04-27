@@ -27,11 +27,28 @@ class Cliente(Resource):
 
 class Clientes(Resource):
     def get(self):
-        clientes = db.session.query(ClienteModel).all()
-        return jsonify([cliente.to_json() for cliente in clientes])
+        page = 1
+        per_page = 10
+        clientes = db.session.query(ClienteModel)
+        if request.get_json():
+            filters = request.get_json().items()
+            for key, value in filters:
+                if key == 'page':
+                    page = int(value)
+                if key == 'per_page':
+                    per_page = int(value)
+        clientes = clientes.paginate(page, per_page, True, 30)
+        return jsonify({'clientes': [cliente.to_json() for cliente in clientes.items],
+                        'total': clientes.total,
+                        'pages': clientes.pages,
+                        'page': page
+                        })
 
     def post(self):
         cliente = ClienteModel.from_json(request.get_json())
-        db.session.add(cliente)
-        db.session.commit()
+        try:
+            db.session.add(cliente)
+            db.session.commit()
+        except:
+            return 'Formato no correcto', 400
         return cliente.to_json(), 201

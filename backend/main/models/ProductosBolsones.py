@@ -4,9 +4,9 @@ from .. import db
 class BolsonProducto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     productoid = db.Column(db.Integer, db.ForeignKey('producto.id'), nullable=False)
-    producto = db.relationship('Producto', back_populates='bolsones')
+    producto = db.relationship('Producto', back_populates='bolsones', uselist=False, single_parent=True)
     bolsonid = db.Column(db.Integer, db.ForeignKey('bolson.id'), nullable=False)
-    bolson = db.relationship('Bolson', back_populates='productos')
+    bolson = db.relationship('Bolson', back_populates='productos', uselist=False, single_parent=True)
 
     def __repr__(self):
         return '<BolsonProducto: %r %r >' % (self.productoid, self.bolsonid)

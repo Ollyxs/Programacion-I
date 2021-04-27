@@ -27,13 +27,30 @@ class Compra(Resource):
 
 class Compras(Resource):
     def get(self):
-        compras = db.session.query(CompraModel).all()
-        return jsonify([compra.to_json() for compra in compras])
+        page = 1
+        per_page = 10
+        compras = db.session.query(CompraModel)
+        if request.get_json():
+            filters = request.get_json().items()
+            for key, value in filters:
+                if key == 'page':
+                    page = int(value)
+                if key == 'per_page':
+                    per_page = int(value)
+        compras = compras.paginate(page, per_page, True, 30)
+        return jsonify({'compras': [compra.to_json() for compra in compras.items],
+                        'total': compras.total,
+                        'pages': compras.pages,
+                        'page': page
+                        })
 
     def post(self):
         compra = CompraModel.from_json(request.get_json())
         cliente = db.session.query(ClienteModel).get_or_404(compra.clienteid)
         bolson = db.session.query(BolsonModel).get_or_404(compra.bolsonid)
-        db.session.add(compra)
-        db.session.commit()
+        try:
+            db.session.add(compra)
+            db.session.commit()
+        except:
+            return 'Formato no correcto', 400
         return compra.to_json(), 201

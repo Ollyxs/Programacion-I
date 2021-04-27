@@ -10,8 +10,8 @@ class Bolson(db.Model):
     nombre = db.Column(db.String(100), nullable=False)
     aprobado = db.Column(db.Boolean, default=False)
     fecha = db.Column(db.DateTime)
-    productos = db.relationship('BolsonProducto', back_populates='bolson')
-    compra = db.relationship('Compra', back_populates='bolson')
+    productos = db.relationship('BolsonProducto', back_populates='bolson', cascade='all, delete-orphan')
+    compra = db.relationship('Compra', back_populates='bolson', cascade='all, delete-orphan')
 
     def __repr__(self):
         return '<Bolson: %r %r %r >' % (self.nombre, self.aprobado, self.fecha)
@@ -31,8 +31,11 @@ class Bolson(db.Model):
         nombre = bolson_json.get('nombre')
         aprobado = bolson_json.get('aprobado')
         fecha = bolson_json.get('fecha')
-        return Bolson(id=id,
-                      nombre=nombre,
-                      aprobado=aprobado,
-                      fecha=datetime.datetime.strptime(fecha, formato),
-                      )
+        try:
+            return Bolson(id=id,
+                          nombre=nombre,
+                          aprobado=aprobado,
+                          fecha=datetime.datetime.strptime(fecha, formato),
+                          )
+        except:
+            return '', 400

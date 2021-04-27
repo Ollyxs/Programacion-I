@@ -32,6 +32,9 @@ class Proveedores(Resource):
 
     def post(self):
         proveedor = ProveedorModel.from_json(request.get_json())
-        db.session.add(proveedor)
-        db.session.commit()
+        try:
+            db.session.add(proveedor)
+            db.session.commit()
+        except:
+            return 'Formato no correcto', 400
         return proveedor.to_json(), 201

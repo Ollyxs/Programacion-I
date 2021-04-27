@@ -5,11 +5,11 @@ from datetime import datetime
 class Compra(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     clienteid = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=False)
-    cliente = db.relationship('Cliente', back_populates='compra')
+    cliente = db.relationship('Cliente', back_populates='compra', uselist=False, single_parent=True)
     bolsonid = db.Column(db.Integer, db.ForeignKey('bolson.id'), nullable=False)
-    bolson = db.relationship('Bolson', back_populates='compra')
+    bolson = db.relationship('Bolson', back_populates='compra', uselist=False, single_parent=True)
     fechaHoraCompra = db.Column(db.DateTime, default=datetime.now)
-    retirado = db.Column(db.Boolean)
+    retirado = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<Compra: %r %r %r %r >' % (self.clienteid, self.bolsonid, self.fechaHoraCompra, self.retirado)
