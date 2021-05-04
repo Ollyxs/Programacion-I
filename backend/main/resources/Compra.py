@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
-from main.models import CompraModel, ClienteModel, BolsonModel
+from main.models import CompraModel, UsuarioModel, BolsonModel
 
 
 class Compra(Resource):
@@ -46,7 +46,7 @@ class Compras(Resource):
 
     def post(self):
         compra = CompraModel.from_json(request.get_json())
-        cliente = db.session.query(ClienteModel).get_or_404(compra.clienteid)
+        cliente = db.session.query(UsuarioModel).get_or_404(compra.clienteid)
         bolson = db.session.query(BolsonModel).get_or_404(compra.bolsonid)
         try:
             db.session.add(compra)

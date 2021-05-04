@@ -1,35 +1,48 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
-from main.models import ClienteModel
+from main.models import UsuarioModel
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class Cliente(Resource):
+    @jwt_required()
     def get(self, id):
-        cliente = db.session.query(ClienteModel).get_or_404(id)
-        return cliente.to_json()
+        cliente = db.session.query(UsuarioModel).get_or_404(id)
+        if cliente.role == 'cliente':
+            return cliente.to_json()
+        else:
+            return '', 404
 
     def delete(self, id):
-        cliente = db.session.query(ClienteModel).get_or_404(id)
-        db.session.delete(cliente)
-        db.session.commit()
-        return '', 204
+        cliente = db.session.query(UsuarioModel).get_or_404(id)
+        if cliente.role == 'cliente':
+            db.session.delete(cliente)
+            db.session.commit()
+            return '', 204
+        else:
+            return '', 404
 
+    @jwt_required()
     def put(self, id):
-        cliente = db.session.query(ClienteModel).get_or_404(id)
-        data = request.get_json().items()
-        for key, value in data:
-            setattr(cliente, key, value)
-        db.session.add(cliente)
-        db.session.commit()
-        return cliente.to_json(), 201
+        cliente = db.session.query(UsuarioModel).get_or_404(id)
+        if cliente.role == 'cliente':
+            data = request.get_json().items()
+            for key, value in data:
+                setattr(cliente, key, value)
+            db.session.add(cliente)
+            db.session.commit()
+            return cliente.to_json(), 201
+        else:
+            return '', 404
 
 
 class Clientes(Resource):
+    @jwt_required()
     def get(self):
         page = 1
         per_page = 10
-        clientes = db.session.query(ClienteModel)
+        clientes = db.session.query(UsuarioModel).filter(UsuarioModel.role == 'cliente')
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
@@ -44,11 +57,13 @@ class Clientes(Resource):
                         'page': page
                         })
 
+    @jwt_required()
     def post(self):
-        cliente = ClienteModel.from_json(request.get_json())
-        try:
-            db.session.add(cliente)
-            db.session.commit()
-        except:
-            return 'Formato no correcto', 400
-        return cliente.to_json(), 201
+        cliente = UsuarioModel.from_json(request.get_json())
+        if cliente.role == 'cliente':
+            try:
+                db.session.add(cliente)
+                db.session.commit()
+            except:
+                return 'Formato no correcto', 400
+            return cliente.to_json(), 201

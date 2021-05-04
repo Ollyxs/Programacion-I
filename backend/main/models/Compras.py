@@ -4,7 +4,7 @@ from datetime import datetime
 
 class Compra(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    clienteid = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=False)
+    clienteid = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     cliente = db.relationship('Cliente', back_populates='compra', uselist=False, single_parent=True)
     bolsonid = db.Column(db.Integer, db.ForeignKey('bolson.id'), nullable=False)
     bolson = db.relationship('Bolson', back_populates='compra', uselist=False, single_parent=True)
