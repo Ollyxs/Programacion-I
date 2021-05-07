@@ -5,7 +5,7 @@ from datetime import datetime
 class Compra(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     clienteid = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
-    cliente = db.relationship('Cliente', back_populates='compra', uselist=False, single_parent=True)
+    cliente = db.relationship('Usuario', back_populates='compra', uselist=False, single_parent=True)
     bolsonid = db.Column(db.Integer, db.ForeignKey('bolson.id'), nullable=False)
     bolson = db.relationship('Bolson', back_populates='compra', uselist=False, single_parent=True)
     fechaHoraCompra = db.Column(db.DateTime, default=datetime.now)

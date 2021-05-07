@@ -3,6 +3,7 @@ from flask import request, jsonify
 from .. import db
 from main.models import UsuarioModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from main.auth.decorators import admin_required
 
 
 class Proveedor(Resource):
@@ -14,6 +15,7 @@ class Proveedor(Resource):
         else:
             return '', 404
 
+    @admin_required
     def delete(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
         if proveedor.role == 'proveedor':
@@ -23,7 +25,7 @@ class Proveedor(Resource):
         else:
             return '', 404
 
-    @jwt_required()
+    @admin_required
     def put(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
         if proveedor.role == 'proveedor':
@@ -43,13 +45,14 @@ class Proveedores(Resource):
         proveedores = db.session.query(UsuarioModel).filter(UsuarioModel.role == 'proveedor').all()
         return jsonify([proveedor.to_json() for proveedor in proveedores])
 
+    @admin_required
     def post(self):
         proveedor = UsuarioModel.from_json(request.get_json())
         if proveedor.role == 'proveedor':
             try:
                 db.session.add(proveedor)
                 db.session.commit()
-            except:
+            except Exception as error:
                 return 'Formato no correcto', 400
             return proveedor.to_json(), 201
         else:

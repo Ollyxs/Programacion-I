@@ -3,6 +3,7 @@ from flask import request, jsonify
 from .. import db
 from main.models import BolsonModel
 import datetime
+from main.auth.decorators import admin_required
 
 
 hoy = datetime.datetime.now()
@@ -10,6 +11,7 @@ fechaPrev = hoy - datetime.timedelta(weeks=1)
 
 
 class BolsonPrevio(Resource):
+    @admin_required
     def get(self, id):
         bolsonprevio = db.session.query(BolsonModel).get_or_404(id)
         if bolsonprevio.fecha <= fechaPrev:
@@ -19,6 +21,7 @@ class BolsonPrevio(Resource):
 
 
 class BolsonesPrevios(Resource):
+    @admin_required
     def get(self):
         page = 1
         per_page = 10

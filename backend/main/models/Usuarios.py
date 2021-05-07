@@ -8,10 +8,10 @@ class Usuario(db.Model):
     apellido = db.Column(db.String(100))
     telefono = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, index=True, nullable=False)
-    contrasena = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(10), nullable=False, default="cliente")
     compra = db.relationship('Compra', back_populates='cliente', cascade='all, delete-orphan')
-    productos = db.relationship('Product', back_populates='proveedor', cascade='all, delete-orphan')
+    productos = db.relationship('Producto', back_populates='proveedor', cascade='all, delete-orphan')
 
     @property
     def plain_password(self):
@@ -28,26 +28,15 @@ class Usuario(db.Model):
         return '<Usuario: %r %r %r %r %r >' % (self.nombre, self.apellido, self.telefono, self.email, self.role)
 
     def to_json(self):
-        usuario = db.session.query(UsuarioModel).get_or_404(id)
-        if usuario.role == 'cliente':
-            cliente_json = {
-                'id': self.id,
-                'nombre': str(self.nombre),
-                'apellido': str(self.apellido),
-                'telefono': str(self.telefono),
-                'email': str(self.email),
-                'role': str(self.role),
-            }
-            return cliente_json
-        if usuario.role == 'proveedor':
-            proveedor_json = {
-                'id': self.id,
-                'nombre': str(self.nombre),
-                'telefono': str(self.telefono),
-                'email': str(self.email),
-                'role': str(self.role),
-            }
-            return proveedor_json
+        usuario_json = {
+            'id': self.id,
+            'nombre': str(self.nombre),
+            'apellido': str(self.apellido),
+            'telefono': str(self.telefono),
+            'email': str(self.email),
+            'role': str(self.role),
+        }
+        return usuario_json
 
     @staticmethod
     def from_json(usuario_json):
@@ -62,7 +51,7 @@ class Usuario(db.Model):
                        nombre=nombre,
                        apellido=apellido,
                        telefono=telefono,
-                       email =email,
+                       email=email,
                        plain_password=password,
                        role=role,
                        )

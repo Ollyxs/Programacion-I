@@ -3,6 +3,7 @@ from flask import request, jsonify
 from .. import db
 from main.models import UsuarioModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from main.auth.decorators import admin_required
 
 
 class Cliente(Resource):
@@ -14,6 +15,7 @@ class Cliente(Resource):
         else:
             return '', 404
 
+    @admin_required
     def delete(self, id):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         if cliente.role == 'cliente':
@@ -64,6 +66,6 @@ class Clientes(Resource):
             try:
                 db.session.add(cliente)
                 db.session.commit()
-            except:
+            except Exception as error:
                 return 'Formato no correcto', 400
             return cliente.to_json(), 201
