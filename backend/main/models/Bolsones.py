@@ -1,5 +1,5 @@
 from .. import db
-import datetime
+from datetime import datetime
 
 
 formato = "%Y-%m-%d"
@@ -21,21 +21,21 @@ class Bolson(db.Model):
             'id': self.id,
             'nombre': str(self.nombre),
             'aprobado': self.aprobado,
-            'fecha': datetime.datetime.strftime(self.fecha, formato),
+            'fecha': str(datetime.strftime(self.fecha, formato)),
         }
         return bolson_json
 
     @staticmethod
     def from_json(bolson_json):
-        id = bolson_json.get('id')
-        nombre = bolson_json.get('nombre')
-        aprobado = bolson_json.get('aprobado')
-        fecha = bolson_json.get('fecha')
         try:
+            id = bolson_json.get('id')
+            nombre = bolson_json.get('nombre')
+            aprobado = bolson_json.get('aprobado')
+            fecha = datetime.strptime(bolson_json.get('fecha'), formato)
             return Bolson(id=id,
                           nombre=nombre,
                           aprobado=aprobado,
-                          fecha=datetime.datetime.strptime(fecha, formato),
+                          fecha=fecha,
                           )
-        except:
+        except Exception:
             return '', 400

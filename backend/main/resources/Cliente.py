@@ -3,11 +3,11 @@ from flask import request, jsonify
 from .. import db
 from main.models import UsuarioModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from main.auth.decorators import admin_required
+from main.auth.decorators import admin_required, client_required, admin_client_required
 
 
 class Cliente(Resource):
-    @jwt_required()
+    @admin_required
     def get(self, id):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         if cliente.role == 'cliente':
@@ -15,7 +15,7 @@ class Cliente(Resource):
         else:
             return '', 404
 
-    @admin_required
+    @admin_client_required
     def delete(self, id):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         if cliente.role == 'cliente':
@@ -25,10 +25,11 @@ class Cliente(Resource):
         else:
             return '', 404
 
-    @jwt_required()
+    @client_required
     def put(self, id):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
-        if cliente.role == 'cliente':
+        clienteid = get_jwt_identity()
+        if cliente.id == clienteid:
             data = request.get_json().items()
             for key, value in data:
                 setattr(cliente, key, value)
@@ -40,7 +41,7 @@ class Cliente(Resource):
 
 
 class Clientes(Resource):
-    @jwt_required()
+    @admin_required
     def get(self):
         page = 1
         per_page = 10
@@ -59,13 +60,11 @@ class Clientes(Resource):
                         'page': page
                         })
 
-    @jwt_required()
     def post(self):
         cliente = UsuarioModel.from_json(request.get_json())
-        if cliente.role == 'cliente':
-            try:
-                db.session.add(cliente)
-                db.session.commit()
-            except Exception as error:
-                return 'Formato no correcto', 400
-            return cliente.to_json(), 201
+        try:
+            db.session.add(cliente)
+            db.session.commit()
+        except Exception:
+            return 'Formato no correcto', 400
+        return cliente.to_json(), 201

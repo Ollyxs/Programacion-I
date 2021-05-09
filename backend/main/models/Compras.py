@@ -1,4 +1,5 @@
 from .. import db
+from . import UsuarioModel
 from datetime import datetime
 
 

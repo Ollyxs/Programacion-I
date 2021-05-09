@@ -47,11 +47,14 @@ class Usuario(db.Model):
         email = usuario_json.get('email')
         password = usuario_json.get('password')
         role = usuario_json.get('role')
-        return Usuario(id=id,
-                       nombre=nombre,
-                       apellido=apellido,
-                       telefono=telefono,
-                       email=email,
-                       plain_password=password,
-                       role=role,
-                       )
+        try:
+            return Usuario(id=id,
+                           nombre=nombre,
+                           apellido=apellido,
+                           telefono=telefono,
+                           email=email,
+                           plain_password=password,
+                           role=role,
+                           )
+        except Exception:
+            return '', 400

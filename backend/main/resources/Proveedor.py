@@ -3,11 +3,11 @@ from flask import request, jsonify
 from .. import db
 from main.models import UsuarioModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from main.auth.decorators import admin_required
+from main.auth.decorators import admin_required, admin_provider_required
 
 
 class Proveedor(Resource):
-    @jwt_required()
+    @admin_provider_required
     def get(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
         if proveedor.role == 'proveedor':
@@ -40,7 +40,6 @@ class Proveedor(Resource):
 
 
 class Proveedores(Resource):
-    @jwt_required()
     def get(self):
         proveedores = db.session.query(UsuarioModel).filter(UsuarioModel.role == 'proveedor').all()
         return jsonify([proveedor.to_json() for proveedor in proveedores])
@@ -52,7 +51,7 @@ class Proveedores(Resource):
             try:
                 db.session.add(proveedor)
                 db.session.commit()
-            except Exception as error:
+            except Exception:
                 return 'Formato no correcto', 400
             return proveedor.to_json(), 201
         else:

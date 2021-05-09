@@ -1,19 +1,16 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
-from main.models import CompraModel, UsuarioModel, BolsonModel
+from main.models import CompraModel, BolsonModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from main.auth.decorators import admin_required
+from main.auth.decorators import admin_required, client_required, admin_client_required
 
 
 class Compra(Resource):
-    @jwt_required()
+    @admin_client_required
     def get(self, id):
         compra = db.session.query(CompraModel).get_or_404(id)
-        if UsuarioModel.role == 'cliente' or UsuarioModel.role == 'admin':
-            return compra.to_json()
-        else:
-            return '', 404
+        return compra.to_json()
 
     @admin_required
     def delete(self, id):
@@ -53,14 +50,18 @@ class Compras(Resource):
                         'page': page
                         })
 
-    @jwt_required()
+    @client_required
     def post(self):
         compra = CompraModel.from_json(request.get_json())
-        cliente = db.session.query(UsuarioModel).get_or_404(compra.clienteid)
         bolson = db.session.query(BolsonModel).get_or_404(compra.bolsonid)
-        try:
-            db.session.add(compra)
-            db.session.commit()
-        except Exception as error:
-            return 'Formato no correcto', 400
-        return compra.to_json(), 201
+        cliente = get_jwt_identity()
+        compra.clienteid = cliente
+        if bolson.aprobado == 1:
+            try:
+                db.session.add(compra)
+                db.session.commit()
+            except Exception:
+                return 'Formato no correcto', 400
+            return compra.to_json(), 201
+        else:
+            return 'ID de bolson no correcto', 400

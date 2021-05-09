@@ -3,11 +3,11 @@ from flask import request, jsonify
 from .. import db
 from main.models import BolsonModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from main.auth.decorators import admin_required
+from main.auth.decorators import admin_required, admin_provider_required
 
 
 class BolsonPendiente(Resource):
-    @jwt_required()
+    @admin_provider_required
     def get(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
         if bolsonpendiente.aprobado == 0:
@@ -34,7 +34,7 @@ class BolsonPendiente(Resource):
 
 
 class BolsonesPendientes(Resource):
-    @jwt_required()
+    @admin_provider_required
     def get(self):
         page = 1
         per_page = 10

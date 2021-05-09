@@ -14,7 +14,7 @@ class Producto(db.Model):
     def to_json(self):
         producto_json = {
             'id': self.id,
-            'nombre': str(self.nombre),
+            'nombre': self.nombre,
             'proveedor': self.proveedor.nombre,
         }
         return producto_json
