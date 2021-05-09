@@ -62,9 +62,13 @@ class Clientes(Resource):
 
     def post(self):
         cliente = UsuarioModel.from_json(request.get_json())
-        try:
-            db.session.add(cliente)
-            db.session.commit()
-        except Exception:
-            return 'Formato no correcto', 400
-        return cliente.to_json(), 201
+        emailcheck = db.session.query(UsuarioModel).filter(UsuarioModel.email == cliente.email)
+        if emailcheck:
+            try:
+                db.session.add(cliente)
+                db.session.commit()
+            except Exception:
+                return 'Formato no correcto', 400
+            return cliente.to_json(), 201
+        else:
+            return 'Email alredy in use', 409
