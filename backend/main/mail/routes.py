@@ -12,10 +12,10 @@ mail = Blueprint('mail', __name__, url_prefix='/mail')
 #@admin_required
 def promo():
     cliente = db.session.query(UsuarioModel).filter(UsuarioModel.role == 'cliente').all()
-    lista_mails = [c.email for c in cliente]
-    print(lista_mails)
-    try:
-        sent = sendMail([lista_mails], "Promocion!", 'promocion', cliente=cliente)
-    except Exception as error:
-        return str(error), 409
-    return cliente.to_json(), 201
+    for i in cliente:
+        try:
+            sent = sendMail([i.email], "Promocion!", 'promocion', cliente=i)
+        except Exception as error:
+            return str(error), 409
+    # return cliente.to_json(), 201
+    return 'Enviado', 200

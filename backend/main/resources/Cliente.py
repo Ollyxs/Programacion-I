@@ -18,7 +18,13 @@ class Cliente(Resource):
     @admin_client_required
     def delete(self, id):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
-        if cliente.role == 'cliente':
+        iduser = get_jwt_identity()
+        user = db.session.query(UsuarioModel).get_or_404(iduser)
+        if user.role == 'admin' and cliente.id != iduser:
+            db.session.delete(cliente)
+            db.session.commit()
+            return '', 204
+        elif user.role == 'cliente' and cliente.id == iduser:
             db.session.delete(cliente)
             db.session.commit()
             return '', 204
