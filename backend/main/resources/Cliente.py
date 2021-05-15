@@ -20,7 +20,7 @@ class Cliente(Resource):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         iduser = get_jwt_identity()
         user = db.session.query(UsuarioModel).get_or_404(iduser)
-        if user.role == 'admin' and cliente.id != iduser:
+        if user.role == 'admin' and cliente.id != iduser and cliente.role == 'cliente':
             db.session.delete(cliente)
             db.session.commit()
             return '', 204
