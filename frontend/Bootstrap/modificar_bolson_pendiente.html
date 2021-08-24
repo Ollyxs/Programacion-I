@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <title>Bolsón</title>
+    <title>Bolsón Pendiente</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"/>
@@ -30,6 +30,9 @@
           </ul>
           <span class="nav-item">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Lucas Ollarce (Admin)</a>
+              </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Login
@@ -37,8 +40,13 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                   <li>
                     <div class="d-grid gap-2 col-10 mx-auto">
-                      <a href="./ingresar.html" type="button" class="btn btn-primary">Ingresar</a>
-                      <a href="./registrarse.html" type="button" class="btn btn-primary">Registrarse</a>
+                      <a href="./cabecera_pie_admin.html" type="button" class="btn btn-primary">Configuración</a>
+                    </div>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <div class="d-grid gap-2 col-10 mx-auto">
+                      <a href="#" type="button" class="btn btn-primary">Cerrar sesión</a>
                     </div>
                   </li>
                 </ul>
@@ -48,9 +56,12 @@
         </div>
       </div>
     </nav>
-    </br>
-    </br>
-    </br>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12 col-sm-1"></div>
@@ -126,8 +137,23 @@
                 </div>
               </li>
             </ul>
-            <div class="d-grid gap-2 mx-auto">
-              <a href="#" type="button" class="btn btn-primary">Comprar ahora</a>
+            <div class="d-flex justify-content-center">
+              <div class="p-2 m-1">
+                <h6>Aprobado: </h6>
+              </div>
+              <div>
+                <select class="m-1 p-2"size="1">
+                  <option selected="selected">No</option>
+                  <option>Si</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <p>12 May 2021</p> 
+            </div>
+            <div class="d-flex justify-content-center m-2">
+              <button class="btn btn-primary m-2" type="button">Guardar cambios</button>
+              <button class="btn btn-primary m-2" type="button" onclick="history.back()">Volver</button>
             </div>
           </div>
         </div>
@@ -140,13 +166,9 @@
         <div class="row">
           <div class="col-md-6 col-sm-1">
             <h5>Seguinos</h5>
-            <ul class="list-unstyled text-small">
-              <li>
-                <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
-                <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
-                <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
-              </li>
-            </ul>
+            <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
+            <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
+            <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
           </div>
           <div class="col-md-2 col-sm-1">
             <h5>Nosotros</h5>
