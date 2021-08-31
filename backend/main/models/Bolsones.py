@@ -1,6 +1,7 @@
 from .. import db
 from datetime import datetime
-
+from main.models.ProductosBolsones import BolsonProducto
+from main.models.Productos import Producto
 
 formato = "%Y-%m-%d"
 
@@ -22,6 +23,7 @@ class Bolson(db.Model):
             'nombre': str(self.nombre),
             'aprobado': self.aprobado,
             'fecha': str(datetime.strftime(self.fecha, formato)),
+            'productos': self.productos,
         }
         return bolson_json
 
@@ -32,10 +34,21 @@ class Bolson(db.Model):
             nombre = bolson_json.get('nombre')
             aprobado = bolson_json.get('aprobado')
             fecha = datetime.strptime(bolson_json.get('fecha'), formato)
-            return Bolson(id=id,
+            print(2)
+            bolson = Bolson(id=id,
                           nombre=nombre,
                           aprobado=aprobado,
                           fecha=fecha,
                           )
-        except Exception:
-            return '', 400
+            print(bolson_json)
+            if "productos" in bolson_json:
+                print(5)
+                for productoid in bolson_json.get('productos'):
+                    print("producto id", str(productoid))
+                    db.session.query(Producto).get_or_404(productoid)
+                    bolson.productos.append(BolsonProducto(productoid = productoid))
+                    print(7)
+            return bolson
+            print(4)
+        except Exception as error:
+            return print(error), 400

@@ -60,5 +60,5 @@ class BolsonesPendientes(Resource):
             db.session.add(bolsonpendiente)
             db.session.commit()
         except Exception as error:
-            return 'Formato no correcto', 400
+            return error, 400
         return bolsonpendiente.to_json(), 201
