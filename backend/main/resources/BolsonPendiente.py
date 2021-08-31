@@ -55,10 +55,19 @@ class BolsonesPendientes(Resource):
 
     @admin_required
     def post(self):
-        bolsonpendiente = BolsonModel.from_json(request.get_json())
         try:
-            db.session.add(bolsonpendiente)
-            db.session.commit()
+            bolsonpendiente = BolsonModel.from_json(request.get_json())
+            print(bolsonpendiente)
+            if isinstance (bolsonpendiente, str):
+                print(bolsonpendiente)
+                raise Exception(bolsonpendiente)
+            else:
+                db.session.add(bolsonpendiente)
+                db.session.commit()
+            print(123)
         except Exception as error:
-            return error, 400
+            print(234)
+            print(error)
+            return str(error), 400
+        print(345)
         return bolsonpendiente.to_json(), 201

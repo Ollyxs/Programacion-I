@@ -18,12 +18,14 @@ class Bolson(db.Model):
         return '<Bolson: %r %r %r >' % (self.nombre, self.aprobado, self.fecha)
 
     def to_json(self):
+        productos = [producto.to_json() for producto in self.productos]
+        print("productos", productos)
         bolson_json = {
             'id': self.id,
             'nombre': str(self.nombre),
             'aprobado': self.aprobado,
             'fecha': str(datetime.strftime(self.fecha, formato)),
-            'productos': self.productos,
+            'productos': productos,
         }
         return bolson_json
 
@@ -34,7 +36,6 @@ class Bolson(db.Model):
             nombre = bolson_json.get('nombre')
             aprobado = bolson_json.get('aprobado')
             fecha = datetime.strptime(bolson_json.get('fecha'), formato)
-            print(2)
             bolson = Bolson(id=id,
                           nombre=nombre,
                           aprobado=aprobado,
@@ -42,13 +43,13 @@ class Bolson(db.Model):
                           )
             print(bolson_json)
             if "productos" in bolson_json:
-                print(5)
                 for productoid in bolson_json.get('productos'):
                     print("producto id", str(productoid))
-                    db.session.query(Producto).get_or_404(productoid)
-                    bolson.productos.append(BolsonProducto(productoid = productoid))
-                    print(7)
+                    producto = db.session.query(Producto).get(productoid)
+                    if producto:
+                        bolson.productos.append(BolsonProducto(productoid = productoid))
+                    else:
+                        raise Exception("Producto no válido")
             return bolson
-            print(4)
         except Exception as error:
-            return print(error), 400
+            return str(error)
