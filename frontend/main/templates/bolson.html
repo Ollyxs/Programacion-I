@@ -37,7 +37,7 @@
                   <p>Cantidad: 1</p>
                 </div>
                 <div class="ms-auto">
-			<a href="{{url_for('productos.ver', id=1)}}">Ver</a>
+                  <a href="./producto.html">Ver</a>
                 </div>
               </li>
               <li class="d-flex mb-3">
@@ -48,7 +48,7 @@
                   <p>Cantidad: 1</p>
                 </div>
                 <div class="ms-auto">
-                  <a href="{{url_for('productos.ver', id=2)}}">Ver</a>
+                  <a href="./producto.html">Ver</a>
                 </div>
               </li>
               <li class="d-flex mb-3">
@@ -59,7 +59,7 @@
                   <p>Cantidad: 1</p>
                 </div>
                 <div class="ms-auto">
-                  <a href="{{url_for('productos.ver', id=3)}}">Ver</a>
+                  <a href="./producto.html">Ver</a>
                 </div>
               </li>
               <li class="d-flex mb-3">
@@ -70,12 +70,27 @@
                   <p>Cantidad: 1</p>
                 </div>
                 <div class="ms-auto">
-                  <a href="{{url_for('productos.ver', id=4)}}">Ver</a>
+                  <a href="./producto.html">Ver</a>
                 </div>
               </li>
             </ul>
-            <div class="d-grid gap-2 mx-auto">
-              <a href="#" type="button" class="btn btn-primary">Comprar ahora</a>
+            <div class="d-flex justify-content-center">
+              <div class="p-2 m-1">
+                <h6>Aprobado: </h6>
+              </div>
+              <div>
+                <select class="m-1 p-2"size="1">
+                  <option selected="selected">No</option>
+                  <option>Si</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <p>12 May 2021</p> 
+            </div>
+            <div class="d-flex justify-content-center m-2">
+              <button class="btn btn-primary m-2" type="button">Guardar cambios</button>
+              <button class="btn btn-primary m-2" type="button" onclick="history.back()">Volver</button>
             </div>
           </div>
         </div>
