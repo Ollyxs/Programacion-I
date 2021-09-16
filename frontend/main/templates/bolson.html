@@ -1,99 +1,12 @@
 {% extends "main.html" %}
+{% import 'macros/bolson.html' as macro %}
       {% block content %}
       <div class="row">
         <div class="col-md-12 col-sm-1"></div>
       </div>
       <div class="row">
         <div class="col-md-2 col-sm-1"></div>
-        <div class="col-md-5 col-sm-1 d-flex p-2 bd-highlight">
-          <div>
-            <ul class="list-unstyled">
-              <li class="p-2">
-                <img class="img-fluid" src="https://via.placeholder.com/100x100">
-              </li>
-              <li class="p-2">
-                <img class="img-fluid" src="https://via.placeholder.com/100x100">
-              </li>
-              <li class="p-2">
-                <img class="img-fluid" src="https://via.placeholder.com/100x100">
-              </li>
-            </ul>
-          </div>
-          <div class="p-2">
-            <img class="img-fluid" src="https://via.placeholder.com/400x400">
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-1 d-flex p-2 bd-highlight">
-          <div>
-            <h3>Bolson 1</h3>
-            <h1>$99.99</h1>
-            <h5>Productos que contiene:</h5>
-            <ul>
-              <li class="d-flex mb-3">
-                <div class="me-auto">
-                  <p>Producto</p>
-                </div>
-                <div>
-                  <p>Cantidad: 1</p>
-                </div>
-                <div class="ms-auto">
-                  <a href="./producto.html">Ver</a>
-                </div>
-              </li>
-              <li class="d-flex mb-3">
-                <div class="me-auto">
-                  <p>Producto</p>
-                </div>
-                <div>
-                  <p>Cantidad: 1</p>
-                </div>
-                <div class="ms-auto">
-                  <a href="./producto.html">Ver</a>
-                </div>
-              </li>
-              <li class="d-flex mb-3">
-                <div class="me-auto">
-                  <p>Producto</p>
-                </div>
-                <div>
-                  <p>Cantidad: 1</p>
-                </div>
-                <div class="ms-auto">
-                  <a href="./producto.html">Ver</a>
-                </div>
-              </li>
-              <li class="d-flex mb-3">
-                <div class="me-auto">
-                  <p>Producto</p>
-                </div>
-                <div>
-                  <p>Cantidad: 1</p>
-                </div>
-                <div class="ms-auto">
-                  <a href="./producto.html">Ver</a>
-                </div>
-              </li>
-            </ul>
-            <div class="d-flex justify-content-center">
-              <div class="p-2 m-1">
-                <h6>Aprobado: </h6>
-              </div>
-              <div>
-                <select class="m-1 p-2"size="1">
-                  <option selected="selected">No</option>
-                  <option>Si</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <p>12 May 2021</p> 
-            </div>
-            <div class="d-flex justify-content-center m-2">
-              <button class="btn btn-primary m-2" type="button">Guardar cambios</button>
-              <button class="btn btn-primary m-2" type="button" onclick="history.back()">Volver</button>
-            </div>
-          </div>
-        </div>
+		{{ macro.ver_bolson(bolson) }}
         <div class="col-md-2 col-sm-1"></div>
       </div>
       {% endblock %}
