@@ -1,41 +1,41 @@
 {% extends "main.html" %}
 {% from "macros/form_macros.html" import MostrarCampo, MostrarEnvio %}
 {% block content %}
-      <div class="row">
+    <div class="row">
         <div class="col-md-4 col-sm-1"></div>
         <div class="col-md-4 col-sm-1 border border-1">
-          <div style="padding: 30px">
-            <h3>Registrarse</h3>
-	    <form method="POST" action="{{url_for('usuarios.registrar')}}">
-		<input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-              <div class="mb-3"> 
-		{{MostrarCampo(formulario.nombre, class="form-control")}}
-              </div>
-              <div class="mb-3">
-		{{MostrarCampo(formulario.apellido, class="form-control")}}
-              </div>
-              <div class="mb-3">     
-		{{MostrarCampo(formulario.email, class="form-control")}}
-              </div>
-              <div class="mb-3">
-		{{MostrarCampo(formulario.telefono, class="form-control")}}
-              </div>
-              <div class="mb-3">
-		{{MostrarCampo(formulario.password, class="form-control")}}
-	      </div>
-              <div class="mb-3">
-		{{MostrarCampo(formulario.confirmar, class="form-control")}}
-	      </div>
-        	<div class="d-grid gap-2">
-		{{MostrarEnvio(formulario.envio, class="btn btn-primary")}}
-              </div>
-              </br>
-              <div class="mb-3 text-center">
-                <a class="text-muted text-decoration-none" href="./ingresar.html">¿Ya tienes una cuenta? Ingresar</a>
-              </div>
-            </form>
-          </div>
+            <div style="padding: 30px">
+                <h3>Registrarse</h3>
+                <form method="POST" action="{{url_for('usuarios.registrar')}}">
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                    <div class="mb-3">
+                        {{MostrarCampo(formulario.nombre, class="form-control")}}
+                    </div>
+                    <div class="mb-3">
+                        {{MostrarCampo(formulario.apellido, class="form-control")}}
+                    </div>
+                    <div class="mb-3">
+                        {{MostrarCampo(formulario.email, class="form-control")}}
+                    </div>
+                    <div class="mb-3">
+                        {{MostrarCampo(formulario.telefono, class="form-control")}}
+                    </div>
+                    <div class="mb-3">
+                        {{MostrarCampo(formulario.password, class="form-control")}}
+                    </div>
+                    <div class="mb-3">
+                        {{MostrarCampo(formulario.confirmar, class="form-control")}}
+                    </div>
+                    <div class="d-grid gap-2">
+                        {{MostrarEnvio(formulario.envio, class="btn btn-primary")}}
+                    </div>
+                    </br>
+                    <div class="mb-3 text-center">
+			    <a class="text-muted text-decoration-none" href="{{url_for('usuarios.ingresar')}}">¿Ya tienes una cuenta? Ingresar</a>
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="col-md-4 col-sm-1"></div>
-	</div>
+    </div>
 {% endblock %}

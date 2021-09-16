@@ -14,9 +14,9 @@ def create_app():
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     CSRFP.init_app(app)
 
-    from main.routes import main, bolsones_ventas, productos, usuario, proveedor
+    from main.routes import main, bolsones, productos, usuario, proveedor
     app.register_blueprint(routes.main.main)
-    app.register_blueprint(routes.bolsones_ventas.bolsones_ventas)
+    app.register_blueprint(routes.bolsones.bolsones)
     app.register_blueprint(routes.productos.productos)
     app.register_blueprint(routes.usuario.usuarios)
     app.register_blueprint(routes.proveedor.proveedores)
