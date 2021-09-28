@@ -1,12 +1,12 @@
 {% extends "main.html" %}
-{% import 'macros/bolson.html' as macro %}
-      {% block content %}
-      <div class="row">
-        <div class="col-md-12 col-sm-1"></div>
-      </div>
-      <div class="row">
-        <div class="col-md-2 col-sm-1"></div>
-		{{ macro.ver_bolson(bolson) }}
-        <div class="col-md-2 col-sm-1"></div>
-      </div>
-      {% endblock %}
+{% import "macros/bolson.html" as macro %}
+{% block content %}
+<div class="row">
+  <div class="col-md-12 col-sm-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-2 col-sm-1"></div>
+  {{ macro.ver_bolson(bolson, productos) }}
+  <div class="col-md-2 col-sm-1"></div>
+</div>
+{% endblock %}

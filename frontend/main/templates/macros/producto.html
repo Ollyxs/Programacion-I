@@ -1,0 +1,30 @@
+{% macro ver_producto(producto, usuarios) %}
+<div class="col-md-4 col-sm-1 d-flex justify-content-center p-2 bd-highlight">
+  <div class="p-2">
+    <img class="img-fluid" src="https://via.placeholder.com/400x400">
+  </div>
+</div>
+<div class="col-md-4 col-sm-1 d-flex p-2 bd-highlight">
+  <div class="row">
+    <div>
+      <h3>{{producto.nombre}}</h3>
+      <h6>Descripción:</h6>
+      <p>{{producto.descripcion}}</p>
+      {% for usuario in usuarios %}
+      {% if usuario.role == 'proveedor' %}
+      {% if producto.proveedorid == usuario.id %}
+      <div>
+        <p><b>Proveedor:</b> {{usuario.nombre}} {{usuario.apellido}}</p>
+      </div>
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+    </div>
+    <div class="row">
+      <div class="d-flex align-self-end justify-content-end m-2">
+        <button class="btn btn-primary m-2" type="button" onclick="history.back()">Volver</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}

@@ -1,25 +1,12 @@
 {% extends "main.html" %}
-      {% block content %}
-      <div class="row">
-        <div class="col-md-12 col-sm-1"></div>
-      </div>
-      <div class="row">
-        <div class="col-md-2 col-sm-1"></div>
-        <div class="col-md-4 col-sm-1 d-flex justify-content-center p-2 bd-highlight">
-          <div class="p-2">
-            <img class="img-fluid" src="https://via.placeholder.com/400x400">
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-1 d-flex p-2 bd-highlight">
-          <div>
-            <h3>Producto</h3>
-            <h6>Descripción:</h6>
-            <p>Ipsum earum elit illum maiores cumque Non voluptatum temporibus quasi laudantium voluptatum? Tenetur ipsum ab veniam quod quos autem quas Eligendi eum nobis quas excepturi molestias Fugit dolores voluptatem</p>
-            <div>
-              <p><b>Proveedor:</b> Juan Perez</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-2 col-sm-1"></div>
-      </div>
-      {% endblock %}
+{% import "macros/producto.html" as macro %}
+{% block content %}
+<div class="row">
+  <div class="col-md-12 col-sm-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-2 col-sm-1"></div>
+    {{ macro.ver_producto(producto, usuarios) }}
+  <div class="col-md-2 col-sm-1"></div>
+</div>
+{% endblock %}
