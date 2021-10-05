@@ -1,5 +1,6 @@
-from flask import Blueprint, request, url_for, render_template
+from flask import Blueprint, redirect, url_for, render_template, current_app
 from .productos import PRODUCTOS
+import requests, json
 
 bolsones = Blueprint('bolsones', __name__, url_prefix='/bolson')
 
@@ -21,4 +22,14 @@ def ver(id):
 
 @bolsones.route('/ver-todos')
 def ver_todos():
-    return render_template('bolsones.html', bolsones = BOLSONES)
+    data = {}
+    data['page'] = 1
+    data['per_page'] = 10
+    print(data)
+    print(current_app.config["API_URL"]+'/bolsones')
+    r = requests.get(
+        current_app.config["API_URL"]+'/bolsones',
+        headers={"content-type":"application/json"},
+        data=json.dumps(data))
+    bolsones = json.loads(r.text)["bolsones"] 
+    return render_template('bolsones.html', bolsones = bolsones)

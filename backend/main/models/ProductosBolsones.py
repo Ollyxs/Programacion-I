@@ -17,7 +17,7 @@ class BolsonProducto(db.Model):
             'id': self.id,
             'productoid': self.producto.id,
             'nombre': self.producto.nombre,
-            'aprobado': self.producto.aprobado,
+            #'aprobado': self.producto.aprobado,
         }
         return bolsonproducto_json
 

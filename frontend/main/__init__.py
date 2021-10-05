@@ -11,6 +11,7 @@ def create_app():
     app = Flask(__name__)
     load_dotenv()
 
+    app.config['API_URL'] = os.getenv('API_URL')
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     CSRFP.init_app(app)
 

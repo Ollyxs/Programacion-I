@@ -2,3 +2,4 @@ flask
 python-dotenv
 flask-WTF
 email_validator
+requests

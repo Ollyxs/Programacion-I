@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, current_app
 from .. formularios.registrarse import FormRegistro
 from .. formularios.ingresar import FormIngreso
 from .. formularios.cuenta import FormCuenta
+import requests, json
 
 
 usuarios = Blueprint('usuarios', __name__, url_prefix='/usuarios')
@@ -24,7 +25,18 @@ USUARIOS = [
 def registrar():
     form = FormRegistro()
     if form.validate_on_submit():
-        print(form.nombre.data)
+        data = {}
+        data["nombre"] = form.nombre.data
+        data["apellido"] = form.apellido.data
+        data["email"] = form.email.data
+        data["telefono"] = form.telefono.data
+        data["password"] = form.password.data
+        print(data)
+        headers = {"content-type": "application/json"}
+        r = requests.post(
+                current_app.config["API_URL"]+'/auth/register',
+                headers = headers,
+                data = json.dumps(data))
         return redirect(url_for('main.index'))
     return render_template('registrarse.html', formulario=form)
 
