@@ -1,0 +1,13 @@
+{% extends "main.html" %}
+{% import "macros/usuarios.html" as macro %}
+{% block content %}
+<div class="row">
+  <div class="col-md-3 col-sm-1"></div>
+  {{ macro.usuario_datos(usuario) }}
+  <div class="col-md-3 col-sm-1"></div>
+</div>
+<div class="row">
+  </br>
+</div>
+{{ macro.eliminar_cuenta(usuario) }}
+{% endblock %}

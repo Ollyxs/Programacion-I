@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for
 from .. formularios.registrarse import FormRegistro
 from .. formularios.ingresar import FormIngreso
+from .. formularios.cuenta import FormCuenta
 
 
 usuarios = Blueprint('usuarios', __name__, url_prefix='/usuarios')
@@ -34,3 +35,15 @@ def ingresar():
         print(form.email.data)
         return redirect(url_for('main.index'))
     return render_template('ingresar.html', formulario=form)
+
+@usuarios.route('mi-cuenta/<int:id>')
+def mi_cuenta(id):
+    return render_template('usuario.html', usuario = USUARIOS[id])
+
+@usuarios.route('admin', methods=['POST', 'GET'])
+def admin():
+    form = FormCuenta()
+    if form.validate_on_submit():
+        print(form.name.data)
+        return redirect(url_for('usuario.admin'))
+    return render_template('admin.html', formulario=form)
