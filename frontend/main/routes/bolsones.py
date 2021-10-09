@@ -18,7 +18,13 @@ BOLSONES = [
 
 @bolsones.route('/ver/<int:id>')
 def ver(id):
-    return render_template('bolson.html', bolson = BOLSONES[id], productos=PRODUCTOS)
+    r = requests.get(
+            current_app.config["API_URL"]+'/bolson/'+str(id),
+            headers={"content-type": "application/json"})
+    if (r.status_code == 404):
+        return redirect(url_for('bolsones.ver_todos'))
+    bolson = json.loads(r.text)
+    return render_template('bolson.html', bolson = bolson)
 
 @bolsones.route('/ver-todos')
 def ver_todos():
