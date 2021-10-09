@@ -11,7 +11,7 @@ fechaPrev = hoy - datetime.timedelta(weeks=1)
 
 
 class BolsonPrevio(Resource):
-    @admin_required
+    # @admin_required
     def get(self, id):
         bolsonprevio = db.session.query(BolsonModel).get_or_404(id)
         if bolsonprevio.fecha <= fechaPrev:
@@ -21,7 +21,7 @@ class BolsonPrevio(Resource):
 
 
 class BolsonesPrevios(Resource):
-    @admin_required
+    # @admin_required
     def get(self):
         page = 1
         per_page = 10

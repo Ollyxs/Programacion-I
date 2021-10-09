@@ -7,19 +7,19 @@ from main.auth.decorators import admin_required, client_required, admin_client_r
 
 
 class Compra(Resource):
-    @admin_client_required
+    # @admin_client_required
     def get(self, id):
         compra = db.session.query(CompraModel).get_or_404(id)
         return compra.to_json()
 
-    @admin_required
+    # @admin_required
     def delete(self, id):
         compra = db.session.query(CompraModel).get_or_404(id)
         db.session.delete(compra)
         db.session.commit()
         return '', 204
 
-    @admin_required
+    # @admin_required
     def put(self, id):
         compra = db.session.query(CompraModel).get_or_404(id)
         data = request.get_json().items()
@@ -31,7 +31,7 @@ class Compra(Resource):
 
 
 class Compras(Resource):
-    @admin_required
+    # @admin_required
     def get(self):
         page = 1
         per_page = 10
@@ -50,7 +50,7 @@ class Compras(Resource):
                         'page': page
                         })
 
-    @client_required
+    # @client_required
     def post(self):
         compra = CompraModel.from_json(request.get_json())
         bolson = db.session.query(BolsonModel).get_or_404(compra.bolsonid)

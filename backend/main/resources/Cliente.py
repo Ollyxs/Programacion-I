@@ -7,7 +7,7 @@ from main.auth.decorators import admin_required, client_required, admin_client_r
 
 
 class Cliente(Resource):
-    @admin_required
+    # @admin_required
     def get(self, id):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         if cliente.role == 'cliente':
@@ -15,7 +15,7 @@ class Cliente(Resource):
         else:
             return '', 404
 
-    @admin_client_required
+    # @admin_client_required
     def delete(self, id):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         iduser = get_jwt_identity()
@@ -31,7 +31,7 @@ class Cliente(Resource):
         else:
             return '', 404
 
-    @client_required
+    # @client_required
     def put(self, id):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         clienteid = get_jwt_identity()
@@ -47,7 +47,7 @@ class Cliente(Resource):
 
 
 class Clientes(Resource):
-    @admin_required
+    # @admin_required
     def get(self):
         page = 1
         per_page = 10

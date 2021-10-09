@@ -7,7 +7,7 @@ from main.auth.decorators import admin_required, admin_provider_required
 
 
 class BolsonPendiente(Resource):
-    @admin_provider_required
+    # @admin_provider_required
     def get(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
         if bolsonpendiente.aprobado == 0:
@@ -15,14 +15,14 @@ class BolsonPendiente(Resource):
         else:
             return '', 404
 
-    @admin_required
+    # @admin_required
     def delete(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
         db.session.delete(bolsonpendiente)
         db.session.commit()
         return '', 204
 
-    @admin_required
+    # @admin_required
     def put(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
         data = request.get_json().items()
@@ -34,7 +34,7 @@ class BolsonPendiente(Resource):
 
 
 class BolsonesPendientes(Resource):
-    @admin_provider_required
+    # @admin_provider_required
     def get(self):
         page = 1
         per_page = 10
@@ -53,7 +53,7 @@ class BolsonesPendientes(Resource):
                         'page': page
                         })
 
-    @admin_required
+    # @admin_required
     def post(self):
         try:
             bolsonpendiente = BolsonModel.from_json(request.get_json())
