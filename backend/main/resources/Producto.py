@@ -53,7 +53,7 @@ class Productos(Resource):
                         'page': page
                         })
 
-    # @provider_required
+    @provider_required
     def post(self):
         producto = ProductoModel.from_json(request.get_json())
         proveedor = get_jwt_identity()

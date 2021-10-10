@@ -1,4 +1,4 @@
-{% macro ver_bolson(bolson, productos) %}
+{% macro ver_bolson(bolson) %}
 <div class="col-md-5 col-sm-1 d-flex p-2 bd-highlight">
   <div>
     <ul class="list-unstyled">
@@ -29,11 +29,11 @@
             <div class="me-auto">
               <p>{{producto.nombre}}</p>
             </div>
-            <div>
+            <div class="ms-auto">
               <p>Cantidad: 1</p>
             </div>
             <div class="ms-auto">
-              <a href="{{url_for('productos.ver', id=producto.id)}}">Ver</a>
+              <a href="{{url_for('productos.ver', id=producto.productoid)}}">Ver</a>
             </div>
           </li>
         {% endfor %}
