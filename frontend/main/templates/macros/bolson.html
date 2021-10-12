@@ -94,6 +94,37 @@
   <td style="color:red">No</td> 
   {% endif %}
   <td>{{bolson.precio}}</td>
-  <td><a href="{{url_for('bolsones.ver_bolson', id=bolson.id)}}" class="btn btn-primary">Ver</a></td>
+  <td><a href="{{url_for('bolsones.ver', id=bolson.id)}}" class="btn btn-primary">Ver</a></td>
+</tr>
+{% endmacro %}
+
+{% macro pendientes(bolson) %}
+<tr>
+  <!-- <th scope="row"><img src="https://via.placeholder.com/70x70"></th> -->
+  <th>{{bolson.nombre}}</th>
+  <td>{{bolson.fecha}}</td>
+  <td style="color:red">No</td>
+  <td>{{bolson.precio}}</td>
+  <td><a href="{{url_for('bolsones.ver_pendiente', id=bolson.id)}}" class="btn btn-primary">Ver</a></td>
+  <td>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Eliminar
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar bolsón</h5>
+          </div>
+          <div class="modal-body">
+            ¿Está seguro que quiere eliminar el bolsón?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+  </td>
 </tr>
 {% endmacro %}
