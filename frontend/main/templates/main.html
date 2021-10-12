@@ -1,3 +1,4 @@
+{% from 'macros/form.html' import show_field_login, show_submit %}
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -7,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"/>
   </head>
   <body>
+    {% block menu %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="./index.html"><img src="https://via.placeholder.com/70x40"></a>
@@ -28,7 +30,7 @@
               <a class="nav-link" href="#">Nosotros</a>
             </li>
           </ul>
-            {#% if current_user.is_admin %}
+            {% if current_user.is_authenticated and current_user.role == "admin" %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Administrar
@@ -45,29 +47,55 @@
           <span class="nav-item">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Lucas Ollarce (Admin)</a>
+                <a class="nav-link active" aria-current="page" href="#">{{current_user.nombre}}</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Login
+                  Menu
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                   <li>
                     <div class="d-grid gap-2 col-10 mx-auto">
-                      <a href="./cabecera_pie_admin.html" type="button" class="btn btn-primary">Mi cuenta</a>
+                      <a href="{{url_for('usuarios.admin', id=current_user.id)}}" type="button" class="btn btn-primary">Mi cuenta</a>
                     </div>
                   </li>
                   <li><hr class="dropdown-divider"></li>
                   <li>
                     <div class="d-grid gap-2 col-10 mx-auto">
-                      <a href="#" type="button" class="btn btn-primary">Cerrar sesión</a>
+                      <a href="{{url_for('main.logout')}}" type="button" class="btn btn-primary">Cerrar sesión</a>
                     </div>
                   </li>
                 </ul>
               </li>
             </ul>
           </span>
-            {% else %#}
+          {% elif current_user.is_authenticated %}
+          <span class="nav-item">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">{{current_user.nombre}}</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Menu
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <li>
+                    <div class="d-grid gap-2 col-10 mx-auto">
+                      <a href="{{url_for('usuarios.mi_cuenta', id=current_user.id)}}" type="button" class="btn btn-primary">Mi cuenta</a>
+                    </div>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <div class="d-grid gap-2 col-10 mx-auto">
+                      <a href="{{url_for('main.logout')}}" type="button" class="btn btn-primary">Cerrar sesión</a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </span>
+            {% else %}
           <span class="nav-item">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item dropdown">
@@ -85,10 +113,11 @@
               </li>
             </ul>
           </span>
-          {#% endif %#}
+          {% endif %}
         </div>
       </div>
     </nav>
+    {% endblock %}
     <br/>
     <br/>
     <br/>

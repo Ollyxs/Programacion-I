@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, render_template, current_app
+from flask import Blueprint, redirect, url_for, render_template, current_app, request
 from .. formularios.bolson import FormBolson
 import requests, json
 
@@ -27,7 +27,17 @@ def ver_todos():
         headers = {"content-type":"application/json"},
         data = json.dumps(data))
     bolsones = json.loads(r.text)["bolsones"] 
-    return render_template('bolsones_admin.html', bolsones = bolsones)
+    r = requests.get(
+            current_app.config["API_URL"]+'/bolsones-pendientes',
+            headers = {"content-type": "application/json"},
+            data = json.dumps(data))
+    pendientes = json.loads(r.text)["bolsones pendientes"]
+    r = requests.get(
+        current_app.config["API_URL"]+'/bolsones-previos',
+        headers = {"content-type":"application/json"},
+        data = json.dumps(data))
+    previos = json.loads(r.text)["bolsones previos"] 
+    return render_template('bolsones_admin.html', bolsones = bolsones, pendientes = pendientes, previos = previos)
 
 @bolsones.route('/ver/<int:id>')
 def ver_en_venta(id):

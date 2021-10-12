@@ -126,7 +126,7 @@
                 </tr>
               </thead>
               <tbody>
-                {% for bolson in bolsones %}
+                {% for bolson in pendientes %}
                 {{ macro.pendientes(bolson) }}
                 {% endfor %}
               </tbody>
@@ -196,7 +196,7 @@
                 </tr>
               </thead>
               <tbody>
-                {% for bolson in bolsones %}
+                {% for bolson in previos %}
                 {{ macro.bolsones(bolson) }}
                 {% endfor %}
               </tbody>

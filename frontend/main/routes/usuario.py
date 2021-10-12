@@ -1,8 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, current_app
+from flask import Blueprint, render_template, redirect, url_for, current_app, request
 from .. formularios.registrarse import FormRegistro
 from .. formularios.ingresar import FormIngreso
 from .. formularios.cuenta import FormCuenta
+from flask_login import login_required, LoginManager, current_user
 import requests, json
+from .auth import admin_required
 
 
 usuarios = Blueprint('usuarios', __name__, url_prefix='/usuarios')
@@ -44,7 +46,12 @@ def ingresar():
     return render_template('ingresar.html', formulario=form)
 
 @usuarios.route('mi-cuenta/<int:id>')
+@login_required
 def mi_cuenta(id):
+    auth = request.cookies['access_token']
+    headers = {
+            "content-type": "application/json",
+            'authorization': "Bearer "+auth}
     r = requests.get(
             current_app.config["API_URL"]+'/cliente/'+str(id),
             headers = {"content-type": "application/json"})
@@ -55,6 +62,8 @@ def mi_cuenta(id):
     return render_template('usuario.html', usuario = usuario)
 
 @usuarios.route('admin', methods=['POST', 'GET'])
+@login_required
+@admin_required
 def admin():
     form = FormCuenta()
     if form.validate_on_submit():
