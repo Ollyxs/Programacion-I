@@ -82,3 +82,18 @@
 </div>
 {% endif %}
 {% endmacro %}
+
+{% macro bolsones(bolson) %}
+<tr>
+  <!-- <th scope="row"><img src="https://via.placeholder.com/70x70"></th> -->
+  <th>{{bolson.nombre}}</th>
+  <td>{{bolson.fecha}}</td>
+  {% if bolson.aprobado %}
+  <td style="color:green">Si</td>
+  {% else %}
+  <td style="color:red">No</td> 
+  {% endif %}
+  <td>{{bolson.precio}}</td>
+  <td><a href="{{url_for('bolsones.ver_bolson', id=bolson.id)}}" class="btn btn-primary">Ver</a></td>
+</tr>
+{% endmacro %}
