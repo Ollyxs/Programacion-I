@@ -141,3 +141,13 @@ def crear():
         print(r)
     return render_template('crear_bolson.html', form = form)
         
+@bolsones.route('eliminar/<int:id>')
+def eliminar(id):
+    r = requests.delete(
+            current_app.config["API_URL"]+'/bolson-pendiente/'+str(id),
+            headers = {"content-type": "application/json"})
+    if (r.status_code == 404):
+        return redirect(url_for('bolsones.ver_todos'))
+    print(r)
+    return redirect(url_for('bolsones.ver_todos'))
+

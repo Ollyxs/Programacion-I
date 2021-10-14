@@ -23,3 +23,31 @@
   </div>
 </div>
 {% endmacro %}
+
+{% macro productos(producto) %}
+<tr>
+  <td>{{producto.nombre}}</td>
+  <td>{{producto.proveedor}}</td>
+  <td><a href="{{url_for('productos.ver', id=producto.id)}}" class="btn btn-primary">Ver</a></td>
+  <td>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Eliminar
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar producto</h5>
+          </div>
+          <div class="modal-body">
+            ¿Está seguro que quiere eliminar el producto?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+  </td>
+</tr>
+{% endmacro %}
