@@ -1,67 +1,127 @@
 {% macro usuario_datos(usuario) %}
-  <div class="col-md-6 col-sm-1 border border-1">
-    <div style="padding: 30px">
-      <h3>Datos Personales</h3>
-      <div class="d-flex">
-        <div class"col-md-4">
-          <div class="mb-3">
-            <h5>Nombre</h5>
-            <p>{{usuario.nombre}}</p>
-          </div>
-          <div class="mb-3">
-            <h5>Email</h5>
-            <p>{{usuario.email}}</p>
-          </div>
-          <div class="mb-3">
-            <h5>Contraseña</h5>
-            <p>{{usuario.password}}</p>
-          </div>
+<div class="col-md-6 col-sm-1 border border-1">
+  <div style="padding: 30px">
+    <h3>Datos Personales</h3>
+    <div class="d-flex">
+      <div class"col-md-4">
+        <div class="mb-3">
+          <h5>Nombre</h5>
+          <p>{{usuario.nombre}}</p>
         </div>
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-          <div class="mb-3">
-            <h5>Apellido</h5>
-            <p>{{usuario.apellido}}</p>
-          </div>
-          <div class="mb-3">
-            <h5>Teléfono</h5>
-            <p>{{usuario.telefono}}</p>
-          </div>
-          <div class="d-flex justify-content-center mt-4">
-            <button class="btn btn-primary m-1" type="button" onclick="history.back()">Volver</button>
-          </div>
+        <div class="mb-3">
+          <h5>Email</h5>
+          <p>{{usuario.email}}</p>
+        </div>
+        <div class="mb-3">
+          <h5>Contraseña</h5>
+          <p>{{usuario.password}}</p>
+        </div>
+      </div>
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="mb-3">
+          <h5>Apellido</h5>
+          <p>{{usuario.apellido}}</p>
+        </div>
+        <div class="mb-3">
+          <h5>Teléfono</h5>
+          <p>{{usuario.telefono}}</p>
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+          <button class="btn btn-primary m-1" type="button" onclick="history.back()">Volver</button>
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endmacro %}
 
 {% macro eliminar_cuenta(usuario) %}
 {% if usuario.role == 'cliente' %}
-  <div class="row d-flex flex-row-reverse">
-    <div class="col-md-2 col-sm-1 d-flex justify-content-end">
-      <!-- Button trigger modal -->
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Eliminar cuenta
-      </button>
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Eliminar cuenta</h5>
-            </div>
-            <div class="modal-body">
-              ¿Está seguro que quiere eliminar su cuenta?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            </div>
+<div class="row d-flex flex-row-reverse">
+  <div class="col-md-2 col-sm-1 d-flex justify-content-end">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Eliminar cuenta
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar cuenta</h5>
+          </div>
+          <div class="modal-body">
+            ¿Está seguro que quiere eliminar su cuenta?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endif %}
+{% endmacro %}
+
+{% macro proveedores(proveedor) %}
+<tr>
+  <td>{{proveedor.nombre}}</td>
+  <td>{{proveedor.apellido}}</td>
+  <td>{{proveedor.email}}</td>
+  <td>{{proveedor.telefono}}</td>
+  <td><a href="{{url_for('proveedores.ver', id=proveedor.id)}}" class="btn btn-primary">Editar</a></td>
+  <td>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Eliminar
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar proveedor</h5>
+          </div>
+          <div class="modal-body">
+            ¿Está seguro que quiere eliminar el proveedor?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+  </td>
+</tr>
+{% endmacro %}
+
+{% macro clientes(cliente) %}
+<tr>
+  <td>{{cliente.nombre}}</td>
+  <td>{{cliente.apellido}}</td>
+  <td>{{cliente.email}}</td>
+  <td>{{cliente.telefono}}</td>
+  <td><a href="#" class="btn btn-primary">Editar</a></td>
+  <td>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Eliminar
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar cliente</h5>
+          </div>
+          <div class="modal-body">
+            ¿Está seguro que quiere eliminar el cliente?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+  </td>
+</tr>
 {% endmacro %}

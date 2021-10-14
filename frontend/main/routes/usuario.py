@@ -54,12 +54,30 @@ def mi_cuenta(id):
             'authorization': "Bearer "+auth}
     r = requests.get(
             current_app.config["API_URL"]+'/cliente/'+str(id),
-            headers = {"content-type": "application/json"})
+            headers = headers)
     if (r.status_code == 404):
         return redirect(url_for('main.index'))
     usuario = json.loads(r.text)
     print(usuario)
     return render_template('usuario.html', usuario = usuario)
+
+@usuarios.route('/clientes')
+@login_required
+@admin_required
+def ver_clientes():
+    data = {}
+    data['page'] = 1
+    data['per_page'] = 10
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': "application/json",
+            'authorization': "Bearer "+auth}
+    r = requests.get(
+            current_app.config["API_URL"]+'/clientes',
+            headers = headers,
+            data = json.dumps(data))
+    clientes = json.loads(r.text)["clientes"]
+    return render_template('clientes_admin.html', clientes = clientes)
 
 @usuarios.route('admin', methods=['POST', 'GET'])
 @login_required

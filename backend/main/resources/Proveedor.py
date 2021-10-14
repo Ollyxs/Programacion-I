@@ -41,8 +41,22 @@ class Proveedor(Resource):
 
 class Proveedores(Resource):
     def get(self):
-        proveedores = db.session.query(UsuarioModel).filter(UsuarioModel.role == 'proveedor').all()
-        return jsonify([proveedor.to_json() for proveedor in proveedores])
+        page = 1
+        per_page = 10
+        proveedores = db.session.query(UsuarioModel).filter(UsuarioModel.role == 'proveedor')
+        if request.get_json():
+            filters = request.get_json().items()
+            for key, value in filters:
+                if key == 'page':
+                    page = int(value)
+                if key == 'per_page':
+                    per_page = int(value)
+        proveedores = proveedores.paginate(page, per_page, True, 30)
+        return jsonify({'proveedores': [proveedor.to_json() for proveedor in proveedores.items],
+                'total': proveedores.total,
+                'pages': proveedores.pages,
+                'page': page
+                })
 
     @admin_required
     def post(self):
