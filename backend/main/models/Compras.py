@@ -18,7 +18,7 @@ class Compra(db.Model):
     def to_json(self):
         compra_json = {
             'id': self.id,
-            'cliente': self.cliente.nombre,
+            'cliente': self.cliente.nombre + ' ' + self.cliente.apellido,
             'bolson': self.bolson.nombre,
             'fechaHoraCompra': str(self.fechaHoraCompra),
             'retirado': self.retirado,

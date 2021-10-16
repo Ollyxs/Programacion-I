@@ -17,10 +17,11 @@ def create_app():
     CSRFP.init_app(app)
     login_manager.init_app(app)
 
-    from main.routes import main, bolsones, productos, usuario, proveedor
+    from main.routes import main, bolsones, productos, usuario, proveedor, compras
     app.register_blueprint(routes.main.main)
     app.register_blueprint(routes.bolsones.bolsones)
     app.register_blueprint(routes.productos.productos)
     app.register_blueprint(routes.usuario.usuarios)
     app.register_blueprint(routes.proveedor.proveedores)
+    app.register_blueprint(routes.compras.compras)
     return app

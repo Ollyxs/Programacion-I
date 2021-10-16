@@ -39,5 +39,6 @@ def ver_todas():
             current_app.config['API_URL']+'/compras',
             headers = headers,
             data = json.dumps(data))
+    print(r)
     compras = json.loads(r.text)["compras"]
     return render_template('compras_admin.html', compras = compras)

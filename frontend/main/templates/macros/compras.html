@@ -1,0 +1,75 @@
+{% macro ver_compra(compra) %}
+<div style="padding: 30px">
+  <h3>Datos compra #{{compra.id}}</h3>
+  <form>
+    <div class="row mb-3">
+      <div class="col d-flex justify-content-center p-2">
+        <img class="img-fluid" src="http://via.placeholder.com/400x400">
+      </div>
+      <div class="col p-2">
+        <p><b>Bolsón:</b> {{compra.bolson}}</p>
+        <p><b>Cliente:</b> {{compra.cliente}}</p>
+        <p><b>Fecha:</b> {{compra.fechaHoraCompra}}</p>
+        <p><b>Precio:</b> $99.99</p>
+        <div class="d-flex">
+          <div class="mt-2">
+            <h6>Aprobado: </h6>
+          </div>
+          <div>
+            <select class="m-1 p-2"size="1">
+              {% if compra.retirado %}
+                <option selected="selected">Si</option>
+                <option>No</option>
+              {% else %}
+                <option selected="selected">No</option>
+                <option>Si</option>
+              {% endif %}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col d-flex justify-content-end mt-4">
+        <button type="submit" class="btn btn-primary m-1">Guardar cambios</button>
+        <button class="btn btn-primary m-1" type="button" onclick="history.back()">Volver</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endmacro %}
+
+{% macro compras(compra) %}
+<tr>
+  <td>{{compra.id}}</td>
+  <td>{{compra.fechaHoraCompra}}</td>
+  <td>{{compra.cliente}}</td>
+  {% if compra.retirado %}
+  <td style="color:green">Si</td>
+  {% else %}
+  <td style="color:red">No</td> 
+  {% endif %}
+  <td><a href="{{url_for('compras.ver', id=compra.id)}}" class="btn btn-primary">Ver</a></td>
+  <td>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Eliminar
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar compra</h5>
+          </div>
+          <div class="modal-body">
+            ¿Está seguro que quiere eliminar el compra?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </td>
+</tr>
+{% endmacro %}
