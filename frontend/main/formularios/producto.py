@@ -8,11 +8,11 @@ mess = "Campo obligatorio"
 
 
 class FormProducto(FlaskForm):
-    imagen = FileField("",
-            validators = [
-                FileRequired(message="imagen obligatoria")
-            ],
-            )
+    # imagen = FileField("",
+    #         validators = [
+    #             FileRequired(message="imagen obligatoria")
+    #         ],
+    #         )
     nombre = StringField("Nombre",
             [
                 validators.Required(message=mess),

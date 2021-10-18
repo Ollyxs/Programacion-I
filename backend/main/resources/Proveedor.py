@@ -7,7 +7,7 @@ from main.auth.decorators import admin_required, admin_provider_required
 
 
 class Proveedor(Resource):
-    # @admin_provider_required
+    @admin_provider_required
     def get(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
         if proveedor.role == 'proveedor':
@@ -15,7 +15,7 @@ class Proveedor(Resource):
         else:
             return '', 404
 
-    # @admin_required
+    @admin_required
     def delete(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
         if proveedor.role == 'proveedor':
@@ -25,7 +25,7 @@ class Proveedor(Resource):
         else:
             return '', 404
 
-    # @admin_required
+    @admin_required
     def put(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
         if proveedor.role == 'proveedor':

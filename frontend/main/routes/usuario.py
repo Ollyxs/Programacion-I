@@ -55,6 +55,9 @@ def mi_cuenta(id):
     r = requests.get(
             current_app.config["API_URL"]+'/cliente/'+str(id),
             headers = headers)
+    r = requests.get(
+            current_app.config["API_URL"]+'/proveedor/'+str(id),
+            headers = headers)
     if (r.status_code == 404):
         return redirect(url_for('main.index'))
     usuario = json.loads(r.text)

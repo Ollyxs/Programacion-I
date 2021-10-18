@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, current_app, re
 from .. formularios.registrarse import FormRegistro
 from flask_login import login_required, LoginManager, current_user
 import requests, json
-from .auth import admin_required, proveer_required
+from .auth import admin_required, proveerdor_required
 
 
 proveedores = Blueprint('proveedores', __name__, url_prefix='/proveedores')

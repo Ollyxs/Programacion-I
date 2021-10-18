@@ -11,14 +11,14 @@ class Producto(Resource):
         producto = db.session.query(ProductoModel).get_or_404(id)
         return producto.to_json()
 
-    # @admin_provider_required
+    @admin_provider_required
     def delete(self, id):
         producto = db.session.query(ProductoModel).get_or_404(id)
         db.session.delete(producto)
         db.session.commit()
         return '', 204
 
-    # @provider_required
+    @provider_required
     def put(self, id):
         proveedor = get_jwt_identity()
         producto = db.session.query(ProductoModel).get_or_404(id)
@@ -34,7 +34,7 @@ class Producto(Resource):
 
 
 class Productos(Resource):
-    # @admin_provider_required
+    @admin_provider_required
     def get(self):
         page = 1
         per_page = 10

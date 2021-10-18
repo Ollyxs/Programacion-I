@@ -55,7 +55,7 @@
               </thead>
               <tbody>
                 {% for bolson in bolsones %}
-                {{ macro.bolsones(bolson) }}
+                {{ macro.bolsones(bolson, user) }}
                 {% endfor %}
               </tbody>
             </table>
@@ -197,7 +197,7 @@
               </thead>
               <tbody>
                 {% for bolson in previos %}
-                {{ macro.bolsones(bolson) }}
+                {{ macro.bolsones(bolson, user) }}
                 {% endfor %}
               </tbody>
             </table>

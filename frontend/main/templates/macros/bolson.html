@@ -1,4 +1,5 @@
 {% macro ver_bolson(bolson) %}
+{% from "macros/form_macros.html" import MostrarCampo, MostrarEnvio %}
 <div class="col-md-5 col-sm-1 d-flex p-2 bd-highlight">
   <div>
     <ul class="list-unstyled">
@@ -18,51 +19,58 @@
   </div>
 </div>
 <div class="col-md-3 col-sm-1 d-flex p-2 bd-highlight">
-  <div>
-    <h3>{{bolson.nombre}}</h3>
-    <h1>{{bolson.precio}}</h1>
-    <h5>Productos que contiene:</h5>
-    {% if bolson.productos %}
-      <ul style="list-style-type:circle;">
-        {% for producto in bolson.productos %}
-          <li class="d-flex mb-3">
-            <div class="me-auto">
-              <p>{{producto.nombre}}</p>
-            </div>
-            <div class="ms-auto">
-              <p>Cantidad: 1</p>
-            </div>
-            <div class="ms-auto">
-              <a href="{{url_for('productos.ver', id=producto.productoid)}}">Ver</a>
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-    <div class="d-flex justify-content-center">
-      <div class="p-2 m-1">
-        <h6>Aprobado: </h6>
+  <form method="POST" action="{{url_for('bolsones.ver_todos')}}">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <div>
+      <h3>{{bolson.nombre}}</h3>
+      <h1>{{bolson.precio}}</h1>
+      <h5>Productos que contiene:</h5>
+      {% if bolson.productos %}
+        <ul style="list-style-type:circle;">
+          {% for producto in bolson.productos %}
+            <li class="d-flex mb-3">
+              <div class="me-auto">
+                <p>{{producto.nombre}}</p>
+              </div>
+              <div class="ms-auto">
+                <p>Cantidad: 1</p>
+              </div>
+              <div class="ms-auto">
+                <a href="{{url_for('productos.ver', id=producto.productoid)}}">Ver</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {# if current_user.is_authenticated and current_user.role == 'admin' #}
+      <div class="d-flex justify-content-center">
+        <div class="p-2 m-1">
+          {#{MostrarCampo(form.aprobado, class="form-control")}#}
+          <h6>Aprobado: </h6>
+        </div>
+        <div>
+          <select class="m-1 p-2"size="1">
+            {% if bolson.aprobado %}
+              <option selected="selected">Si</option>
+              <option>No</option>
+            {% else %}
+              <option selected="selected">No</option>
+              <option>Si</option>
+            {% endif %}
+          </select>
+        </div>
       </div>
       <div>
-        <select class="m-1 p-2"size="1">
-          {% if bolson.aprobado %}
-            <option selected="selected">Si</option>
-            <option>No</option>
-          {% else %}
-            <option selected="selected">No</option>
-            <option>Si</option>
-          {% endif %}
-        </select>
+        <p>{{bolson.fecha}}</p> 
+      </div>
+      {# endif #}
+      <div class="d-flex justify-content-center m-2">
+        {#{MostrarEnvio(form.envio, class="btn btn-primary m-2")}#}
+        <button class="btn btn-primary m-2" type="button">Guardar cambios</button>
+        <button class="btn btn-primary m-2" type="button" onclick="history.back()">Volver</button>
       </div>
     </div>
-    <div>
-      <p>{{bolson.fecha}}</p> 
-    </div>
-    <div class="d-flex justify-content-center m-2">
-      <button class="btn btn-primary m-2" type="button">Guardar cambios</button>
-      <button class="btn btn-primary m-2" type="button" onclick="history.back()">Volver</button>
-    </div>
-  </div>
+  </form>
 </div>
 {% endmacro %}
 
@@ -75,7 +83,7 @@
       <h5 class="card-title">{{bolson.nombre}}</h5>
       <p class="card-text">{{bolson.precio}}</p>
         <div class="d-grid gap-2">
-          <a href="{{url_for('bolsones.ver', id=bolson.id)}}" class="btn btn-primary">Ver</a>
+          <a href="{{url_for('bolsones.ver_en_venta', id=bolson.id)}}" class="btn btn-primary">Ver</a>
         </div>
     </div>
   </div>
@@ -83,7 +91,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro bolsones(bolson) %}
+{% macro bolsones(bolson, user) %}
 <tr>
   <!-- <th scope="row"><img src="https://via.placeholder.com/70x70"></th> -->
   <th>{{bolson.nombre}}</th>
@@ -94,7 +102,11 @@
   <td style="color:red">No</td> 
   {% endif %}
   <td>{{bolson.precio}}</td>
+  {% if user.is_authenticated and user.role == 'admin' %}
   <td><a href="{{url_for('bolsones.ver', id=bolson.id)}}" class="btn btn-primary">Ver</a></td>
+  {% else %}
+  <td><a href="{{url_for('bolsones.ver_pendiente', id=bolson.id)}}" class="btn btn-primary">Ver</a></td>
+  {% endif %}
 </tr>
 {% endmacro %}
 

@@ -48,7 +48,7 @@ def admin_required(fn):
         return fn(*args, **kws)
     return wrapper
 
-def proveer_required(fn):
+def proveerdor_required(fn):
     @wraps(fn)
     def wrapper(*args, **kws):
         if not current_user.role == "proveedor":
@@ -62,6 +62,24 @@ def cliente_required(fn):
     def wrapper(*args, **kws):
         if not current_user.role == "cliente":
             flash('Acceso restringido a cliente.','warning')
+            return redirect(url_for('main.index'))
+        return fn(*args, **kws)
+    return wrapper
+
+def admin_provider_required(fn):
+    @wraps(fn)
+    def wrapper(*args, **kws):
+        if not current_user.role == "admin" and not current_user.role == "proveedor":
+            flash('Acceso restringido a administradores y proveedores', 'warning')
+            return redirect(url_for('main.index'))
+        return fn(*args, **kws)
+    return wrapper
+
+def admin_client_required(fn):
+    @wraps(fn)
+    def wrapper(*args, **kws):
+        if not current_user.role == "admin" and not current_user.role == "cliente":
+            flash('Acceso restringido a administradores y clientes', 'warning')
             return redirect(url_for('main.index'))
         return fn(*args, **kws)
     return wrapper
