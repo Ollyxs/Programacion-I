@@ -5,7 +5,7 @@
 {% endmacro %}
 
 {% macro MostrarEnvio(Campo) %}
-{{Campo(**kwargs)}}
+{{Campo(**kwargs)|safe}}
 {% endmacro %}
 
 {% macro MostrarError(Campo) %}

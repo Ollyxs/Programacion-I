@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, url_for, render_template, current_app, request
 from .. formularios.bolson import FormBolson
-from .. formularios.modificar import FormModificar
+from .. formularios.compra import FormCompra
 from flask_login import login_required, LoginManager, current_user
 import requests, json
 from .auth import admin_required, proveerdor_required, cliente_required, admin_provider_required, admin_client_required
@@ -13,6 +13,7 @@ bolsones = Blueprint('bolsones', __name__, url_prefix='/bolson')
 @login_required
 @admin_required
 def ver(id):
+    user = current_user
     auth = request.cookies['access_token']
     headers = {
             'content-type': "application/json",
@@ -23,7 +24,7 @@ def ver(id):
     if (r.status_code == 404):
         return redirect(url_for('bolsones.ver_todos'))
     bolson = json.loads(r.text)
-    return render_template('bolson.html', bolson = bolson)
+    return render_template('bolson.html', bolson = bolson, user = user)
 
 @bolsones.route('/todos')
 @login_required
@@ -57,13 +58,29 @@ def ver_todos():
 
 @bolsones.route('/ver/<int:id>')
 def ver_en_venta(id):
+    form = FormCompra()
     r = requests.get(
             current_app.config["API_URL"]+'/bolson-venta/'+str(id),
             headers = {"content-type": "application/json"})
     if (r.status_code == 404):
         return redirect(url_for('bolsones.ver_todos_en_venta'))
     bolson = json.loads(r.text)
-    return render_template('bolson.html', bolson = bolson)
+    form.bolsonId.data = bolson['id']
+    bolsonid = form.bolsonId.data
+    if form.validate_on_submit():
+        data = {}
+        data["bolsonid"] = bolsonid
+        print(data)
+        auth = request.cookies['access_token']
+        headers = {'content-type': 'application/json',
+                'authorization': 'Bearer '+auth}
+        r = requests.post(
+                current_app.config['API_URL']+'/compras',
+                headers = headers,
+                data = json.dumps(data))
+        if (r.status_code == 201):
+            return redirect(url_for('main.index'))
+    return render_template('bolson.html', bolson = bolson, form = form)
 
 @bolsones.route('/ver-todos')
 def ver_todos_en_venta():
@@ -82,7 +99,7 @@ def ver_todos_en_venta():
 @login_required
 @admin_provider_required
 def ver_pendiente(id):
-    form = FormModificar()
+    user = current_user
     auth = request.cookies['access_token']
     headers = {
             'content-type': "application/json",
@@ -93,22 +110,7 @@ def ver_pendiente(id):
     if (r.status_code == 404):
         return redirect(url_for('main.index'))
     bolson = json.loads(r.text)
-    if form.validate_on_submit():
-        auth = request.cookies['access_token']
-        headers = {
-                'content-type': "application/json",
-                'authorization': "Bearer "+auth}
-        data = {}
-        data["aprobado"] = form.aprobado.data
-        print(data)
-        r = requests.post(
-                current_app.config["API_URL"]+'/bolson-pendiente/'+str(id),
-                headers = headers,
-                data = json.dumps(data))
-        print(r)
-        if (r.status_code == 201):
-            return redirect(url_for('main.index'))
-    return render_template('bolson.html', bolson = bolson)
+    return render_template('bolson.html', bolson = bolson, user = user)
 
 @bolsones.route('/pendientes')
 @login_required
@@ -185,7 +187,10 @@ def crear():
     #productos.insert(0, (0, ""))
     form.productosId.choices = productos
     if form.validate_on_submit():
-        headers = {'content-type': 'application/json'}
+        auth = request.cookies['access_token']
+        headers = {
+                'content-type': 'application/json',
+                'authorization': 'Bearer '+auth}
         data = {}
         data["nombre"] = form.nombre.data
         data["fecha"] = form.fecha.data.strftime("%Y-%m-%d")
@@ -217,3 +222,38 @@ def eliminar(id):
     print(r)
     return redirect(url_for('bolsones.ver_todos'))
 
+@bolsones.route('aprobar/<int:id>')
+@login_required
+@admin_required
+def aprobar(id):
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+    data = {}
+    data["aprobado"] = 1
+    r = requests.put(
+            current_app.config['API_URL']+'/bolson-pendiente/'+str(id),
+            headers=headers,
+            data = json.dumps(data))
+    if (r.status_code == 201):
+        return redirect(url_for('bolsones.ver_todos'))
+    return redirect(url_for('bolsones.ver_todos'))
+
+@bolsones.route('desaprobar/<int:id>')
+@login_required
+@admin_required
+def desaprobar(id):
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+    data = {}
+    data["aprobado"] = 0
+    r = requests.put(
+            current_app.config['API_URL']+'/bolson-pendiente/'+str(id),
+            headers=headers,
+            data = json.dumps(data))
+    if (r.status_code == 201):
+        return redirect(url_for('bolsones.ver_todos'))
+    return redirect(url_for('bolsones.ver_todos'))

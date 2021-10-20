@@ -1,5 +1,5 @@
-{% macro ver_bolson(bolson) %}
-{% from "macros/form_macros.html" import MostrarCampo, MostrarEnvio %}
+{% macro ver_bolson(bolson, user) %}
+{#% from "macros/form_macros.html" import MostrarCampo, MostrarEnvio %#}
 <div class="col-md-5 col-sm-1 d-flex p-2 bd-highlight">
   <div>
     <ul class="list-unstyled">
@@ -19,8 +19,6 @@
   </div>
 </div>
 <div class="col-md-3 col-sm-1 d-flex p-2 bd-highlight">
-  <form method="POST" action="{{url_for('bolsones.ver_todos')}}">
-    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
     <div>
       <h3>{{bolson.nombre}}</h3>
       <h1>{{bolson.precio}}</h1>
@@ -42,35 +40,20 @@
           {% endfor %}
         </ul>
       {% endif %}
-      {# if current_user.is_authenticated and current_user.role == 'admin' #}
-      <div class="d-flex justify-content-center">
-        <div class="p-2 m-1">
-          {#{MostrarCampo(form.aprobado, class="form-control")}#}
-          <h6>Aprobado: </h6>
-        </div>
-        <div>
-          <select class="m-1 p-2"size="1">
-            {% if bolson.aprobado %}
-              <option selected="selected">Si</option>
-              <option>No</option>
-            {% else %}
-              <option selected="selected">No</option>
-              <option>Si</option>
-            {% endif %}
-          </select>
-        </div>
-      </div>
       <div>
         <p>{{bolson.fecha}}</p> 
       </div>
-      {# endif #}
       <div class="d-flex justify-content-center m-2">
-        {#{MostrarEnvio(form.envio, class="btn btn-primary m-2")}#}
-        <button class="btn btn-primary m-2" type="button">Guardar cambios</button>
+        {% if user.is_authenticated and user.role == 'admin' %}
+          {% if bolson.aprobado %}
+            <a type="button" class="btn btn-danger m-2" href="{{url_for('bolsones.desaprobar', id=bolson.id)}}">Desaprobar</a>
+          {% else %}
+            <a type="button" class="btn btn-success m-2" href="{{url_for('bolsones.aprobar', id=bolson.id)}}">Aprobar</a>
+          {% endif %}
+        {% endif %}
         <button class="btn btn-primary m-2" type="button" onclick="history.back()">Volver</button>
       </div>
     </div>
-  </form>
 </div>
 {% endmacro %}
 

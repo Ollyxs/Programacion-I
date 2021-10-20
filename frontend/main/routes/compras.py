@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, current_app, request
 from flask_login import login_required, LoginManager, current_user
+from .. formularios.compra import FormCompra
 import requests, json
 from .auth import admin_required, cliente_required
 
@@ -42,3 +43,23 @@ def ver_todas():
     print(r)
     compras = json.loads(r.text)["compras"]
     return render_template('compras_admin.html', compras = compras)
+
+@compras.route('/crear', methods=['POST', 'GET'])
+@login_required
+def crear():
+    form = FormCompra()
+    if form.validate_on_submit():
+        data = {}
+        data["bolsonid"] = form.bolsonid.data
+        print(data)
+        auth = request.cookies['access_token']
+        headers = {
+                'content-type': 'application/json',
+                'authorization': 'Bearer '+auth}
+        r = requests.post(
+                current_app.config['API_URL']+'/compras',
+                headers = headers,
+                data = json.dumps(data))
+        if (r.status_code == 201):
+            return redirect(url_for('main.index'))
+    return render_template('bolson.html', form = form)

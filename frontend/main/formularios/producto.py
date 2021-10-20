@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 from flask_wtf.file import FileField, FileRequired
 from wtforms import validators
 
@@ -28,3 +28,8 @@ class FormProducto(FlaskForm):
                 render_kw={"placeholder": "Descripcion del producto"}
             )
     envio = SubmitField("Guardar cambios")
+
+
+class FormFilterProducto(FlaskForm):
+    proveedorid = SelectField('Proveedor', [validators.optional()], coerce = int,)
+    envio = SubmitField("Filtrar")
