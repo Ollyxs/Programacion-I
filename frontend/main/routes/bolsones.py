@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, url_for, render_template, current_app, request
-from .. formularios.bolson import FormBolson
+from .. formularios.bolson import FormBolson, FormFilterBolson
 from .. formularios.compra import FormCompra
 from flask_login import login_required, LoginManager, current_user
 import requests, json
@@ -84,16 +84,27 @@ def ver_en_venta(id):
 
 @bolsones.route('/ver-todos')
 def ver_todos_en_venta():
+    filter = FormFilterBolson(request.args, meta={'csrf': False})
     data = {}
     data['page'] = 1
-    data['per_page'] = 10
-    print(data)
+    data['per_page'] = 12
+    if 'page' in request.args:
+        data['page'] = request.args.get('page','')
+    headers = {'content-type':'application/json'}
+    
+    if filter.envio():
+        if filter.nombre.data != None:
+            data["nombre"] = filter.nombre.data
+
     r = requests.get(
         current_app.config["API_URL"]+'/bolsones-venta',
-        headers = {"content-type":"application/json"},
+        headers = headers,
         data = json.dumps(data))
-    bolsones = json.loads(r.text)["bolsonesventas"] 
-    return render_template('bolsones.html', bolsones = bolsones)
+    bolsones = json.loads(r.text)["bolsonesventas"]
+    pagination = {}
+    pagination["pages"] = json.loads(r.text)["pages"]
+    pagination["current_page"] = json.loads(r.text)["page"]
+    return render_template('bolsones.html', bolsones = bolsones, pagination = pagination, filter = filter)
 
 @bolsones.route('/pendiente/<int:id>', methods=['POST', 'GET'])
 @login_required

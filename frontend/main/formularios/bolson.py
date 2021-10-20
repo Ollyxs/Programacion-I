@@ -22,3 +22,8 @@ class FormBolson(FlaskForm):
             )
     productosId = SelectMultipleField("", coerce=int)
     envio = SubmitField("Crear bolsón")
+
+
+class FormFilterBolson(FlaskForm):
+    nombre = StringField('',[validators.optional()])
+    envio = SubmitField("Filtrar")
