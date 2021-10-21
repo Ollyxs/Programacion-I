@@ -31,30 +31,60 @@ def ver(id):
 @admin_required
 def ver_todos():
     user = current_user
-    data = {}
-    data['page'] = 1
-    data['per_page'] = 10
     auth = request.cookies['access_token']
     headers = {
             'content-type': "application/json",
             'authorization': "Bearer "+auth}
-    print(data)
+    
+    data = {}
+    data['page'] = 1
+    data['per_page'] = 3
+    if 'page' in request.args:
+        data['page'] = request.args.get('page','')
+    
     r = requests.get(
         current_app.config["API_URL"]+'/bolsones',
         headers = headers,
         data = json.dumps(data))
     bolsones = json.loads(r.text)["bolsones"] 
+    pagination = {}
+    pagination["pages"] = json.loads(r.text)["pages"]
+    pagination["current_page"] = json.loads(r.text)["page"]
+
+    data_pen = {}
+    data_pen['page2'] = 1
+    data_pen['per_page2'] = 3
+    if 'page2' in request.args:
+        data_pen['page2'] = request.args.get('page2','')
+    
     r = requests.get(
             current_app.config["API_URL"]+'/bolsones-pendientes',
             headers = headers,
-            data = json.dumps(data))
+            data = json.dumps(data_pen))
     pendientes = json.loads(r.text)["bolsones pendientes"]
+    pagination2 = {}
+    pagination2["pages2"] = json.loads(r.text)["pages2"]
+    pagination2["current_page2"] = json.loads(r.text)["page2"]
+    
+    data_pre = {}
+    data_pre['page3'] = 1
+    data_pre['per_page3'] = 3
+    if 'page3' in request.args:
+        data_pre['page3'] = request.args.get('page3','')
+    
     r = requests.get(
         current_app.config["API_URL"]+'/bolsones-previos',
         headers = headers,
         data = json.dumps(data))
-    previos = json.loads(r.text)["bolsones previos"] 
-    return render_template('bolsones_admin.html', bolsones = bolsones, pendientes = pendientes, previos = previos, user = user)
+    previos = json.loads(r.text)["bolsones previos"]
+    pagination3 = {}
+    pagination3["pages"] = json.loads(r.text)["pages3"]
+    pagination3["current_page"] = json.loads(r.text)["page3"]
+    
+    return render_template('bolsones_admin.html', bolsones = bolsones, pagination = pagination,
+            pendientes = pendientes, pagination2 = pagination2,
+            previos = previos, pagination3 = pagination3,
+            user = user)
 
 @bolsones.route('/ver/<int:id>')
 def ver_en_venta(id):

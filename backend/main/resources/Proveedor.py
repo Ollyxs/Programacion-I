@@ -47,6 +47,12 @@ class Proveedores(Resource):
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
+                if key == 'ordenamiento':
+                    print(value)
+                    if value == 'nombre':
+                        proveedores = proveedores.order_by(UsuarioModel.nombre.asc())
+                    if value == 'apellido':
+                        proveedores = proveedores.order_by(UsuarioModel.apellido.asc())
                 if key == 'page':
                     page = int(value)
                 if key == 'per_page':

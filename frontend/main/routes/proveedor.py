@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, current_app, request
 from .. formularios.registrarse import FormRegistro
+from .. formularios.proveedores import FormFilterProveedor
 from flask_login import login_required, LoginManager, current_user
 import requests, json
 from .auth import admin_required, proveerdor_required
@@ -34,16 +35,26 @@ def ver(id):
 @login_required
 @admin_required
 def ver_todos():
+    filter = FormFilterProveedor(request.args, meta={'csrf': False})
     data = {}
     data['page'] = 1
     data['per_page'] = 10
+    if 'page' in request.args:
+        data['page'] = request.args.get('page','')
     auth = request.cookies['access_token']
     headers = {
             'content-type': "application/json",
             'authorization': "Bearer "+auth}
+    if filter.envio():
+        if filter.ordenamiento.data != None:
+            data["ordenamiento"] =  filter.ordenamiento.data
+
     r = requests.get(
             current_app.config["API_URL"]+'/proveedores',
             headers = headers,
             data = json.dumps(data))
     proveedores = json.loads(r.text)["proveedores"]
-    return render_template('proveedores_admin.html', proveedores = proveedores)
+    pagination = {}
+    pagination["pages"] = json.loads(r.text)["pages"]
+    pagination["current_page"] = json.loads(r.text)["page"]
+    return render_template('proveedores_admin.html', proveedores = proveedores, pagination = pagination, filter = filter)
