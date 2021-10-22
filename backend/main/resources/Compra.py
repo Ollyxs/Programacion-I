@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
-from main.models import CompraModel, BolsonModel
+from main.models import CompraModel, BolsonModel, UsuarioModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from main.auth.decorators import admin_required, client_required, admin_client_required
 
@@ -39,6 +39,22 @@ class Compras(Resource):
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
+                if key == 'nombre':
+                    compras = compras.join(UsuarioModel, CompraModel.cliente).filter(UsuarioModel.nombre.like('%'+value+'%'))
+                if key == 'apellido':
+                    compras = compras.join(UsuarioModel, CompraModel.cliente).filter(UsuarioModel.apellido.like('%'+value+'%'))
+                if key == 'retirado':
+                    if value != 2:
+                        compras = compras.filter(CompraModel.retirado == value)
+                if key == 'ordenamiento':
+                    if value == 'id':
+                        compras = compras.order_by(CompraModel.id.desc())
+                    if value == 'fecha':
+                        compras = compras.order_by(CompraModel.fechaHoraCompra.asc())
+                    if value == 'nombre':
+                        compras = compras.join(UsuarioModel, CompraModel.cliente).order_by(UsuarioModel.nombre.asc())
+                    if value == 'apellido':
+                        compras = compras.join(UsuarioModel, CompraModel.cliente).order_by(UsuarioModel.apellido.asc())
                 if key == 'page':
                     page = int(value)
                 if key == 'per_page':

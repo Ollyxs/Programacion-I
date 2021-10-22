@@ -1,12 +1,25 @@
 {% extends "main.html" %}
 {% import 'macros/compras.html' as macro %}
+{% from 'macros/form_macros.html' import MostrarCampo, MostrarEnvio %}
 {% block content %}
       <div class="row">
         <div class="col-md-1 col-sm-1"></div>
         <div class="col-md-10 col-sm-1 border border-1 p-1">
           <h3>Compras</h3>
           <div class="row">
-            <div class="col-md-10 col-sm-6"></div>
+            <div class="col-md-10 col-sm-6">
+              <form method="GET" action="{{url_for('compras.ver_todas')}}">
+                <div class="form-row">
+                  <div class="form-group d-flex col-md-12">
+                    {{ MostrarCampo(filter.nombre, class="form-control", placeholder="Buscar x Nombre") }}
+                    {{ MostrarCampo(filter.apellido, class="form-control", placeholder="Buscar x Apellido") }}
+                    {{ MostrarCampo(filter.retirado, class="form-control") }}
+                    {{ MostrarCampo(filter.ordenamiento, class="form-control") }}
+                    {{ MostrarEnvio(filter.envio, class="btn btn-success")}}
+                  </div>
+                </div>
+              </form>
+            </div>
             <div class="col-md-2 col-sm-6">
               <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
