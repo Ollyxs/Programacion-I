@@ -32,7 +32,7 @@ class FormProducto(FlaskForm):
 
 
 class FormFilterProducto(FlaskForm):
-    proveedorid = SelectField('Proveedor', [validators.optional()], coerce = int,)
+    proveedorid = SelectField('', [validators.optional()], coerce = int,)
     ordenamiento = SelectField('',
             choices = [('producto',"Producto"),('proveedor',"Proveedor")],
             validators=[InputRequired()], coerce=str, default='producto')

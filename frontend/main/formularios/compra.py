@@ -12,7 +12,7 @@ class FormCompra(FlaskForm):
 class FormFilterCompra(FlaskForm):
     nombre = StringField('',[validators.optional()])
     apellido = StringField('',[validators.optional()])
-    retirado = SelectField('', [validators.optional()], choices = [(2, ""), (1, "Si"), (0, "No")], coerce = int, default=2)
+    retirado = SelectField('', [validators.optional()], choices = [(2, "Retirado"), (1, "Si"), (0, "No")], coerce = int, default=2)
     ordenamiento = SelectField('',
             choices = [('id', "N° Compra"), ('fecha', "Fecha Compra"), ('nombre', "Nombre Cliente"), ('apellido', "Apellido Cliente")],
             validators=[InputRequired()], coerce=str, default='id')

@@ -50,15 +50,15 @@ def ver_todas():
         if filter.ordenamiento.data != None:
             data['ordenamiento'] = filter.ordenamiento.data
 
-    print(data)
-
     r = requests.get(
             current_app.config['API_URL']+'/compras',
             headers = headers,
             data = json.dumps(data))
-    print(r)
     compras = json.loads(r.text)["compras"]
-    return render_template('compras_admin.html', compras = compras, filter = filter)
+    pagination = {}
+    pagination["pages"] = json.loads(r.text)["pages"]
+    pagination["current_page"] = json.loads(r.text)["page"]
+    return render_template('compras_admin.html', compras = compras, pagination = pagination, filter = filter)
 
 @compras.route('/crear', methods=['POST', 'GET'])
 @login_required

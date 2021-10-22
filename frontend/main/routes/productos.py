@@ -40,7 +40,7 @@ def ver_todos():
             headers = headers,
             data = json.dumps(data_prov))
     proveedores = [(item['id'], item['nombre']+" "+item['apellido']) for item in json.loads(r.text)["proveedores"]]
-    proveedores.insert(0, (0, ""))
+    proveedores.insert(0, (0, "Proveedor"))
     filter.proveedorid.choices = proveedores
 
     if filter.envio():
