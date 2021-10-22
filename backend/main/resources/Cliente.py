@@ -55,6 +55,11 @@ class Clientes(Resource):
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
+                if key == 'ordenamiento':
+                    if value == 'nombre':
+                        clientes = clientes.order_by(UsuarioModel.nombre.asc())
+                    if value == 'apellido':
+                        clientes = clientes.order_by(UsuarioModel.apellido.asc())
                 if key == 'page':
                     page = int(value)
                 if key == 'per_page':

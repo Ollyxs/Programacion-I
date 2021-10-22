@@ -43,7 +43,12 @@ class Productos(Resource):
             filters = request.get_json().items()
             for key, value in filters:
                 if key == 'proveedorid':
-                        productos = productos.filter(ProductoModel.proveedorid == value)
+                    productos = productos.filter(ProductoModel.proveedorid == value)
+                if key == 'ordenamiento':
+                    if value == 'producto':
+                        productos = productos.order_by(ProductoModel.nombre.asc())
+                    if value == 'proveedor':
+                        productos = productos.join(UsuarioModel, ProductoModel.proveedor).order_by(UsuarioModel.nombre.asc())
                 if key == 'page':
                     page = int(value)
                 if key == 'per_page':

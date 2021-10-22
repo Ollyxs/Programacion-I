@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from flask_wtf.file import FileField, FileRequired
+from wtforms.validators import InputRequired
 from wtforms import validators
 
 
@@ -32,4 +33,7 @@ class FormProducto(FlaskForm):
 
 class FormFilterProducto(FlaskForm):
     proveedorid = SelectField('Proveedor', [validators.optional()], coerce = int,)
+    ordenamiento = SelectField('',
+            choices = [('producto',"Producto"),('proveedor',"Proveedor")],
+            validators=[InputRequired()], coerce=str, default='producto')
     envio = SubmitField("Filtrar")

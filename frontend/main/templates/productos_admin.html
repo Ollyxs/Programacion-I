@@ -16,7 +16,7 @@
         <form method="GET" action="{{url_for('productos.ver_todos')}}">
           <div class="form-row">
             <div class="form-group d-flex col-md-12">
-              {{ MostrarCampo(filter.proveedorid, class="form-control")}} {{ MostrarEnvio(filter.envio, class="btn btn-success")}}
+              {{ MostrarCampo(filter.proveedorid, class="form-control")}} {{ MostrarCampo(filter.ordenamiento, class="form-control")}} {{ MostrarEnvio(filter.envio, class="btn btn-success")}}
             </div>
             <!-- <div class="form-group col-md-2">
               {{ MostrarEnvio(filter.envio, class="btn btn-success")}}
@@ -29,7 +29,10 @@
           <ul class="pagination justify-content-center">
             {% if pagination.current_page != 1 %}
             <li class="page-item">
-              <a class="page-link" href="{{url_for('productos.ver_todos', page = (pagination.current_page-1), proveedorid = request.args.proveedorid)}}">
+              <a class="page-link" href="{{url_for('productos.ver_todos',
+                page = (pagination.current_page-1),
+                proveedorid = request.args.proveedorid,
+                ordenamiento = request.args.ordenamiento)}}">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
@@ -43,7 +46,10 @@
             {% for n in range(1, pagination.pages+1) %}
             {% if n != pagination.current_page %}
             <li class="page-item" aria-current="page">
-              <a class="page-link" href="{{url_for('productos.ver_todos', page = n, proveedorid = request.args.proveedorid)}}">{{n}}</a>
+              <a class="page-link" href="{{url_for('productos.ver_todos',
+                page = n,
+                proveedorid = request.args.proveedorid,
+                ordenamiento = request.args.ordenamiento)}}">{{n}}</a>
             </li>
             {% else %}
             <li class="page-item disabled">
@@ -53,7 +59,10 @@
             {% endfor %}
             {% if pagination.current_page != pagination.pages %}
             <li class="page-item">
-              <a class="page-link" href="{{url_for('productos.ver_todos', page = (pagination.current_page+1), proveedorid = request.args.proveedorid)}}">
+              <a class="page-link" href="{{url_for('productos.ver_todos',
+                page = (pagination.current_page+1),
+                proveedorid = request.args.proveedorid,
+                ordenamiento = request.args.ordenamiento)}}">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>

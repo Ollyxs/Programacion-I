@@ -19,7 +19,6 @@ class Bolson(db.Model):
 
     def to_json(self):
         productos = [producto.to_json() for producto in self.productos]
-        print("productos", productos)
         bolson_json = {
             'id': self.id,
             'nombre': str(self.nombre),
@@ -41,7 +40,6 @@ class Bolson(db.Model):
                           aprobado=aprobado,
                           fecha=fecha,
                           )
-            print(bolson_json)
             if "productos" in bolson_json:
                 for productoid in bolson_json.get('productos'):
                     print("producto id", str(productoid))

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, current_app, re
 from .. formularios.registrarse import FormRegistro
 from .. formularios.ingresar import FormIngreso
 from .. formularios.cuenta import FormCuenta
+from .. formularios.clientes import FormFilterCliente
 from flask_login import login_required, LoginManager, current_user
 import requests, json
 from .auth import admin_required
@@ -20,7 +21,6 @@ def registrar():
         data["email"] = form.email.data
         data["telefono"] = form.telefono.data
         data["password"] = form.password.data
-        print(data)
         headers = {"content-type": "application/json"}
         r = requests.post(
                 current_app.config["API_URL"]+'/auth/register',
@@ -36,7 +36,6 @@ def ingresar():
         data = {}
         data["email"] = form.email.data
         data["password"] = form.password.data
-        print(data)
         headers = {"content-type": "application/json"}
         r = requests.post(
                 current_app.config["API_URL"]+'/auth/login',
@@ -61,26 +60,34 @@ def mi_cuenta(id):
     if (r.status_code == 404):
         return redirect(url_for('main.index'))
     usuario = json.loads(r.text)
-    print(usuario)
     return render_template('usuario.html', usuario = usuario)
 
 @usuarios.route('/clientes')
 @login_required
 @admin_required
 def ver_clientes():
+    filter = FormFilterCliente(request.args, meta={'csrf': False})
     data = {}
     data['page'] = 1
     data['per_page'] = 10
+    if 'page' in request.args:
+        data['page'] = request.args.get('page','')
     auth = request.cookies['access_token']
     headers = {
             'content-type': "application/json",
             'authorization': "Bearer "+auth}
+    if filter.envio():
+        if filter.ordenamiento.data != None:
+            data["ordenamiento"] = filter.ordenamiento.data
     r = requests.get(
             current_app.config["API_URL"]+'/clientes',
             headers = headers,
             data = json.dumps(data))
     clientes = json.loads(r.text)["clientes"]
-    return render_template('clientes_admin.html', clientes = clientes)
+    pagination = {}
+    pagination["pages"] = json.loads(r.text)["pages"]
+    pagination["current_page"] = json.loads(r.text)["page"]
+    return render_template('clientes_admin.html', clientes = clientes, pagination = pagination, filter = filter)
 
 @usuarios.route('admin', methods=['POST', 'GET'])
 @login_required

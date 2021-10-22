@@ -1,32 +1,64 @@
 {% extends "main.html" %}
 {% import 'macros/usuarios.html' as macro %}
+{% from 'macros/form_macros.html' import MostrarCampo, MostrarEnvio %}
 {% block content %}
       <div class="row">
         <div class="col-md-1 col-sm-1"></div>
         <div class="col-md-10 col-sm-1 border border-1 p-1">
           <h3>Clientes</h3>
           <div class="row">
-            <div class="col-md-10 col-sm-6">
+            <div class="col-md-6 col-sm-3">
               <a href="#" type="button" class="btn btn-success ">Enviar mail de promoción</a>
             </div>
-            <div class="col-md-2 col-sm-6">
-              <nav aria-label="Page navigation example">
+            <div class="col-md-4 col-sm-3">
+              <form method="GET" action="{{url_for('usuarios.ver_clientes')}}">
+                <div class="form-group">
+                  <div class="form-group d-flex col-md-12">
+                    {{ MostrarCampo(filter.ordenamiento, class="form-control") }} {{ MostrarEnvio(filter.envio, class="btn btn-success") }} 
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-2 col-sm-3">
+              <nav aria-label="Pagination">
                 <ul class="pagination justify-content-center">
+                  {% if pagination.current_page != 1 %}
                   <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
+                    <a class="page-link" href="{{url_for('usuarios.ver_clientes', page = (pagination.current_page-1), ordenamiento = request.args.ordenamiento)}}">
                       <span aria-hidden="true">&laquo;</span>
                     </a>
                   </li>
-                  <li class="page-item active " aria-current="page">
-                    <a class="page-link" href="#">1</a>
-                  </li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                      <span aria-hidden="true">&raquo;</span>
+                  {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                      <span aria-hidden="true">&laquo;</span>
                     </a>
                   </li>
+                  {% endif %}
+                  {% for n in range(1, pagination.pages+1) %}
+                    {% if n != pagination.current_page %}
+                      <li class="page-item" aria-current="page">
+                        <a class="page-link" href="{{url_for('usuarios.ver_clientes', page = n, ordenamiento = request.args.ordenamiento)}}">{{n}}</a>
+                      </li>
+                    {% else %}
+                      <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">{{n}}</a>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                  {% if pagination.current_page != pagination.pages %}
+                    <li class="page-item">
+                      <a class="page-link" href="{{url_for('usuarios.ver_clientes', page = (pagination.current_page+1), ordenamiento = request.args.ordenamiento)}}">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  {% else %}
+                    <li class="page-item disabled">
+                      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  {% endif %}
                 </ul>
               </nav>
             </div>

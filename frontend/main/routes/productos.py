@@ -16,7 +16,6 @@ def ver(id):
     if (r.status_code == 404):
         return redirect(url_for('main.index'))
     producto = json.loads(r.text)
-    print(producto)
     return render_template('producto.html', producto = producto)
 
 @productos.route('/todos')
@@ -45,9 +44,10 @@ def ver_todos():
     filter.proveedorid.choices = proveedores
 
     if filter.envio():
-        print(filter.proveedorid.data)
         if filter.proveedorid.data != None and filter.proveedorid.data != 0:
             data["proveedorid"] = filter.proveedorid.data
+        if filter.ordenamiento.data != None:
+            data["ordenamiento"] = filter.ordenamiento.data
 
     r = requests.get(
             current_app.config['API_URL']+'/productos',
@@ -71,7 +71,6 @@ def crear():
         data = {}
         data["nombre"] = form.nombre.data
         data["descripcion"] = form.descripcion.data
-        print(data)
         r = requests.post(
                 current_app.config['API_URL']+'/productos',
                 headers = headers,

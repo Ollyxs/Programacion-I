@@ -4,8 +4,8 @@ from wtforms.validators import InputRequired
 from wtforms import validators
 
 
-class FormFilterProveedor(FlaskForm):
+class FormFilterCliente(FlaskForm):
     ordenamiento = SelectField('',
-            choices=[('nombre', "nombre"), ('apellido', "apellido")],
+            choices=[('nombre',"Nombre"),('apellido',"Apellido")],
             validators=[InputRequired()], coerce=str, default='nombre')
     envio = SubmitField("ordenar")

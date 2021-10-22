@@ -38,7 +38,7 @@ def ver_todos():
     filter = FormFilterProveedor(request.args, meta={'csrf': False})
     data = {}
     data['page'] = 1
-    data['per_page'] = 10
+    data['per_page'] = 1
     if 'page' in request.args:
         data['page'] = request.args.get('page','')
     auth = request.cookies['access_token']
