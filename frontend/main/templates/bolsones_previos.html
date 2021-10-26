@@ -1,0 +1,108 @@
+{% extends "main.html" %}
+{% import 'macros/bolson.html' as macro %}
+{% block content %}
+<div class="row">
+  <div class="col-md-1 col-sm-1"></div>
+  <div class="col-md-10 col-sm-1 border border-1 p-1">
+    <h3>Bolsones Pendientes</h3>
+    <div>
+      <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_todos')}}">Todos</a>
+      <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_pendientes')}}">Pendientes</a>
+      <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_previos')}}">Previos</a>
+    </div>
+    </br>
+    <div class="row">
+      <div class="col-md-10 col-sm-6"></div>
+      <div class="col-md-2 col-sm-6">
+        <nav aria-label="Pagination">
+          <ul class="pagination justify-content-center">
+            {% if pagination.current_page != 1 %}
+            <li class="page-item">
+              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page-1))}}">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% endif %}
+            {% for n in range(1, pagination.pages+1) %}
+            {% if n != pagination.current_page %}
+            <li class="page-item" aria-current="page">
+              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = n)}}">{{n}}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">{{n}}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if pagination.current_page != pagination.pages %}
+            <li class="page-item">
+              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page+1))}}">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+<div class="row">
+  <div class="col-md-1 col-sm-1"></div>
+  <div class="col-md-10 col-sm-1 border border-1">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th scope="col">Bolsón</th>
+          <!-- <th scope="col"></th> -->
+          <th scope="col">Fecha</th>
+          <th scope="col">Aprobado</th>
+          <th scope="col">Precio</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bolson in previos %}
+        {{ macro.bolsones(bolson, user) }}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-1 col-sm-1"></div>
+</div>
+<br/>
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item active" aria-current="page">
+      <a class="page-link" href="#">1</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="col-md-1 col-sm-1"></div>
+</div>
+{% endblock %}

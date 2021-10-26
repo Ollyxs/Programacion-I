@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectMultipleField, SubmitField
-from wtforms.fields.html5 import DateField
+from wtforms.fields.html5 import DateField, DateTimeField
 from wtforms import validators
 
 
@@ -27,3 +27,8 @@ class FormBolson(FlaskForm):
 class FormFilterBolson(FlaskForm):
     nombre = StringField('',[validators.optional()])
     envio = SubmitField("Filtrar")
+
+class FromFilterBolsones(FlaskForm):
+    desde = DateTimeField('',[validators.optional()], format='%Y-%m-%d')
+    hasta = DateTimeField('',[validators.optional()], format='%Y-%m-%d')
+    envio = SubmitField('Filtrar')

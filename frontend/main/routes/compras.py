@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, current_app, request
 from flask_login import login_required, LoginManager, current_user
-from .. formularios.compra import FormCompra, FormFilterCompra
+from .. formularios.compra import FormFilterCompra
 import requests, json
 from .auth import admin_required, cliente_required
 
@@ -12,6 +12,7 @@ compras = Blueprint('compras', __name__, url_prefix='/compras')
 @login_required
 @admin_required
 def ver(id):
+    user = current_user
     auth = request.cookies['access_token']
     headers = {
             'content-type': "application/json",
@@ -23,7 +24,7 @@ def ver(id):
         return redirect(url_for('compras.ver_todas'))
     compra = json.loads(r.text)
     print(compra)
-    return render_template('ver_modificar_compra.html', compra = compra)
+    return render_template('ver_modificar_compra.html', compra = compra, user = user)
 
 @compras.route('/todas')
 @login_required
@@ -60,22 +61,57 @@ def ver_todas():
     pagination["current_page"] = json.loads(r.text)["page"]
     return render_template('compras_admin.html', compras = compras, pagination = pagination, filter = filter)
 
-@compras.route('/crear', methods=['POST', 'GET'])
+@compras.route('comprar/<int:id>')
 @login_required
-def crear():
-    form = FormCompra()
-    if form.validate_on_submit():
-        data = {}
-        data["bolsonid"] = form.bolsonid.data
-        print(data)
-        auth = request.cookies['access_token']
-        headers = {
-                'content-type': 'application/json',
-                'authorization': 'Bearer '+auth}
-        r = requests.post(
-                current_app.config['API_URL']+'/compras',
-                headers = headers,
-                data = json.dumps(data))
-        if (r.status_code == 201):
-            return redirect(url_for('main.index'))
-    return render_template('bolson.html', form = form)
+@cliente_required
+def comprar(id):
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+    data = {}
+    data["bolsonid"] = id
+    r = requests.post(
+            current_app.config['API_URL']+'/compras',
+            headers = headers,
+            data = json.dumps(data))
+    if (r.status_code == 201):
+        return redirect(url_for('main.index'))
+    return render_template('main.index')
+
+@compras.route('retirado/<int:id>')
+@login_required
+@admin_required
+def retirado(id):
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+    data = {}
+    data['retirado'] = 1
+    r = requests.put(
+            current_app.config['API_URL']+'/compra/'+str(id),
+            headers = headers,
+            data = json.dumps(data))
+    if (r.status_code == 201):
+        return redirect(url_for('compras.ver_todas'))
+    return redirect(url_for('compras.ver_todas'))
+
+@compras.route('no-retirado/<int:id>')
+@login_required
+@admin_required
+def no_retirado(id):
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+    data = {}
+    data['retirado'] = 0
+    r = requests.put(
+            current_app.config['API_URL']+'/compra/'+str(id),
+            headers = headers,
+            data = json.dumps(data))
+    if (r.status_code == 201):
+        return redirect(url_for('compras.ver_todas'))
+    return redirect(url_for('compras.ver_todas'))
+

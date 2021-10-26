@@ -1,4 +1,4 @@
-{% macro ver_compra(compra) %}
+{% macro ver_compra(compra, user) %}
 <div style="padding: 30px">
   <h3>Datos compra #{{compra.id}}</h3>
   <form>
@@ -25,6 +25,13 @@
                 <option>Si</option>
               {% endif %}
             </select>
+            {% if user.is_authenticated and user.role == 'admin' %}
+              {% if compra.retirado %}
+                <a type="button" class="btn btn-danger m-2" href="{{url_for('compras.no_retirado', id=compra.id)}}">Sin Retirar</a>
+              {% else %}
+               <a type="button" class="btn btn-success m-2" href="{{url_for('compras.retirado', id=compra.id)}}">Retirado</a>
+              {% endif %}
+            {% endif %}
           </div>
         </div>
       </div>

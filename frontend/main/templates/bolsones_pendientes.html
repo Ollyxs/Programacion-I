@@ -1,32 +1,26 @@
 {% extends "main.html" %}
 {% import 'macros/bolson.html' as macro %}
-{% from 'macros/form_macros.html' import MostrarCampo, MostrarEnvio %}
 {% block content %}
 <div class="row">
   <div class="col-md-1 col-sm-1"></div>
   <div class="col-md-10 col-sm-1 border border-1 p-1">
-    <h3>Bolsones</h3>
+    <h3>Bolsones Pendientes</h3>
     <div>
       <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_todos')}}">Todos</a>
       <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_pendientes')}}">Pendientes</a>
       <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_previos')}}">Previos</a>
     </div>
+    </br>
     <div class="row">
-      <form method="GET" action="{{url_for('bolsones.ver_todos')}}">
-      <div class="col-md-9 col-sm-6 d-flex m-2">
-        {{ MostrarCampo(filter.desde, class="form-control") }}
-        {{ MostrarCampo(filter.hasta, class="form-control") }}
-        {{ MostrarEnvio(filter.envio, class="btn btn-success") }}
+      <div class="col-md-10 col-sm-6">
+        <a href="{{url_for('bolsones.crear')}}" type="button" class="btn btn-success ">Crear bolsón</a>
       </div>
-      </form>
       <div class="col-md-2 col-sm-6">
         <nav aria-label="Pagination">
           <ul class="pagination justify-content-center">
             {% if pagination.current_page != 1 %}
             <li class="page-item">
-              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page-1),
-                desde = request.args.desde,
-                hasta = request.args.hasta)}}">
+              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page-1))}}">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
@@ -40,9 +34,7 @@
             {% for n in range(1, pagination.pages+1) %}
             {% if n != pagination.current_page %}
             <li class="page-item" aria-current="page">
-              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = n,
-                desde = request.args.desde,
-                hasta = request.args.hasta)}}">{{n}}</a>
+              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = n)}}">{{n}}</a>
             </li>
             {% else %}
             <li class="page-item disabled">
@@ -52,9 +44,7 @@
             {% endfor %}
             {% if pagination.current_page != pagination.pages %}
             <li class="page-item">
-              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page+1),
-                desde = request.args.desde,
-                hasta = request.args.hasta)}}">
+              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page+1))}}">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
@@ -68,7 +58,6 @@
           </ul>
         </nav>
       </div>
-      <div class="col-md-1 col-sm-1"></div>
     </div>
     <div class="row">
       <div class="col-md-1 col-sm-1"></div>
@@ -82,11 +71,12 @@
               <th scope="col">Aprobado</th>
               <th scope="col">Precio</th>
               <th scope="col"></th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             {% for bolson in bolsones %}
-            {{ macro.bolsones(bolson, user) }}
+            {{ macro.pendientes(bolson) }}
             {% endfor %}
           </tbody>
         </table>
@@ -98,9 +88,7 @@
       <ul class="pagination justify-content-center">
         {% if pagination.current_page != 1 %}
         <li class="page-item">
-          <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page-1),
-            desde = request.args.desde,
-            hasta = request.args.hasta)}}">
+          <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page-1))}}">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
@@ -114,9 +102,7 @@
         {% for n in range(1, pagination.pages+1) %}
         {% if n != pagination.current_page %}
         <li class="page-item" aria-current="page">
-          <a class="page-link" href="{{url_for('bolsones.ver_todos', page = n,
-            desde = request.args.desde,
-            hasta = request.args.hasta)}}">{{n}}</a>
+          <a class="page-link" href="{{url_for('bolsones.ver_todos', page = n)}}">{{n}}</a>
         </li>
         {% else %}
         <li class="page-item disabled">
@@ -126,9 +112,7 @@
         {% endfor %}
         {% if pagination.current_page != pagination.pages %}
         <li class="page-item">
-          <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page+1),
-            desde = request.args.desde,
-            hasta = request.args.hasta)}}">
+          <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page+1))}}">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
@@ -142,6 +126,4 @@
       </ul>
     </nav>
   </div>
-  <br/>
-</div>
-{% endblock %}
+  {% endblock %}

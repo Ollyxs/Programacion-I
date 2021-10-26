@@ -29,13 +29,13 @@ class BolsonesPrevios(Resource):
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
-                if key == 'page3':
+                if key == 'page':
                     page = int(value)
-                if key == 'per_page3':
+                if key == 'per_page':
                     per_page = int(value)
         bolsonesprevios = bolsonesprevios.paginate(page, per_page, True, 30)
         return jsonify({'bolsones previos': [bolsonprevio.to_json() for bolsonprevio in bolsonesprevios.items],
                         'total': bolsonesprevios.total,
-                        'pages3': bolsonesprevios.pages,
-                        'page3': page
+                        'pages': bolsonesprevios.pages,
+                        'page': page
                         })

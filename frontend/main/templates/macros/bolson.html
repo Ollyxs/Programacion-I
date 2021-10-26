@@ -24,7 +24,25 @@
       <h1>{{bolson.precio}}</h1>
       <h5>Productos que contiene:</h5>
       {% if bolson.productos %}
-        <ul style="list-style-type:circle;">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for producto in bolson.productos %}
+              <tr>
+                <th>{{producto.nombre}}</th>
+                <td>Cantidad: 1</td>
+                <td><a type="button" class="btn btn-primary" href="{{url_for('productos.ver', id=producto.productoid)}}">Ver</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <!-- <ul style="list-style-type:circle;">
           {% for producto in bolson.productos %}
             <li class="d-flex mb-3">
               <div class="me-auto">
@@ -38,7 +56,7 @@
               </div>
             </li>
           {% endfor %}
-        </ul>
+        </ul> -->
       {% endif %}
       <div>
         <p>{{bolson.fecha}}</p> 
@@ -50,6 +68,8 @@
           {% else %}
             <a type="button" class="btn btn-success m-2" href="{{url_for('bolsones.aprobar', id=bolson.id)}}">Aprobar</a>
           {% endif %}
+        {% else %}
+          <a type="button" class="btn btn-primary m-2" href="{{url_for('compras.comprar', id=bolson.id)}}">Comprar</a>
         {% endif %}
         <button class="btn btn-primary m-2" type="button" onclick="history.back()">Volver</button>
       </div>

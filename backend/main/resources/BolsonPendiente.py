@@ -42,15 +42,15 @@ class BolsonesPendientes(Resource):
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
-                if key == 'page2':
+                if key == 'page':
                     page = int(value)
-                if key == 'per_page2':
+                if key == 'per_page':
                     per_page = int(value)
         bolsonespendientes = bolsonespendientes.paginate(page, per_page, True, 30)
         return jsonify({'bolsones pendientes': [bolsonpendiente.to_json() for bolsonpendiente in bolsonespendientes.items],
                         'total': bolsonespendientes.total,
-                        'pages2': bolsonespendientes.pages,
-                        'page2': page
+                        'pages': bolsonespendientes.pages,
+                        'page': page
                         })
 
     @admin_required

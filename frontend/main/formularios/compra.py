@@ -4,11 +4,6 @@ from wtforms.validators import InputRequired
 from wtforms import validators
 
 
-class FormCompra(FlaskForm):
-    bolsonId = IntegerField(label=None)
-    envio = SubmitField("Comprar")
-
-
 class FormFilterCompra(FlaskForm):
     nombre = StringField('',[validators.optional()])
     apellido = StringField('',[validators.optional()])

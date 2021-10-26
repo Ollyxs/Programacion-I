@@ -17,10 +17,16 @@ class Bolsones(Resource):
     def get(self):
         page = 1
         per_page = 10
-        bolsones = db.session.query(BolsonModel)
+        bolsones = db.session.query(BolsonModel).order_by(BolsonModel.fecha.desc())
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
+                if key == 'desde':
+                    print(value)
+                    bolsones = bolsones.filter(BolsonModel.fecha >= value)
+                if key == 'hasta':
+                    bolsones = bolsones.filter(BolsonModel.fecha <= value)
+                    print(value)
                 if key == 'page':
                     page = int(value)
                 if key == 'per_page':
