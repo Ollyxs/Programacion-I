@@ -11,14 +11,18 @@
       <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_pendientes')}}">Pendientes</a>
       <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_previos')}}">Previos</a>
     </div>
+    </br>
     <div class="row">
-      <form method="GET" action="{{url_for('bolsones.ver_todos')}}">
-      <div class="col-md-9 col-sm-6 d-flex m-2">
-        {{ MostrarCampo(filter.desde, class="form-control") }}
-        {{ MostrarCampo(filter.hasta, class="form-control") }}
-        {{ MostrarEnvio(filter.envio, class="btn btn-success") }}
+      <div class="col-md-1"></div>
+      <div class="col-md-8 col-sm-6 d">
+        <form method="GET" action="{{url_for('bolsones.ver_todos')}}">
+          <div class="form-group d-flex col-md-8">
+            {{ MostrarCampo(filter.desde, class="form-control", placeholder="Desde") }}
+            {{ MostrarCampo(filter.hasta, class="form-control", placeholder="Hasta") }}
+            {{ MostrarEnvio(filter.envio, class="btn btn-success") }}
+          </div>
+        </form>
       </div>
-      </form>
       <div class="col-md-2 col-sm-6">
         <nav aria-label="Pagination">
           <ul class="pagination justify-content-center">

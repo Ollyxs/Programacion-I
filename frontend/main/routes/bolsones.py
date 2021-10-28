@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, url_for, render_template, current_app, request
-from .. formularios.bolson import FormBolson, FormFilterBolson, FromFilterBolsones
+from .. formularios.bolson import FormBolson, FormFilterBolson, FormFilterBolsones
 from flask_login import login_required, LoginManager, current_user
 import requests, json
 from .auth import admin_required, proveerdor_required, cliente_required, admin_provider_required, admin_client_required
@@ -30,7 +30,7 @@ def ver(id):
 @admin_required
 def ver_todos():
     user = current_user
-    filter = FromFilterBolsones(request.args, meta={'csrf': False})
+    filter = FormFilterBolsones(request.args, meta={'csrf': False})
     auth = request.cookies['access_token']
     headers = {
             'content-type': "application/json",
@@ -46,7 +46,7 @@ def ver_todos():
         if filter.desde.data != None:
             data['desde'] = filter.desde.data.strftime('%Y-%m-%d')
         if filter.hasta.data != None:
-            data['hasta'] = filter.hasta.data
+            data['hasta'] = filter.hasta.data.strftime('%Y-%m-%d')
 
     print(data)
 
@@ -117,6 +117,7 @@ def ver_pendiente(id):
 @admin_provider_required
 def ver_pendientes():
     user = current_user
+    filter = FormFilterBolsones(request.args, meta={'csrf': False})
     auth = request.cookies['access_token']
     headers = {
             'content-type': "application/json",
@@ -128,6 +129,12 @@ def ver_pendientes():
     if 'page' in request.args:
         data['page'] = request.args.get('page','')
 
+    if filter.envio():
+        if filter.desde.data != None:
+            data['desde'] = filter.desde.data.strftime('%Y-%m-%d')
+        if filter.hasta.data != None:
+            data['hasta'] = filter.hasta.data.strftime('%Y-%m-%d')
+
     r = requests.get(
             current_app.config["API_URL"]+'/bolsones-pendientes',
             headers = headers,
@@ -136,7 +143,7 @@ def ver_pendientes():
     pagination = {}
     pagination["pages"] = json.loads(r.text)["pages"]
     pagination["current_page"] = json.loads(r.text)["page"]
-    return render_template('bolsones_pendientes.html', bolsones = bolsones, pagination = pagination, user = user)
+    return render_template('bolsones_pendientes.html', bolsones = bolsones, pagination = pagination, filter = filter, user = user)
 
 @bolsones.route('/previo/<int:id>')
 @login_required
@@ -159,6 +166,7 @@ def ver_previo(id):
 @admin_required
 def ver_previos():
     user = current_user
+    filter = FormFilterBolsones(request.args, meta={'csrf': False})
     auth = request.cookies['access_token']
     headers = {
             'content-type': "application/json",
@@ -166,6 +174,14 @@ def ver_previos():
     data = {}
     data['page'] = 1
     data['per_page'] = 10
+    if 'page' in request.args:
+        data['page'] = request.args.get('page','')
+
+    if filter.envio():
+        if filter.desde.data != None:
+            data['desde'] = filter.desde.data.strftime('%Y-%m-%d')
+        if filter.hasta.data != None:
+            data['hasta'] = filter.hasta.data.strftime('%Y-%m-%d')
 
     r = requests.get(
         current_app.config["API_URL"]+'/bolsones-previos',
@@ -175,7 +191,7 @@ def ver_previos():
     pagination = {}
     pagination["pages"] = json.loads(r.text)["pages"]
     pagination["current_page"] = json.loads(r.text)["page"]
-    return render_template('bolsones_admin.html', bolsones = bolsones, pagination = pagination, user = user)
+    return render_template('bolsones_previos.html', bolsones = bolsones, pagination = pagination, filter = filter, user = user)
 
 @bolsones.route('/crear', methods=['POST', 'GET'])
 @login_required

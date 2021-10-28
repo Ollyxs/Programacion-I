@@ -28,7 +28,7 @@ class FormFilterBolson(FlaskForm):
     nombre = StringField('',[validators.optional()])
     envio = SubmitField("Filtrar")
 
-class FromFilterBolsones(FlaskForm):
+class FormFilterBolsones(FlaskForm):
     desde = DateTimeField('',[validators.optional()], format='%Y-%m-%d')
     hasta = DateTimeField('',[validators.optional()], format='%Y-%m-%d')
     envio = SubmitField('Filtrar')

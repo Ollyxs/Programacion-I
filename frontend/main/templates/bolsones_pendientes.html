@@ -1,5 +1,6 @@
 {% extends "main.html" %}
 {% import 'macros/bolson.html' as macro %}
+{% from 'macros/form_macros.html' import MostrarCampo, MostrarEnvio %}
 {% block content %}
 <div class="row">
   <div class="col-md-1 col-sm-1"></div>
@@ -12,15 +13,26 @@
     </div>
     </br>
     <div class="row">
-      <div class="col-md-10 col-sm-6">
+      <div class="col-md-2 col-sm-6">
         <a href="{{url_for('bolsones.crear')}}" type="button" class="btn btn-success ">Crear bolsón</a>
+      </div>
+      <div class="col-md-8 col-sm-6">
+        <form method="GET" action="{{url_for('bolsones.ver_pendientes')}}">
+          <div class="form-group d-flex col-md-5">
+            {{ MostrarCampo(filter.desde, class="form-control", placeholder="Desde") }}
+            {{ MostrarCampo(filter.hasta, class="form-control", placeholder="Hasta") }}
+            {{ MostrarEnvio(filter.envio, class="btn btn-success") }}
+          </div>
+        </form>
       </div>
       <div class="col-md-2 col-sm-6">
         <nav aria-label="Pagination">
           <ul class="pagination justify-content-center">
             {% if pagination.current_page != 1 %}
             <li class="page-item">
-              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page-1))}}">
+              <a class="page-link" href="{{url_for('bolsones.ver_pendientes', page = (pagination.current_page-1),
+                desde = request.args.desde,
+                hasta = request.args.hasta)}}">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
@@ -34,7 +46,9 @@
             {% for n in range(1, pagination.pages+1) %}
             {% if n != pagination.current_page %}
             <li class="page-item" aria-current="page">
-              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = n)}}">{{n}}</a>
+              <a class="page-link" href="{{url_for('bolsones.ver_pendientes', page = n,
+                desde = request.args.desde,
+                hasta = request.args.hasta)}}">{{n}}</a>
             </li>
             {% else %}
             <li class="page-item disabled">
@@ -44,7 +58,9 @@
             {% endfor %}
             {% if pagination.current_page != pagination.pages %}
             <li class="page-item">
-              <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page+1))}}">
+              <a class="page-link" href="{{url_for('bolsones.ver_pendientes', page = (pagination.current_page+1),
+                desde = request.args.desde,
+                hasta = request.args.hasta)}}">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
@@ -84,46 +100,52 @@
       <div class="col-md-1 col-sm-1"></div>
     </div>
     <br/>
-    <nav aria-label="Pagination">
-      <ul class="pagination justify-content-center">
-        {% if pagination.current_page != 1 %}
-        <li class="page-item">
-          <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page-1))}}">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        {% endif %}
-        {% for n in range(1, pagination.pages+1) %}
-        {% if n != pagination.current_page %}
-        <li class="page-item" aria-current="page">
-          <a class="page-link" href="{{url_for('bolsones.ver_todos', page = n)}}">{{n}}</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">{{n}}</a>
-        </li>
-        {% endif %}
-        {% endfor %}
-        {% if pagination.current_page != pagination.pages %}
-        <li class="page-item">
-          <a class="page-link" href="{{url_for('bolsones.ver_todos', page = (pagination.current_page+1))}}">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-        {% endif %}
-      </ul>
-    </nav>
+        <nav aria-label="Pagination">
+          <ul class="pagination justify-content-center">
+            {% if pagination.current_page != 1 %}
+            <li class="page-item">
+              <a class="page-link" href="{{url_for('bolsones.ver_pendientes', page = (pagination.current_page-1),
+                desde = request.args.desde,
+                hasta = request.args.hasta)}}">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% endif %}
+            {% for n in range(1, pagination.pages+1) %}
+            {% if n != pagination.current_page %}
+            <li class="page-item" aria-current="page">
+              <a class="page-link" href="{{url_for('bolsones.ver_pendientes', page = n,
+                desde = request.args.desde,
+                hasta = request.args.hasta)}}">{{n}}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">{{n}}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if pagination.current_page != pagination.pages %}
+            <li class="page-item">
+              <a class="page-link" href="{{url_for('bolsones.ver_pendientes', page = (pagination.current_page+1),
+                desde = request.args.desde,
+                hasta = request.args.hasta)}}">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
   </div>
   {% endblock %}

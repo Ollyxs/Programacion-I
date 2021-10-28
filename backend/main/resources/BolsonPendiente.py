@@ -38,10 +38,14 @@ class BolsonesPendientes(Resource):
     def get(self):
         page = 1
         per_page = 10
-        bolsonespendientes = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 0)
+        bolsonespendientes = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 0).order_by(BolsonModel.fecha.desc())
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
+                if key == 'desde':
+                    bolsonespendientes = bolsonespendientes.filter(BolsonModel.fecha >= value)
+                if key == 'hasta':
+                    bolsonespendientes = bolsonespendientes.filter(BolsonModel.fecha <= value)
                 if key == 'page':
                     page = int(value)
                 if key == 'per_page':
