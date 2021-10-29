@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
-from main.models import BolsonModel
+from main.models import BolsonModel, ProductoModel, BolsonProductoModel, UsuarioModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from main.auth.decorators import admin_required, admin_provider_required
 
@@ -38,7 +38,14 @@ class BolsonesPendientes(Resource):
     def get(self):
         page = 1
         per_page = 10
-        bolsonespendientes = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 0).order_by(BolsonModel.fecha.desc())
+        iduser = get_jwt_identity()
+        user = db.session.query(UsuarioModel).get_or_404(iduser)
+        if user.role == 'admin':
+            bolsonespendientes = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 0).order_by(BolsonModel.fecha.desc())
+        if user.role == 'proveedor':
+            bolsonespendientes = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 0).join(BolsonProductoModel,
+                    BolsonModel.productos).join(ProductoModel,
+                    BolsonProductoModel.producto).filter(ProductoModel.proveedorid == iduser).order_by(BolsonModel.fecha.desc())
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:

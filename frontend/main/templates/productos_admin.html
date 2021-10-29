@@ -7,20 +7,22 @@
   <div class="col-md-10 col-sm-1 border border-1 p-1">
     <h3>Productos</h3>
     <div class="row">
-      <div class="col-md-5 col-sm-6">
-        {% if current_user.role == 'proveedor' %}
+      {% if current_user.role == 'proveedor' %}
+      <div class="col-md-10 col-sm-6">
         <a href="{{url_for('productos.crear')}}" type="button" class="btn btn-success ">Crear Producto</a>
-        {% endif %}
       </div>
-      <div class="col-md-5 col-sm-1">
+      {% elif current_user.role == 'admin' %}
+      <div class="col-md-1 col-sm-1"></div>
+      <div class="col-md-9 col-sm-1">
         <form method="GET" action="{{url_for('productos.ver_todos')}}">
           <div class="form-row">
-            <div class="form-group d-flex col-md-12">
+            <div class="form-group d-flex col-md-5">
               {{ MostrarCampo(filter.proveedorid, class="form-control")}} {{ MostrarCampo(filter.ordenamiento, class="form-control")}} {{ MostrarEnvio(filter.envio, class="btn btn-success")}}
             </div>
           </div>
         </form>
       </div>
+      {% endif %}
       <div class="col-md-2 col-sm-6">
         <nav aria-label="Pagination">
           <ul class="pagination justify-content-center">

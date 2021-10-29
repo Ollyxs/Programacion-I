@@ -230,7 +230,7 @@ def crear():
                 headers = headers,
                 data = json.dumps(data))
         if (r.status_code == 201):
-            return redirect(url_for('bolsones.ver_todos'))
+            return redirect(url_for('bolsones.ver_pendientes'))
         print(r)
     return render_template('crear_bolson.html', form = form)
 

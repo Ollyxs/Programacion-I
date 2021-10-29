@@ -6,17 +6,23 @@
   <div class="col-md-1 col-sm-1"></div>
   <div class="col-md-10 col-sm-1 border border-1 p-1">
     <h3>Bolsones Pendientes</h3>
+    {% if current_user.role == 'admin' %}
     <div>
       <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_todos')}}">Todos</a>
       <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_pendientes')}}">Pendientes</a>
       <a class="btn btn-primary" type="button" href="{{url_for('bolsones.ver_previos')}}">Previos</a>
     </div>
     </br>
+    {% endif %}
     <div class="row">
+      {% if current_user.role == 'admin' %}
       <div class="col-md-2 col-sm-6">
         <a href="{{url_for('bolsones.crear')}}" type="button" class="btn btn-success ">Crear bolsón</a>
       </div>
       <div class="col-md-8 col-sm-6">
+      {% else %}
+      <div class="col-md-10 col-sm-6">
+      {% endif %}
         <form method="GET" action="{{url_for('bolsones.ver_pendientes')}}">
           <div class="form-group d-flex col-md-5">
             {{ MostrarCampo(filter.desde, class="form-control", placeholder="Desde") }}

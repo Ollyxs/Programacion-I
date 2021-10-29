@@ -38,7 +38,12 @@ class Productos(Resource):
     def get(self):
         page = 1
         per_page = 10
-        productos = db.session.query(ProductoModel)
+        iduser = get_jwt_identity()
+        user = db.session.query(UsuarioModel).get_or_404(iduser)
+        if user.role == 'admin':
+            productos = db.session.query(ProductoModel)
+        if user.role == 'proveedor':
+            productos = db.session.query(ProductoModel).filter(ProductoModel.proveedorid == iduser)
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
