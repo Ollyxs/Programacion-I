@@ -18,19 +18,19 @@
           <div>
             <select class="m-1 p-2"size="1">
               {% if compra.retirado %}
-                <option selected="selected">Si</option>
-                <option>No</option>
+              <option selected="selected">Si</option>
+              <option>No</option>
               {% else %}
-                <option selected="selected">No</option>
-                <option>Si</option>
+              <option selected="selected">No</option>
+              <option>Si</option>
               {% endif %}
             </select>
             {% if user.is_authenticated and user.role == 'admin' %}
-              {% if compra.retirado %}
-                <a type="button" class="btn btn-danger m-2" href="{{url_for('compras.no_retirado', id=compra.id)}}">Sin Retirar</a>
-              {% else %}
-               <a type="button" class="btn btn-success m-2" href="{{url_for('compras.retirado', id=compra.id)}}">Retirado</a>
-              {% endif %}
+            {% if compra.retirado %}
+            <a type="button" class="btn btn-danger m-2" href="{{url_for('compras.no_retirado', id=compra.id)}}">Sin Retirar</a>
+            {% else %}
+            <a type="button" class="btn btn-success m-2" href="{{url_for('compras.retirado', id=compra.id)}}">Retirado</a>
+            {% endif %}
             {% endif %}
           </div>
         </div>
@@ -78,5 +78,20 @@
       </div>
     </div>
   </td>
+</tr>
+{% endmacro %}
+
+{% macro mis_compras(compra) %}
+<tr>
+  <!-- <th scope="row"><img src="https://via.placeholder.com/70x70"></th> -->
+  <th>{{compra.id}}</th>
+  <td>{{compra.bolson}}</td>
+  <td>{{compra.fechaHoraCompra}}</td>
+  {% if compra.retirado %}
+  <td style="color:green">Si</td>
+  {% else %}
+  <td style="color:red">No</td>
+  {% endif %}
+  <td>$99.99</td>
 </tr>
 {% endmacro %}

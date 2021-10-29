@@ -2,393 +2,159 @@
 {% import 'macros/compras.html' as macro %}
 {% from 'macros/form_macros.html' import MostrarCampo, MostrarEnvio %}
 {% block content %}
+<div class="row">
+  <div class="col-md-1 col-sm-1"></div>
+  <div class="col-md-10 col-sm-1 border border-1 p-1">
+    <h3>Compras</h3>
+    <div class="row">
+      <div class="col-md-10 col-sm-6">
+        <form method="GET" action="{{url_for('compras.ver_todas')}}">
+          <div class="form-row">
+            <div class="form-group d-flex col-md-12">
+              {{ MostrarCampo(filter.nombre, class="form-control", placeholder="Buscar x Nombre") }}
+              {{ MostrarCampo(filter.apellido, class="form-control", placeholder="Buscar x Apellido") }}
+              {{ MostrarCampo(filter.retirado, class="form-control") }}
+              {{ MostrarCampo(filter.ordenamiento, class="form-control") }}
+              {{ MostrarEnvio(filter.envio, class="btn btn-success")}}
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-2 col-sm-6">
+        <nav aria-label="Pagination">
+          <ul class="pagination justify-content-center">
+            {% if pagination.current_page != 1 %}
+            <li class="page-item">
+              <a class="page-link" href="{{url_for('compras.ver_todas', page = (pagination.current_page-1),
+                                  nombre = request.args.nombre,
+                                  apellido = request.args.apellido,
+                                  retirado = request.args.retirado,
+                                  ordenamiento = request.args.ordenamiento)}}">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% endif %}
+            {% for n in range(1, pagination.pages+1) %}
+            {% if n != pagination.current_page %}
+            <li class="page-item" aria-current="page">
+              <a class="page-link" href="{{url_for('compras.ver_todas', page = n,
+                                  nombre = request.args.nombre,
+                                  apellido = request.args.apellido,
+                                  retirado = request.args.retirado,
+                                  ordenamiento = request.args.ordenamiento)}}">{{n}}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">{{n}}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if pagination.current_page != pagination.pages %}
+            <li class="page-item">
+              <a class="page-link" href="{{url_for('compras.ver_todas', page = (pagination.current_page+1),
+                                  nombre = request.args.nombre,
+                                  apellido = request.args.apellido,
+                                  retirado = request.args.retirado,
+                                  ordenamiento = request.args.ordenamiento)}}">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+      <div class="col-md-1 col-sm-1"></div>
       <div class="row">
         <div class="col-md-1 col-sm-1"></div>
-        <div class="col-md-10 col-sm-1 border border-1 p-1">
-          <h3>Compras</h3>
-          <div class="row">
-            <div class="col-md-10 col-sm-6">
-              <form method="GET" action="{{url_for('compras.ver_todas')}}">
-                <div class="form-row">
-                  <div class="form-group d-flex col-md-12">
-                    {{ MostrarCampo(filter.nombre, class="form-control", placeholder="Buscar x Nombre") }}
-                    {{ MostrarCampo(filter.apellido, class="form-control", placeholder="Buscar x Apellido") }}
-                    {{ MostrarCampo(filter.retirado, class="form-control") }}
-                    {{ MostrarCampo(filter.ordenamiento, class="form-control") }}
-                    {{ MostrarEnvio(filter.envio, class="btn btn-success")}}
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="col-md-2 col-sm-6">
-              <nav aria-label="Pagination">
-                <ul class="pagination justify-content-center">
-                  {% if pagination.current_page != 1 %}
-                    <li class="page-item">
-                      <a class="page-link" href="{{url_for('compras.ver_todas', page = (pagination.current_page-1),
-                        nombre = request.args.nombre,
-                        apellido = request.args.apellido,
-                        retirado = request.args.retirado,
-                        ordenamiento = request.args.ordenamiento)}}">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                    </li>
-                  {% else %}
-                    <li class="page-item disabled">
-                      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                    </li>
-                  {% endif %}
-                  {% for n in range(1, pagination.pages+1) %}
-                   {% if n != pagination.current_page %}
-                      <li class="page-item" aria-current="page">
-                        <a class="page-link" href="{{url_for('compras.ver_todas', page = n,
-                          nombre = request.args.nombre,
-                          apellido = request.args.apellido,
-                          retirado = request.args.retirado,
-                          ordenamiento = request.args.ordenamiento)}}">{{n}}</a>
-                      </li>
-                    {% else %}
-                      <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">{{n}}</a>
-                      </li>
-                    {% endif %}
-                  {% endfor %}
-                  {% if pagination.current_page != pagination.pages %}
-                    <li class="page-item">
-                      <a class="page-link" href="{{url_for('compras.ver_todas', page = (pagination.current_page+1),
-                        nombre = request.args.nombre,
-                        apellido = request.args.apellido,
-                        retirado = request.args.retirado,
-                        ordenamiento = request.args.ordenamiento)}}">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
-                    </li>
-                  {% else %}
-                    <li class="page-item disabled">
-                      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
-                    </li>
-                  {% endif %}
-                </ul>
-              </nav>
-            </div>
-            <div class="col-md-1 col-sm-1"></div>
-          <div class="row">
-            <div class="col-md-1 col-sm-1"></div>
-            <div class="col-md-10 col-sm-1">
-              <table class="table align-middle">
-                <thead>
-                  <tr>
-                    <th scope="col">N° de Compra</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Retirado</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for compra in compras %}
-                  {{macro.compras(compra)}}
-                  {% endfor %}
-                  <!-- <tr>
-                    <td>#00001</td>
-                    <td>12 Feb 2021 - 10:30hs</td>
-                    <td>Nombre cliente</td>
-                    <td><a href="#" class="btn btn-primary">Ver</a></td>
-                    <td>
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Eliminar
-                      </button>
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Eliminar compra</h5>
-                            </div>
-                            <div class="modal-body">
-                              ¿Está seguro que quiere eliminar el compra?
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#00001</td>
-                    <td>12 Feb 2021 - 10:30hs</td>
-                    <td>Nombre cliente</td>
-                    <td><a href="#" class="btn btn-primary">Ver</a></td>
-                    <td>
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Eliminar
-                      </button>
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Eliminar compra</h5>
-                            </div>
-                            <div class="modal-body">
-                              ¿Está seguro que quiere eliminar el compra?
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#00001</td>
-                    <td>12 Feb 2021 - 10:30hs</td>
-                    <td>Nombre cliente</td>
-                    <td><a href="#" class="btn btn-primary">Ver</a></td>
-                    <td>
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Eliminar
-                      </button>
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Eliminar compra</h5>
-                            </div>
-                            <div class="modal-body">
-                              ¿Está seguro que quiere eliminar el compra?
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#00001</td>
-                    <td>12 Feb 2021 - 10:30hs</td>
-                    <td>Nombre cliente</td>
-                    <td><a href="#" class="btn btn-primary">Ver</a></td>
-                    <td>
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Eliminar
-                      </button>
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Eliminar compra</h5>
-                            </div>
-                            <div class="modal-body">
-                              ¿Está seguro que quiere eliminar el compra?
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#00001</td>
-                    <td>12 Feb 2021 - 10:30hs</td>
-                    <td>Nombre cliente</td>
-                    <td><a href="#" class="btn btn-primary">Ver</a></td>
-                    <td>
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Eliminar
-                      </button>
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Eliminar compra</h5>
-                            </div>
-                            <div class="modal-body">
-                              ¿Está seguro que quiere eliminar el compra?
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#00001</td>
-                    <td>12 Feb 2021 - 10:30hs</td>
-                    <td>Nombre cliente</td>
-                    <td><a href="#" class="btn btn-primary">Ver</a></td>
-                    <td>
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Eliminar
-                      </button>
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Eliminar compra</h5>
-                            </div>
-                            <div class="modal-body">
-                              ¿Está seguro que quiere eliminar el compra?
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#00001</td>
-                    <td>12 Feb 2021 - 10:30hs</td>
-                    <td>Nombre cliente</td>
-                    <td><a href="#" class="btn btn-primary">Ver</a></td>
-                    <td>
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Eliminar
-                      </button>
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Eliminar compra</h5>
-                            </div>
-                            <div class="modal-body">
-                              ¿Está seguro que quiere eliminar el compra?
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#00001</td>
-                    <td>12 Feb 2021 - 10:30hs</td>
-                    <td>Nombre cliente</td>
-                    <td><a href="#" class="btn btn-primary">Ver</a></td>
-                    <td>
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Eliminar
-                      </button>
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Eliminar compra</h5>
-                            </div>
-                            <div class="modal-body">
-                              ¿Está seguro que quiere eliminar el compra?
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#00001</td>
-                    <td>12 Feb 2021 - 10:30hs</td>
-                    <td>Nombre cliente</td>
-                    <td><a href="#" class="btn btn-primary">Ver</a></td>
-                    <td>
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Eliminar
-                      </button>
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Eliminar compra</h5>
-                            </div>
-                            <div class="modal-body">
-                              ¿Está seguro que quiere eliminar el compra?
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                  </tr> -->
-                </tbody>
-              </table>
-            </div>
-            <div class="col-md-1 col-sm-1"></div>
-              <br/>
-              <nav aria-label="Pagination">
-                <ul class="pagination justify-content-center">
-                  {% if pagination.current_page != 1 %}
-                    <li class="page-item">
-                      <a class="page-link" href="{{url_for('compras.ver_todas', page = (pagination.current_page-1),
-                        nombre = request.args.nombre,
-                        apellido = request.args.apellido,
-                        retirado = request.args.retirado,
-                        ordenamiento = request.args.ordenamiento)}}">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                    </li>
-                  {% else %}
-                    <li class="page-item disabled">
-                      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                    </li>
-                  {% endif %}
-                  {% for n in range(1, pagination.pages+1) %}
-                   {% if n != pagination.current_page %}
-                      <li class="page-item" aria-current="page">
-                        <a class="page-link" href="{{url_for('compras.ver_todas', page = n,
-                          nombre = request.args.nombre,
-                          apellido = request.args.apellido,
-                          retirado = request.args.retirado,
-                          ordenamiento = request.args.ordenamiento)}}">{{n}}</a>
-                      </li>
-                    {% else %}
-                      <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">{{n}}</a>
-                      </li>
-                    {% endif %}
-                  {% endfor %}
-                  {% if pagination.current_page != pagination.pages %}
-                    <li class="page-item">
-                      <a class="page-link" href="{{url_for('compras.ver_todas', page = (pagination.current_page+1),
-                        nombre = request.args.nombre,
-                        apellido = request.args.apellido,
-                        retirado = request.args.retirado,
-                        ordenamiento = request.args.ordenamiento)}}">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
-                    </li>
-                  {% else %}
-                    <li class="page-item disabled">
-                      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
-                    </li>
-                  {% endif %}
-                </ul>
-              </nav>
-            </div> 
-          </div>
+        <div class="col-md-10 col-sm-1">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th scope="col">N° de Compra</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Retirado</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for compra in compras %}
+              {{macro.compras(compra)}}
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
         <div class="col-md-1 col-sm-1"></div>
-      </div>
+        <br/>
+        <nav aria-label="Pagination">
+          <ul class="pagination justify-content-center">
+            {% if pagination.current_page != 1 %}
+            <li class="page-item">
+              <a class="page-link" href="{{url_for('compras.ver_todas', page = (pagination.current_page-1),
+                                  nombre = request.args.nombre,
+                                  apellido = request.args.apellido,
+                                  retirado = request.args.retirado,
+                                  ordenamiento = request.args.ordenamiento)}}">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% endif %}
+            {% for n in range(1, pagination.pages+1) %}
+            {% if n != pagination.current_page %}
+            <li class="page-item" aria-current="page">
+              <a class="page-link" href="{{url_for('compras.ver_todas', page = n,
+                                  nombre = request.args.nombre,
+                                  apellido = request.args.apellido,
+                                  retirado = request.args.retirado,
+                                  ordenamiento = request.args.ordenamiento)}}">{{n}}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">{{n}}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if pagination.current_page != pagination.pages %}
+            <li class="page-item">
+              <a class="page-link" href="{{url_for('compras.ver_todas', page = (pagination.current_page+1),
+                                  nombre = request.args.nombre,
+                                  apellido = request.args.apellido,
+                                  retirado = request.args.retirado,
+                                  ordenamiento = request.args.ordenamiento)}}">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div> 
+    </div>
+  </div>
+  <div class="col-md-1 col-sm-1"></div>
+</div>
 {% endblock %}

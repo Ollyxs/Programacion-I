@@ -31,11 +31,16 @@ class Compra(Resource):
 
 
 class Compras(Resource):
-    @admin_required
+    @admin_client_required
     def get(self):
         page = 1
         per_page = 10
-        compras = db.session.query(CompraModel)
+        iduser = get_jwt_identity()
+        user = db.session.query(UsuarioModel).get_or_404(iduser)
+        if user.role == 'admin':
+            compras = db.session.query(CompraModel)
+        if user.role == 'cliente':
+            compras = db.session.query(CompraModel).filter(CompraModel.clienteid == iduser).order_by(CompraModel.fechaHoraCompra.desc())
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:

@@ -79,6 +79,30 @@ def comprar(id):
         return redirect(url_for('main.index'))
     return render_template('main.index')
 
+@compras.route('mis-compras')
+@login_required
+@cliente_required
+def mis_compras():
+    data = {}
+    data['page'] = 1
+    data['per_page'] = 10
+    if 'page' in request.args:
+        data['page'] = request.args.get('page','')
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+
+    r = requests.get(
+            current_app.config['API_URL']+'/compras',
+            headers = headers,
+            data=json.dumps(data))
+    compras = json.loads(r.text)["compras"]
+    pagination = {}
+    pagination['pages'] = json.loads(r.text)['pages']
+    pagination['current_page'] = json.loads(r.text)['page']
+    return render_template('mis_compras.html', compras = compras, pagination = pagination)
+
 @compras.route('retirado/<int:id>')
 @login_required
 @admin_required
