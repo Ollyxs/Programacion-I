@@ -139,3 +139,17 @@ def no_retirado(id):
         return redirect(url_for('compras.ver_todas'))
     return redirect(url_for('compras.ver_todas'))
 
+@compras.route('/eliminar/<int:id>')
+@login_required
+@admin_required
+def eliminar(id):
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+    r = requests.delete(
+            current_app.config['API_URL']+'/compra/'+str(id),
+            headers = headers)
+    if r.status_code == 404:
+        return redirect(url_for('compras.ver_todas'))
+    return redirect(url_for('compras.ver_todas'))

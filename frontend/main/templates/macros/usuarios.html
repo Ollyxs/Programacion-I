@@ -74,20 +74,20 @@
   <td>{{proveedor.telefono}}</td>
   <td><a href="{{url_for('proveedores.ver', id=proveedor.id)}}" class="btn btn-primary">Editar</a></td>
   <td>
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#proveedor{{proveedor.id}}">
       Eliminar
     </button>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="proveedor{{proveedor.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Eliminar proveedor</h5>
           </div>
           <div class="modal-body">
-            ¿Está seguro que quiere eliminar el proveedor?
+            ¿Está seguro que quiere eliminar el proveedor {{proveedor.nombre}}?
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+            <a href="{{url_for('proveedores.eliminar', id=proveedor.id)}}" class="btn btn-danger">Eliminar</a>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
         </div>
@@ -104,10 +104,10 @@
   <td>{{cliente.telefono}}</td>
   <td><a href="#" class="btn btn-primary">Editar</a></td>
   <td>
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cliente{{cliente.id}}">
       Eliminar
     </button>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="cliente{{cliente.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -117,11 +117,48 @@
             ¿Está seguro que quiere eliminar el cliente?
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+            <a href="{{url_for('usuarios.eliminar', id=cliente.id)}}" class="btn btn-danger">Eliminar</a>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
         </div>
       </div>
   </td>
 </tr>
+{% endmacro %}
+
+{% from 'macros/form_macros.html' import MostrarCampo, MostrarEnvio %}
+{% macro admin(usuario, formulario) %}
+      <form method="POST" action="{{url_for('usuarios.admin')}}">
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+        <div class="row mb-3">
+          <div class="col">
+            {{MostrarCampo(formulario.nombre, class="form-control", value="{{usuario.nombre}}")}}
+          </div>
+          <div class="col">
+            {{MostrarCampo(formulario.apellido, class="form-control")}}
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            {{MostrarCampo(formulario.email, class="form-control")}}
+          </div>
+          <div class="col">
+            {{MostrarCampo(formulario.telefono, class="form-control")}}
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            {{MostrarCampo(formulario.password, class="form-control")}}
+          </div>
+          <div class="col">
+            {{MostrarCampo(formulario.confirmar, class="form-control")}}
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col d-flex justify-content-end mt-4">
+            {{MostrarEnvio(formulario.envio, class="btn btn-primary m-1")}}
+            <button class="btn btn-primary m-1" type="button" onclick="history.back()">Volver</button>
+          </div>
+        </div>
+      </form>
 {% endmacro %}

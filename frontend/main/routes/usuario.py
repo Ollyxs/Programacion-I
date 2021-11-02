@@ -1,11 +1,11 @@
-from flask import Blueprint, render_template, redirect, url_for, current_app, request
+from flask import Blueprint, render_template, redirect, url_for, current_app, request, flash
 from .. formularios.registrarse import FormRegistro
 from .. formularios.ingresar import FormIngreso
 from .. formularios.cuenta import FormCuenta
 from .. formularios.clientes import FormFilterCliente
 from flask_login import login_required, LoginManager, current_user
 import requests, json
-from .auth import admin_required
+from .auth import admin_required, admin_client_required
 
 
 usuarios = Blueprint('usuarios', __name__, url_prefix='/usuarios')
@@ -89,12 +89,68 @@ def ver_clientes():
     pagination["current_page"] = json.loads(r.text)["page"]
     return render_template('clientes_admin.html', clientes = clientes, pagination = pagination, filter = filter)
 
+
+# @usuarios.route('admin/<int:id>')
+# @login_required
+# def mi_cuenta_admin(id):
+#     auth = request.cookies['access_token']
+#     headers = {
+#             "content-type": "application/json",
+#             'authorization': "Bearer "+auth}
+#     r = requests.get(
+#             current_app.config["API_URL"]+'/admin/'+str(id),
+#             headers = headers)
+#     if (r.status_code == 404):
+#         return redirect(url_for('main.index'))
+#     usuario = json.loads(r.text)
+#     return render_template('admin.html', usuario = usuario)
+
 @usuarios.route('admin', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def admin():
     form = FormCuenta()
+    auth = request.cookies['access_token']
+    headers = {
+            "content-type": "application/json",
+            'authorization': "Bearer "+auth}
+    r = requests.get(
+            current_app.config["API_URL"]+'/admin/'+str(1),
+            headers = headers)
+    usuario = json.loads(r.text)
     if form.validate_on_submit():
         print(form.name.data)
         return redirect(url_for('usuario.admin'))
-    return render_template('admin.html', formulario=form)
+    return render_template('admin.html', usuario=usuario, formulario=form)
+
+@usuarios.route('eliminar/<int:id>')
+@login_required
+@admin_client_required
+def eliminar(id):
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+    r = requests.delete(
+            current_app.config['API_URL']+'/cliente/'+str(id),
+            headers = headers)
+    if (r.status_code == 404):
+        flash('El usuario no existe', 'danger')
+        return redirect(url_for('usuarios.ver_clientes'))
+    flash('Usuario eliminado', 'success')
+    return redirect(url_for('usuarios.ver_clientes'))
+
+@usuarios.route('enviar-promocion')
+@login_required
+@admin_required
+def promocion():
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+    r = requests.post(
+            current_app.config['API_URL']+'/mail/promo',
+            headers = headers)
+    if (r.status_code == 404):
+        return redirect(url_for('usuarios.ver_clientes'))
+    return redirect(url_for('usuarios.ver_clientes'))

@@ -78,3 +78,16 @@ def crear():
         if (r.status_code == 201):
             return redirect(url_for('productos.ver_todos'))
     return render_template('crear_producto.html', formulario=form)
+
+@productos.route('/eliminar/<int:id>')
+def eliminar(id):
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+    r = requests.delete(
+            current_app.config['API_URL']+'/producto/'+str(id),
+            headers = headers)
+    if (r.status_code == 404):
+        return redirect(url_for('productos.ver_todos'))
+    return redirect(url_for('productos.ver_todos'))

@@ -76,7 +76,7 @@ def ver_todos_en_venta():
     filter = FormFilterBolson(request.args, meta={'csrf': False})
     data = {}
     data['page'] = 1
-    data['per_page'] = 12
+    data['per_page'] = 2
     if 'page' in request.args:
         data['page'] = request.args.get('page','')
     headers = {'content-type':'application/json'}

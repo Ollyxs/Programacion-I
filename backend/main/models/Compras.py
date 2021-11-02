@@ -22,6 +22,7 @@ class Compra(db.Model):
             'bolson': self.bolson.nombre,
             'fechaHoraCompra': str(self.fechaHoraCompra),
             'retirado': self.retirado,
+            'precio': self.bolson.precio
         }
         return compra_json
 

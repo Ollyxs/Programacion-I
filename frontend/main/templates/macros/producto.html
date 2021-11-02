@@ -10,9 +10,11 @@
       <h3>{{producto.nombre}}</h3>
       <h6>Descripción:</h6>
       <p>{{producto.descripcion}}</p
-      <p>{{producto.proveedorid}}</p>
       <div>
-        <p><b>Proveedor: </b>{{producto.proveedor}}</p>
+        <p>
+          <b>Proveedor: </b>
+          <a style="color: #000; text-decoration: none" href="{{url_for('proveedores.ver', id=producto.proveedorid)}}">{{producto.proveedor}}</a>
+        </p>
       </div>
     </div>
     <div class="row">
@@ -30,10 +32,10 @@
   <td>{{producto.proveedor}}</td>
   <td><a href="{{url_for('productos.ver', id=producto.id)}}" class="btn btn-primary">Ver</a></td>
   <td>
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#producto{{producto.id}}">
       Eliminar
     </button>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="producto{{producto.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -43,7 +45,7 @@
             ¿Está seguro que quiere eliminar el producto?
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+            <a href="{{url_for('productos.eliminar', id=producto.id)}}" class="btn btn-danger">Eliminar</a>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
         </div>

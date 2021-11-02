@@ -13,14 +13,14 @@ class FormCuenta(FlaskForm):
             validators.Required(message=mess),
             validators.Length(max=100, message="El nombre debe tener menos de 100 caracteres")
         ],
-            render_kw={"value": "Lucas"}
+            # render_kw={"value": "Lucas"}
         )
     apellido = StringField("Apellido",
         [
             validators.Required(message=mess),
             validators.Length(max=100, message="Apellido debe tener menos de 100 caracteres")
         ],
-            render_kw={"value": "Ollarce"}
+            # render_kw={"value": "Ollarce"}
         )
     email = EmailField("Email",
         [
@@ -28,14 +28,14 @@ class FormCuenta(FlaskForm):
             validators.Email(message="Formato incorrecto"),
             validators.Length(max=100, message="El email debe tener menos de 100 caracteres")
         ],
-            render_kw={"value": "l.ollarce@example.com"}
+            # render_kw={"value": "l.ollarce@example.com"}
         )
     telefono = TelField("Telefono",
         [
             validators.Required(message=mess),
             validators.Length(max=100, min=10, message="El email debe tener entre 10 y 100 caracteres")
         ],
-            render_kw={"value": "2604000000"}
+            # render_kw={"value": "2604000000"}
         )
     password = PasswordField("Contraseña",
         [
@@ -43,7 +43,7 @@ class FormCuenta(FlaskForm):
             validators.EqualTo("confirmar", message="Las contraseñas no coinciden"),
             validators.Length(max=128, min=8, message="La contraseña debe tener entre 8 y 128 caracteres")
         ],
-            render_kw={"value": "**********"}
+            # render_kw={"value": "**********"}
         )
-    confirmar = PasswordField("Confirmar contraseña", render_kw={"value": "**********"})
+    confirmar = PasswordField("Confirmar contraseña")#, render_kw={"value": "**********"})
     envio = SubmitField("Guardar cambios")

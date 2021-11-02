@@ -17,6 +17,7 @@ class Producto(db.Model):
             'id': self.id,
             'nombre': self.nombre,
             'descripcion': self.descripcion,
+            'proveedorid': self.proveedorid,
             'proveedor': self.proveedor.nombre + ' ' + self.proveedor.apellido,
         }
         return producto_json

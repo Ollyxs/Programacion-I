@@ -10,35 +10,28 @@
         <p><b>Bolsón:</b> {{compra.bolson}}</p>
         <p><b>Cliente:</b> {{compra.cliente}}</p>
         <p><b>Fecha:</b> {{compra.fechaHoraCompra}}</p>
-        <p><b>Precio:</b> $99.99</p>
+        <p><b>Precio:</b> ${{compra.precio}}</p>
         <div class="d-flex">
-          <div class="mt-2">
-            <h6>Aprobado: </h6>
-          </div>
-          <div>
-            <select class="m-1 p-2"size="1">
+          <div class="d-flex">
+            <p><b>Aprobado: </b></p>
               {% if compra.retirado %}
-              <option selected="selected">Si</option>
-              <option>No</option>
+              <p style="color:green">Si</p>
               {% else %}
-              <option selected="selected">No</option>
-              <option>Si</option>
+              <p style="color:red">No</p>
               {% endif %}
-            </select>
-            {% if user.is_authenticated and user.role == 'admin' %}
-            {% if compra.retirado %}
-            <a type="button" class="btn btn-danger m-2" href="{{url_for('compras.no_retirado', id=compra.id)}}">Sin Retirar</a>
-            {% else %}
-            <a type="button" class="btn btn-success m-2" href="{{url_for('compras.retirado', id=compra.id)}}">Retirado</a>
-            {% endif %}
-            {% endif %}
           </div>
         </div>
       </div>
     </div>
     <div class="row mb-3">
       <div class="col d-flex justify-content-end mt-4">
-        <button type="submit" class="btn btn-primary m-1">Guardar cambios</button>
+            {% if user.is_authenticated and user.role == 'admin' %}
+            {% if compra.retirado %}
+            <a type="button" class="btn btn-danger m-1" href="{{url_for('compras.no_retirado', id=compra.id)}}">Marcar sin retirar</a>
+            {% else %}
+            <a type="button" class="btn btn-success m-1" href="{{url_for('compras.retirado', id=compra.id)}}">Marcar retirado</a>
+            {% endif %}
+            {% endif %}
         <button class="btn btn-primary m-1" type="button" onclick="history.back()">Volver</button>
       </div>
     </div>
@@ -58,10 +51,10 @@
   {% endif %}
   <td><a href="{{url_for('compras.ver', id=compra.id)}}" class="btn btn-primary">Ver</a></td>
   <td>
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#compra{{compra.id}}">
       Eliminar
     </button>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="compra{{compra.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -71,7 +64,7 @@
             ¿Está seguro que quiere eliminar el compra?
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+            <a href="{{url_for('compras.eliminar', id=compra.id)}}" class="btn btn-danger">Eliminar</a>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
         </div>
@@ -92,6 +85,6 @@
   {% else %}
   <td style="color:red">No</td>
   {% endif %}
-  <td>$99.99</td>
+  <td>${{compra.precio}}</td>
 </tr>
 {% endmacro %}

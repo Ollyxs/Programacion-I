@@ -14,3 +14,4 @@ from .Cliente import Cliente as ClienteResource
 from .Cliente import Clientes as ClientesResource
 from .Proveedor import Proveedor as ProveedorResource
 from .Proveedor import Proveedores as ProveedoresResource
+from .Admin import Admin as AdminResource

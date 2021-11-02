@@ -10,11 +10,25 @@ proveedores = Blueprint('proveedores', __name__, url_prefix='/proveedores')
 
 
 @proveedores.route('/registrar', methods=['POST', 'GET'])
+@login_required
+@admin_required
 def registrar():
     form = FormRegistro()
     if form.validate_on_submit():
-        print(form.nombre.data)
-        return redirect(url_for('main.index'))
+        data = {}
+        data["nombre"] = form.nombre.data
+        data["apellido"] = form.apellido.data
+        data["email"] = form.email.data
+        data["telefono"] = form.telefono.data
+        data["password"] = form.password.data
+        data["role"] = 'proveedor'
+        headers = {"content-type": "application/json"}
+        print(data)
+        r = requests.post(
+                current_app.config["API_URL"]+'/auth/register',
+                headers = headers,
+                data = json.dumps(data))
+        return redirect(url_for('proveedores.ver_todos'))
     return render_template('crear_proveedor.html', formulario=form)
 
 @proveedores.route('/ver/<int:id>')
@@ -58,3 +72,18 @@ def ver_todos():
     pagination["pages"] = json.loads(r.text)["pages"]
     pagination["current_page"] = json.loads(r.text)["page"]
     return render_template('proveedores_admin.html', proveedores = proveedores, pagination = pagination, filter = filter)
+
+@proveedores.route('/eliminar/<int:id>')
+@login_required
+@admin_required
+def eliminar(id):
+    auth = request.cookies['access_token']
+    headers = {
+            'content-type': 'application/json',
+            'authorization': 'Bearer '+auth}
+    r = requests.delete(
+            current_app.config['API_URL']+'/proveedor/'+str(id),
+            headers = headers)
+    if (r.status_code == 404):
+        return redirect(url_for('proveedores.ver_todos'))
+    return redirect(url_for('proveedores.ver_todos'))

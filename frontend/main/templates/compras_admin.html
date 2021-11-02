@@ -10,7 +10,7 @@
       <div class="col-md-10 col-sm-6">
         <form method="GET" action="{{url_for('compras.ver_todas')}}">
           <div class="form-row">
-            <div class="form-group d-flex col-md-12">
+            <div class="form-group d-flex col-md-12 col-sm-1">
               {{ MostrarCampo(filter.nombre, class="form-control", placeholder="Buscar x Nombre") }}
               {{ MostrarCampo(filter.apellido, class="form-control", placeholder="Buscar x Apellido") }}
               {{ MostrarCampo(filter.retirado, class="form-control") }}

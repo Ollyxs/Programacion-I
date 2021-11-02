@@ -8,7 +8,7 @@
           <h3>Clientes</h3>
           <div class="row">
             <div class="col-md-8 col-sm-3">
-              <a href="#" type="button" class="btn btn-success ">Enviar mail de promoción</a>
+              <a href="{{url_for('usuarios.promocion')}}" type="button" class="btn btn-success ">Enviar mail de promoción</a>
             </div>
             <div class="col-md-2 col-sm-3">
               <form method="GET" action="{{url_for('usuarios.ver_clientes')}}">

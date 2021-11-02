@@ -8,7 +8,7 @@
     <h3>Proveedores</h3>
     <div class="row">
       <div class="col-md-8 col-sm-3">
-        <a href="#" type="button" class="btn btn-success ">Crear Proveedor</a>
+        <a href="{{url_for('proveedores.registrar')}}" type="button" class="btn btn-success ">Crear Proveedor</a>
       </div>
       <div class="col-md-2 col-sm-3">
         <form method="GET" action="{{url_for('proveedores.ver_todos')}}">

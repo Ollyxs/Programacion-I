@@ -42,6 +42,7 @@ def create_app():
     api.add_resource(resources.ClienteResource, '/cliente/<id>')
     api.add_resource(resources.ProveedoresResource, '/proveedores')
     api.add_resource(resources.ProveedorResource, '/proveedor/<id>')
+    api.add_resource(resources.AdminResource, '/admin/<id>')
     api.init_app(app)
 
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
