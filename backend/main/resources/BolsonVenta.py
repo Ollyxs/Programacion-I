@@ -22,12 +22,23 @@ class BolsonesVentas(Resource):
     def get(self):
         page = 1
         per_page = 10
-        bolsonesventas = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 1, BolsonModel.fecha >= fechaPrev).order_by(BolsonModel.id.desc())
+        bolsonesventas = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 1, BolsonModel.fecha >= fechaPrev)
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
                 if key == 'nombre':
                     bolsonesventas = bolsonesventas.filter(BolsonModel.nombre.like('%'+value+'%'))
+                if key == 'desde':
+                    bolsonesventas = bolsonesventas.filter(BolsonModel.precio >= value)
+                if key == 'hasta':
+                    bolsonesventas = bolsonesventas.filter(BolsonModel.precio <= value)
+                if key == 'ordenamiento':
+                    if value == 'fecha':
+                        bolsonesventas = bolsonesventas.order_by(BolsonModel.fecha.desc())
+                    if value == 'asc':
+                        bolsonesventas = bolsonesventas.order_by(BolsonModel.precio.asc())
+                    if value == 'desc':
+                        bolsonesventas = bolsonesventas.order_by(BolsonModel.precio.desc())
                 if key == 'page':
                     page = int(value)
                 if key == 'per_page':

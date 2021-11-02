@@ -84,6 +84,12 @@ def ver_todos_en_venta():
     if filter.envio():
         if filter.nombre.data != None:
             data["nombre"] = filter.nombre.data
+        if filter.desde.data != None:
+            data["desde"] = filter.desde.data
+        if filter.hasta.data != None:
+            data["hasta"] = filter.hasta.data
+        if filter.ordenamiento.data != None:
+            data["ordenamiento"] = filter.ordenamiento.data
 
     r = requests.get(
         current_app.config["API_URL"]+'/bolsones-venta',
@@ -210,7 +216,6 @@ def crear():
             data = json.dumps(data))
     productos = [(item['id'], item['nombre']+"\n - "+item['proveedor']) for item in json.loads(r.text)["productos"]]
 
-    #productos.insert(0, (0, ""))
     form.productosId.choices = productos
     if form.validate_on_submit():
         auth = request.cookies['access_token']
@@ -220,9 +225,7 @@ def crear():
         data = {}
         data["nombre"] = form.nombre.data
         data["fecha"] = form.fecha.data.strftime("%Y-%m-%d")
-        # productosId = []
-        # if form.productosId.data != 0:
-        #     productosId.append(form.productosId.data)
+        data["precio"] = form.precio.data
         data["productos"] = form.productosId.data
         print(data)
         r = requests.post(
@@ -235,6 +238,8 @@ def crear():
     return render_template('crear_bolson.html', form = form)
 
 @bolsones.route('eliminar/<int:id>')
+@login_required
+@admin_required
 def eliminar(id):
     auth = request.cookies['access_token']
     headers = {
@@ -245,7 +250,6 @@ def eliminar(id):
             headers = headers)
     if (r.status_code == 404):
         return redirect(url_for('bolsones.ver_todos'))
-    print(r)
     return redirect(url_for('bolsones.ver_todos'))
 
 @bolsones.route('aprobar/<int:id>')

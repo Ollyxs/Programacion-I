@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectMultipleField, SubmitField
+from wtforms import StringField, SelectField, SelectMultipleField, SubmitField, FloatField
 from wtforms.fields.html5 import DateField, DateTimeField
+from wtforms.validators import InputRequired
 from wtforms import validators
 
 
@@ -20,12 +21,23 @@ class FormBolson(FlaskForm):
                 validators.Required()
             ],  format='%Y-%m-%d'
             )
+    precio = FloatField("Precio $",
+            [
+                validators.Required(message=mess)
+            ],
+                render_kw={"placeholder": "99.99"}
+            )
     productosId = SelectMultipleField("", coerce=int)
     envio = SubmitField("Crear bolsón")
 
 
 class FormFilterBolson(FlaskForm):
     nombre = StringField('',[validators.optional()])
+    desde = FloatField('', [validators.optional()])
+    hasta = FloatField('',[validators.optional()])
+    ordenamiento = SelectField('',
+            choices=[('fecha', "Fecha"), ('asc',"Precio ascendente"), ('desc', "Precio descendente")],
+            validators=[InputRequired()], coerce=str, default='fecha')
     envio = SubmitField("Filtrar")
 
 class FormFilterBolsones(FlaskForm):

@@ -42,21 +42,6 @@
             {% endfor %}
           </tbody>
         </table>
-        <!-- <ul style="list-style-type:circle;">
-          {% for producto in bolson.productos %}
-            <li class="d-flex mb-3">
-              <div class="me-auto">
-                <p>{{producto.nombre}}</p>
-              </div>
-              <div class="ms-auto">
-                <p>Cantidad: 1</p>
-              </div>
-              <div class="ms-auto">
-                <a href="{{url_for('productos.ver', id=producto.productoid)}}">Ver</a>
-              </div>
-            </li>
-          {% endfor %}
-        </ul> -->
       {% endif %}
       <div>
         <p>{{bolson.fecha}}</p> 
@@ -122,10 +107,10 @@
   <td>{{bolson.precio}}</td>
   <td><a href="{{url_for('bolsones.ver_pendiente', id=bolson.id)}}" class="btn btn-primary">Ver</a></td>
   <td>
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#bolson{{bolson.id}}">
       Eliminar
     </button>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="bolson{{bolson.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -135,7 +120,7 @@
             ¿Está seguro que quiere eliminar el bolsón?
           </div>
           <div class="modal-footer">
-            <a type="button" class="btn btn-danger" data-bs-dismiss="modal" href="{{url_for('bolsones.eliminar', id=bolson.id)}}">Eliminar</a> 
+            <a type="button" class="btn btn-danger" href="{{url_for('bolsones.eliminar', id=bolson.id)}}">Eliminar</a> 
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           </div>
         </div>
