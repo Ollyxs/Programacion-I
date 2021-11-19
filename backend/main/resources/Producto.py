@@ -1,10 +1,14 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
-from main.models import ProductoModel, UsuarioModel
+from main.models import ProductoModel, UsuarioModel, BolsonModel, BolsonProductoModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from main.auth.decorators import admin_required, provider_required, admin_provider_required
+import datetime
 
+
+hoy = datetime.datetime.now()
+fechaPrev = hoy - datetime.timedelta(weeks=1)
 
 class Producto(Resource):
     def get(self, id):
@@ -13,10 +17,27 @@ class Producto(Resource):
 
     @admin_provider_required
     def delete(self, id):
+        iduser = get_jwt_identity()
         producto = db.session.query(ProductoModel).get_or_404(id)
-        db.session.delete(producto)
-        db.session.commit()
-        return '', 204
+        print(producto)
+        print(producto.id)
+        bolsonesventas = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 1, BolsonModel.fecha >= fechaPrev).filter(BolsonModel.productos).join(BolsonProductoModel,
+                    BolsonModel.productos).join(ProductoModel,
+                    BolsonProductoModel.producto).filter(ProductoModel.id == producto.id)
+        productos_bolson = []
+        for a in bolsonesventas:
+            print(a)
+            print(a.productos)
+            for i in a.productos:
+                print(i)
+                print(i.productoid)
+                productos_bolson.append(i.productoid)
+        if producto.id not in productos_bolson:
+            db.session.delete(producto)
+            db.session.commit()
+            return '', 204
+        else:
+            return 'El producto no se puede eliminar mientra pertenezca a un bolson en venta.', 405
 
     @provider_required
     def put(self, id):
