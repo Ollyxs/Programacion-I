@@ -1,6 +1,6 @@
 from .. import login_manager
 from flask import request, flash, redirect, url_for,current_app
-from flask_login import UserMixin, LoginManager, current_user
+from flask_login import UserMixin, LoginManager, AnonymousUserMixin, current_user
 import jwt
 from functools import wraps
 
@@ -10,6 +10,14 @@ class User(UserMixin):
         self.id = id
         self.email = email
         self.role = role
+
+#Clase para modificar los datos del usuario anónimo
+class Anonymous(AnonymousUserMixin):
+    def __init__(self):
+        self.role = 'invitado'
+
+#Asignar los datos al usuario anónimo
+login_manager.anonymous_user = Anonymous
 
 #Método que le indica a LoginManager como obtener los datos del usuario logueado
 #En nuestro caso al trabajar con JWT los datos se obtendran de los claims del Token
