@@ -18,9 +18,8 @@ class Producto(Resource):
     @admin_provider_required
     def delete(self, id):
         iduser = get_jwt_identity()
+        user = db.session.query(UsuarioModel).get_or_404(iduser)
         producto = db.session.query(ProductoModel).get_or_404(id)
-        print(producto)
-        print(producto.id)
         bolsonesventas = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 1, BolsonModel.fecha >= fechaPrev).filter(BolsonModel.productos).join(BolsonProductoModel,
                     BolsonModel.productos).join(ProductoModel,
                     BolsonProductoModel.producto).filter(ProductoModel.id == producto.id)
@@ -29,9 +28,12 @@ class Producto(Resource):
             for i in a.productos:
                 productos_bolson.append(i.productoid)
         if producto.id not in productos_bolson:
-            db.session.delete(producto)
-            db.session.commit()
-            return '', 204
+            if producto.proveedorid == iduser or user.role == "admin":
+                db.session.delete(producto)
+                db.session.commit()
+                return '', 204
+            else:
+                return '', 404
         else:
             return 'El producto no se puede eliminar mientra pertenezca a un bolson en venta.', 405
 
