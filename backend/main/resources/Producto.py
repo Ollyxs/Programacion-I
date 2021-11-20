@@ -26,11 +26,7 @@ class Producto(Resource):
                     BolsonProductoModel.producto).filter(ProductoModel.id == producto.id)
         productos_bolson = []
         for a in bolsonesventas:
-            print(a)
-            print(a.productos)
             for i in a.productos:
-                print(i)
-                print(i.productoid)
                 productos_bolson.append(i.productoid)
         if producto.id not in productos_bolson:
             db.session.delete(producto)

@@ -1,4 +1,4 @@
-from flask import Blueprint, url_for, render_template, redirect, current_app, request
+from flask import Blueprint, url_for, render_template, redirect, current_app, request, flash
 from .. formularios.producto import FormProducto, FormFilterProducto
 from flask_login import login_required, current_user, LoginManager
 import requests, json
@@ -76,10 +76,12 @@ def crear():
                 headers = headers,
                 data = json.dumps(data))
         if (r.status_code == 201):
+            flash('Producto creado.','success')
             return redirect(url_for('productos.ver_todos'))
     return render_template('crear_producto.html', formulario=form)
 
 @productos.route('/eliminar/<int:id>')
+@admin_provider_required
 def eliminar(id):
     auth = request.cookies['access_token']
     headers = {
@@ -88,6 +90,10 @@ def eliminar(id):
     r = requests.delete(
             current_app.config['API_URL']+'/producto/'+str(id),
             headers = headers)
-    if (r.status_code == 404):
-        return redirect(url_for('productos.ver_todos'))
+    if (r.status_code == 204):
+        flash('Producto eliminado.', 'success')
+    elif (r.status_code == 404):
+        flash('Producto no encontrado', 'danger')
+    elif (r.status_code == 405):
+        flash('No se puede eliminar el producto porque permanece a un bolson en venta.', 'warning')
     return redirect(url_for('productos.ver_todos'))
