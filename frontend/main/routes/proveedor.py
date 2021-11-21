@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, current_app, request
+from flask import Blueprint, render_template, redirect, url_for, current_app, request, flash
 from .. formularios.registrarse import FormRegistro
 from .. formularios.proveedores import FormFilterProveedor
 from flask_login import login_required, LoginManager, current_user
@@ -28,6 +28,7 @@ def registrar():
                 current_app.config["API_URL"]+'/auth/register',
                 headers = headers,
                 data = json.dumps(data))
+        flash('Proveedor creado.', 'success')
         return redirect(url_for('proveedores.ver_todos'))
     return render_template('crear_proveedor.html', formulario=form)
 
@@ -85,5 +86,7 @@ def eliminar(id):
             current_app.config['API_URL']+'/proveedor/'+str(id),
             headers = headers)
     if (r.status_code == 404):
+        flash('Proveedor no encontrado.', 'danger')
         return redirect(url_for('proveedores.ver_todos'))
+    flash('Proveedor eliminado.', 'success')
     return redirect(url_for('proveedores.ver_todos'))

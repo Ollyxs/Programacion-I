@@ -60,7 +60,7 @@ def proveerdor_required(fn):
     @wraps(fn)
     def wrapper(*args, **kws):
         if not current_user.role == "proveedor":
-            flash('Acceso restringido a proveedor.','warning')
+            flash('Acceso restringido a proveedores.','warning')
             return redirect(url_for('main.index'))
         return fn(*args, **kws)
     return wrapper
@@ -69,7 +69,7 @@ def cliente_required(fn):
     @wraps(fn)
     def wrapper(*args, **kws):
         if not current_user.role == "cliente":
-            flash('Acceso restringido a cliente.','warning')
+            flash('Acceso restringido a clientes.','warning')
             return redirect(url_for('main.index'))
         return fn(*args, **kws)
     return wrapper

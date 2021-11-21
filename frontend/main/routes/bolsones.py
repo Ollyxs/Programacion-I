@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, render_template, current_app, request
+from flask import Blueprint, redirect, url_for, render_template, current_app, request, flash
 from .. formularios.bolson import FormBolson, FormFilterBolson, FormFilterBolsones
 from flask_login import login_required, LoginManager, current_user
 import requests, json
@@ -233,8 +233,8 @@ def crear():
                 headers = headers,
                 data = json.dumps(data))
         if (r.status_code == 201):
+            flash('Bolsón creado.', 'success')
             return redirect(url_for('bolsones.ver_pendientes'))
-        print(r)
     return render_template('crear_bolson.html', form = form)
 
 @bolsones.route('eliminar/<int:id>')
@@ -249,7 +249,9 @@ def eliminar(id):
             current_app.config["API_URL"]+'/bolson-pendiente/'+str(id),
             headers = headers)
     if (r.status_code == 404):
+        flash('Bolsón no encontrado.', 'danger')
         return redirect(url_for('bolsones.ver_todos'))
+    flash('Bolsón eliminado', 'success')
     return redirect(url_for('bolsones.ver_todos'))
 
 @bolsones.route('aprobar/<int:id>')
@@ -267,6 +269,7 @@ def aprobar(id):
             headers=headers,
             data = json.dumps(data))
     if (r.status_code == 201):
+        flash('Bolsón aprobar', 'success')
         return redirect(url_for('bolsones.ver_todos'))
     return redirect(url_for('bolsones.ver_todos'))
 
@@ -285,5 +288,6 @@ def desaprobar(id):
             headers=headers,
             data = json.dumps(data))
     if (r.status_code == 201):
+        flash('Bolsón desaprobado', 'warning')
         return redirect(url_for('bolsones.ver_todos'))
     return redirect(url_for('bolsones.ver_todos'))

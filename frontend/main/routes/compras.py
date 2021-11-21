@@ -76,6 +76,7 @@ def comprar(id):
             headers = headers,
             data = json.dumps(data))
     if (r.status_code == 201):
+        flash('Compra exitosa.', 'success')
         return redirect(url_for('main.index'))
     return render_template('main.index')
 
@@ -118,6 +119,7 @@ def retirado(id):
             headers = headers,
             data = json.dumps(data))
     if (r.status_code == 201):
+        flash('Compra retirada.', 'success')
         return redirect(url_for('compras.ver_todas'))
     return redirect(url_for('compras.ver_todas'))
 
@@ -136,6 +138,7 @@ def no_retirado(id):
             headers = headers,
             data = json.dumps(data))
     if (r.status_code == 201):
+        flash('Compra no retirada.', 'warning')
         return redirect(url_for('compras.ver_todas'))
     return redirect(url_for('compras.ver_todas'))
 
@@ -151,5 +154,7 @@ def eliminar(id):
             current_app.config['API_URL']+'/compra/'+str(id),
             headers = headers)
     if r.status_code == 404:
+        flash('Compra no encontrada.', 'danger')
         return redirect(url_for('compras.ver_todas'))
+    flash('Compra eliminada.', 'success')
     return redirect(url_for('compras.ver_todas'))

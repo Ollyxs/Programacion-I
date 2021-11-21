@@ -9,7 +9,7 @@ mail = Blueprint('mail', __name__, url_prefix='/mail')
 
 
 @mail.route('/promo', methods=['POST'])
-#@admin_required
+@admin_required
 def promo():
     cliente = db.session.query(UsuarioModel).filter(UsuarioModel.role == 'cliente').all()
     for i in cliente:

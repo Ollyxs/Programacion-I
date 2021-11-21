@@ -26,6 +26,10 @@ def registrar():
                 current_app.config["API_URL"]+'/auth/register',
                 headers = headers,
                 data = json.dumps(data))
+        if (r.status_code == 201):
+            flash('Registro exitoso.', 'success')
+        elif (r.status_code == 409):
+            flash('Email duplicado.', 'warning')
         return redirect(url_for('main.index'))
     return render_template('registrarse.html', formulario=form)
 
@@ -41,6 +45,9 @@ def ingresar():
                 current_app.config["API_URL"]+'/auth/login',
                 headers = headers,
                 data = json.dumps(data))
+        if (r.status_code == 401):
+            flash('Contraseña incorrecta.', 'warning')
+            return redirect(url_for('usuarios.ingresar'))
         return redirect(url_for('main.index'))
     return render_template('ingresar.html', formulario=form)
 
@@ -118,9 +125,22 @@ def admin():
             current_app.config["API_URL"]+'/admin/'+str(1),
             headers = headers)
     usuario = json.loads(r.text)
+    print(usuario)
     if form.validate_on_submit():
-        print(form.name.data)
-        return redirect(url_for('usuario.admin'))
+        data = {}
+        data["nombre"] = form.nombre.data
+        data["apellido"] = form.apellido.data
+        data["email"] = form.email.data
+        data["telefono"] = form.telefono.data
+        data["password"] = form.password.data
+        print(form.nombre.data)
+        print(form.telefono.data)
+        print(data)
+        r = requests.put(
+                current_app.config["API_URL"]+'/admin/'+str(1),
+                headers = headers,
+                data = json.dumps(data))
+        return redirect(url_for('usuarios.admin'))
     return render_template('admin.html', usuario=usuario, formulario=form)
 
 @usuarios.route('eliminar/<int:id>')
@@ -151,6 +171,8 @@ def promocion():
     r = requests.post(
             current_app.config['API_URL']+'/mail/promo',
             headers = headers)
-    if (r.status_code == 404):
+    if (r.status_code == 409):
+        flash(r.text, 'danger')
         return redirect(url_for('usuarios.ver_clientes'))
+    flash('Enviado.', 'success')
     return redirect(url_for('usuarios.ver_clientes'))
