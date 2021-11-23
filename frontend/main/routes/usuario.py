@@ -5,7 +5,7 @@ from .. formularios.cuenta import FormCuenta
 from .. formularios.clientes import FormFilterCliente
 from flask_login import login_required, LoginManager, current_user
 import requests, json
-from .auth import admin_required, admin_client_required
+from .auth import admin_required, admin_client_required, cliente_required, admin_provider_required
 
 
 usuarios = Blueprint('usuarios', __name__, url_prefix='/usuarios')
@@ -45,7 +45,7 @@ def ingresar():
                 current_app.config["API_URL"]+'/auth/login',
                 headers = headers,
                 data = json.dumps(data))
-        if (r.status_code == 401):
+        if (r.status_code == 404):
             flash('Contraseña incorrecta.', 'warning')
             return redirect(url_for('usuarios.ingresar'))
         return redirect(url_for('main.index'))
@@ -68,6 +68,84 @@ def mi_cuenta(id):
         return redirect(url_for('main.index'))
     usuario = json.loads(r.text)
     return render_template('usuario.html', usuario = usuario)
+
+@usuarios.route('cuenta/<int:id>', methods=['POST', 'GET'])
+@login_required
+@cliente_required
+def cliente(id):
+    form = FormCuenta()
+    auth = request.cookies['access_token']
+    headers = {
+            "content-type": "application/json",
+            'authorization': "Bearer "+auth}
+    r = requests.get(
+            current_app.config["API_URL"]+'/cliente/'+str(id),
+            headers = headers)
+    usuario = json.loads(r.text)
+    print(usuario)
+    if form.validate_on_submit():
+        data = {}
+        data["nombre"] = form.nombre.data
+        data["apellido"] = form.apellido.data
+        data["email"] = form.email.data
+        data["telefono"] = form.telefono.data
+        data["contra"] = form.password.data
+        print(form.nombre.data)
+        print(form.telefono.data)
+        print(data)
+        r = requests.put(
+                current_app.config["API_URL"]+'/cliente/'+str(id),
+                headers = headers,
+                data = json.dumps(data))
+        if (r.status_code == 201):
+            flash('Perfil actualizado.', 'success')
+        elif (r.status_code == 401):
+            flash('Contraseña incorrecta.', 'danger')
+        return redirect(url_for('usuarios.cliente', id=str(id)))
+    if (r.status_code == 404):
+        flash('Usuario no encontrado.', 'danger')
+        return redirect(url_for('main.index'))
+    return render_template('admin.html', usuario=usuario, formulario=form)
+
+
+@usuarios.route('proveedor/<int:id>', methods=['POST', 'GET'])
+@login_required
+@admin_provider_required
+def proveedor(id):
+    form = FormCuenta()
+    auth = request.cookies['access_token']
+    headers = {
+            "content-type": "application/json",
+            'authorization': "Bearer "+auth}
+    r = requests.get(
+            current_app.config["API_URL"]+'/proveedor/'+str(id),
+            headers = headers)
+    usuario = json.loads(r.text)
+    print(usuario)
+    if form.validate_on_submit():
+        data = {}
+        data["nombre"] = form.nombre.data
+        data["apellido"] = form.apellido.data
+        data["email"] = form.email.data
+        data["telefono"] = form.telefono.data
+        data["contra"] = form.password.data
+        print(form.nombre.data)
+        print(form.telefono.data)
+        print(data)
+        r = requests.put(
+                current_app.config["API_URL"]+'/proveedor/'+str(id),
+                headers = headers,
+                data = json.dumps(data))
+        if (r.status_code == 201):
+            flash('Perfil actualizado.', 'success')
+        elif (r.status_code == 401):
+            flash('Contraseña incorrecta.', 'danger')
+        return redirect(url_for('usuarios.proveedor', id=str(id)))
+    if (r.status_code == 404):
+        flash('Usuario no encontrado.', 'danger')
+        return redirect(url_for('main.index'))
+    return render_template('admin.html', usuario=usuario, formulario=form)
+
 
 @usuarios.route('/clientes')
 @login_required
@@ -112,17 +190,17 @@ def ver_clientes():
 #     usuario = json.loads(r.text)
 #     return render_template('admin.html', usuario = usuario)
 
-@usuarios.route('admin', methods=['POST', 'GET'])
+@usuarios.route('admin/<int:id>', methods=['POST', 'GET'])
 @login_required
 @admin_required
-def admin():
+def admin(id):
     form = FormCuenta()
     auth = request.cookies['access_token']
     headers = {
             "content-type": "application/json",
             'authorization': "Bearer "+auth}
     r = requests.get(
-            current_app.config["API_URL"]+'/admin/'+str(1),
+            current_app.config["API_URL"]+'/admin/'+str(id),
             headers = headers)
     usuario = json.loads(r.text)
     print(usuario)
@@ -132,15 +210,22 @@ def admin():
         data["apellido"] = form.apellido.data
         data["email"] = form.email.data
         data["telefono"] = form.telefono.data
-        data["password"] = form.password.data
+        data["contra"] = form.password.data
         print(form.nombre.data)
         print(form.telefono.data)
         print(data)
         r = requests.put(
-                current_app.config["API_URL"]+'/admin/'+str(1),
+                current_app.config["API_URL"]+'/admin/'+str(id),
                 headers = headers,
                 data = json.dumps(data))
-        return redirect(url_for('usuarios.admin'))
+        if (r.status_code == 201):
+            flash('Perfil actualizado.', 'success')
+        elif (r.status_code == 401):
+            flash('Contraseña incorrecta.', 'danger')
+        return redirect(url_for('usuarios.admin', id=str(id)))
+    if (r.status_code == 404):
+        flash('Usuario no encontrado.', 'danger')
+        return redirect(url_for('main.index'))
     return render_template('admin.html', usuario=usuario, formulario=form)
 
 @usuarios.route('eliminar/<int:id>')

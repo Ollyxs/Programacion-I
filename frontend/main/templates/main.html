@@ -1,5 +1,5 @@
-{% from 'macros/form.html' import show_field_login, show_submit %}
-<!DOCTYPE html>
+{# from 'macros/form.html' import show_field_login, show_submit #}
+<!DOCTYPE html> -->
 <html lang="es">
   <head>
     <title>Inicio</title>
@@ -94,7 +94,7 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                   <li>
                     <div class="d-grid gap-2 col-10 mx-auto">
-                      <a href="{{url_for('usuarios.mi_cuenta', id=current_user.id)}}" type="button" class="btn btn-primary">Mi cuenta</a>
+                      <a href="{{url_for('usuarios.proveedor', id=current_user.id)}}" type="button" class="btn btn-primary">Mi cuenta</a>
                     </div>
                   </li>
                   <li><hr class="dropdown-divider"></li>
@@ -121,7 +121,7 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                   <li>
                     <div class="d-grid gap-2 col-10 mx-auto">
-                      <a href="{{url_for('usuarios.mi_cuenta', id=current_user.id)}}" type="button" class="btn btn-primary">Mi cuenta</a>
+                      <a href="{{url_for('usuarios.cliente', id=current_user.id)}}" type="button" class="btn btn-primary">Mi cuenta</a>
                       <a href="{{url_for('compras.mis_compras')}}" type="button" class="btn btn-primary">Mis compras</a>
                     </div>
                   </li>
@@ -171,11 +171,15 @@
             {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
                 {% for category, message in messages %}
-                  <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
-                    {{message}}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
+                  <div class="alert alert-{{category}} alert-dismissible fade show d-flex" role="alert">
+                    <div class="col-md-6 d-flex">
+                      {{message}}
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-end" role="alert">
+                      <button type="button" class="btn btn-close" data-dismiss="alert" aria-label="Close">
+                        <!-- <span aria-hidden="true">&Chi;</span> -->
+                      </button>
+                    </div>
                   </div>
                 {% endfor %}
               {% endif %}

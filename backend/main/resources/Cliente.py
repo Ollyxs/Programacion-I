@@ -7,10 +7,14 @@ from main.auth.decorators import admin_required, client_required, admin_client_r
 
 
 class Cliente(Resource):
-    @admin_required
+    @admin_client_required
     def get(self, id):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
-        if cliente.role == 'cliente':
+        iduser = get_jwt_identity()
+        user = db.session.query(UsuarioModel).get_or_404(iduser)
+        if user.role == 'admin' and cliente.id != iduser and cliente.role == 'cliente':
+            return cliente.to_json()
+        elif user.role == 'cliente' and cliente.id == iduser:
             return cliente.to_json()
         else:
             return '', 404
@@ -36,12 +40,15 @@ class Cliente(Resource):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         clienteid = get_jwt_identity()
         if cliente.id == clienteid:
-            data = request.get_json().items()
-            for key, value in data:
-                setattr(cliente, key, value)
-            db.session.add(cliente)
-            db.session.commit()
-            return cliente.to_json(), 201
+            if cliente.validate_pass(request.get_json().get("contra")):
+                data = request.get_json().items()
+                for key, value in data:
+                    setattr(cliente, key, value)
+                db.session.add(cliente)
+                db.session.commit()
+                return cliente.to_json(), 201
+            else:
+                return 'Incorrect password', 401
         else:
             return '', 404
 

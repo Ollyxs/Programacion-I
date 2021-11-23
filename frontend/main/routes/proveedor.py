@@ -46,6 +46,7 @@ def ver(id):
     proveedor = json.loads(r.text)
     return render_template('modificar_proveedor.html', proveedor = proveedor)
 
+
 @proveedores.route('/todos')
 @login_required
 @admin_required

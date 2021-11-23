@@ -38,6 +38,7 @@ def login():
             return req
         else:
             flash('Usuario o contraseña incorrecta', 'danger')
+            return redirect(url_for('usuarios.ingresar'))
     return redirect(url_for('main.index'))
 
 @main.route('/cerrar-sesion')

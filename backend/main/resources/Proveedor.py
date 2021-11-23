@@ -10,7 +10,9 @@ class Proveedor(Resource):
     @admin_provider_required
     def get(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
-        if proveedor.role == 'proveedor':
+        userid = get_jwt_identity()
+        user = db.session.query(UsuarioModel).get_or_404(userid)
+        if proveedor.id == userid or user.role == 'admin' and proveedor.role == 'proveedor':
             return proveedor.to_json()
         else:
             return '', 404
@@ -25,16 +27,20 @@ class Proveedor(Resource):
         else:
             return '', 404
 
-    @admin_required
+    @admin_provider_required
     def put(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
-        if proveedor.role == 'proveedor':
-            data = request.get_json().items()
-            for key, value in data:
-                setattr(proveedor, key, value)
-            db.session.add(proveedor)
-            db.session.commit()
-            return proveedor.to_json(), 201
+        proveedorid = get_jwt_identity()
+        if proveedor.id == proveedorid and proveedor.role == 'proveedor':
+            if proveedor.validate_pass(request.get_json().get("contra")):
+                data = request.get_json().items()
+                for key, value in data:
+                    setattr(proveedor, key, value)
+                db.session.add(proveedor)
+                db.session.commit()
+                return proveedor.to_json(), 201
+            else:
+                return 'Incorrect password', 401
         else:
             return '', 404
 
