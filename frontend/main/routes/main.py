@@ -47,3 +47,15 @@ def logout():
     req.set_cookie('access_token', '', httponly = True)
     logout_user()
     return req
+
+@main.route('/nosotros')
+def nosotros():
+    return render_template('nosotros.html')
+
+@main.route('/zona-de-retiro')
+def retiro():
+    return render_template('zona_retiro.html')
+
+@main.route('/ayuda')
+def ayuda():
+    return render_template('preguntas.html')

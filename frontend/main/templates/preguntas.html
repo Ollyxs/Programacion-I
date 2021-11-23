@@ -1,147 +1,58 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <title>Inicio</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"/>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="./index.html"><img src="https://via.placeholder.com/70x40"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{url_for('main.index')}}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Ayuda</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Contacto</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Nosotros</a>
-            </li>
-          </ul>
-          <span class="nav-item">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Login
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li>
-                    <div class="d-grid gap-2 col-10 mx-auto">
-                      <a href="./ingresar.html" type="button" class="btn btn-primary">Ingresar</a>
-                      <a href="./registrarse.html" type="button" class="btn btn-primary">Registrarse</a>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </span>
+{% extends "main.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-md-1 col-sm-1"></div>
+  <div class="col-md-10 col-sm-1">
+    <h3>Ayuda</h3>
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+            ¿Cómo comprar?
+          </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            Maecenas id eros turpis. Integer posuere imperdiet orci nec ultricies. Curabitur sagittis auctor enim non iaculis. In tristique et ante at 
+            commodo. Duis luctus nisl eu varius pellentesque. Etiam viverra, erat sit amet ornare interdum, odio nisi egestas orci, eu tempus ex felis 
+            at est. Pellentesque sit amet venenatis lectus. Vivamus maximus lorem sed enim sollicitudin, non pulvinar eros pretium. Nulla elementum justo 
+            sed mi feugiat, sed dapibus augue mattis. Morbi laoreet pretium consectetur.
+          </div>
         </div>
       </div>
-    </nav>
-    <br/>
-    <br/>
-    <br/>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-1 col-sm-1"></div>
-        <div class="col-md-10 col-sm-1">
-          <h3>Ayuda</h3>
-          <div class="accordion accordion-flush" id="accordionFlushExample">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="flush-headingOne">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                  ¿Cómo comprar?
-                </button>
-              </h2>
-              <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="flush-headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                  Preguntas frecuentes
-                </button>
-              </h2>
-              <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="flush-headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                  Arrepentimiento de compra
-                </button>
-              </h2>
-              <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
-              </div>
-            </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+            Preguntas frecuentes
+          </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            Quisque blandit sit amet tortor eu posuere. Nunc ut sodales risus. Fusce rutrum enim eu blandit efficitur. Sed porttitor lorem eu diam 
+            molestie dapibus. Vestibulum eros nunc, consectetur vitae tellus sit amet, viverra aliquet arcu. Curabitur nunc felis, accumsan et urna 
+            sed, scelerisque eleifend ante. Donec varius libero ac eros aliquet, et lacinia odio fringilla. Integer efficitur quis quam in consequat. 
+            Integer ut libero ac enim sagittis ultricies. Proin quis leo non ante congue rutrum eu et libero. Aenean nisl risus, cursus a suscipit non, 
+            semper et massa. Integer ac ultrices lorem. Pellentesque lectus justo, ultrices sit amet ante in. 
           </div>
         </div>
-        <div class="col-md-1 col-sm-1"></div>
-      <br/>
-      <br/>
-      <br/>
-      <footer class="page-footer border-top pt-4 my-md-5 pt-md-5">
-        <div class="row">
-          <div class="col-md-6 col-sm-1">
-            <h5>Seguinos</h5>
-            <ul class="list-unstyled text-small">
-              <li>
-                <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
-                <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
-                <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
-              </li>
-            </ul>
-          </div>
-          <div class="col-md-2 col-sm-1">
-            <h5>Nosotros</h5>
-            <ul class="list-unstyled text-small">
-              <li>
-                <a class="text-muted text-decoration-none" href="#">¿Quiénes somos?</a>
-              </li>
-            </ul>
-          </div>
-          <div class="col-md-2 col-sm-1">
-            <h5>Ayuda</h5>
-            <ul class="list-unstyled text-small">
-              <li>
-                <a class="text-muted text-decoration-none" href="#">¿Cómo comprar?</a>
-              </li>
-              <li>
-                <a class="text-muted text-decoration-none" href="#">Preguntas frecuentes</a>
-              </li>
-              <li>
-                <a class="text-muted text-decoration-none" href="#">Arrepentimiento de compra</a>
-              </li>
-            </ul>
-          </div>
-          <div class="col-md-2 col-sm-1">
-            <h5>Contacto</h5>
-            <ul class="list-unstyled text-small">
-              <li>
-                <a class="text-muted text-decoration-none" href="#">Contacto compradores</a>
-              </li>
-              <li>
-                <a class="text-muted text-decoration-none" href="#">Contacto proveedores</a>
-              </li>
-            </ul>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+            Arrepentimiento de compra
+          </button>
+        </h2>
+        <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            Nam non justo non eros ullamcorper mollis. Nullam sed turpis erat. Vivamus posuere velit at justo posuere ornare. Maecenas et justo vitae 
+            nisl consequat maximus interdum vitae ante. Sed vehicula egestas ante at efficitur. Nulla feugiat leo nunc, at fringilla est ultrices eu. 
+            Cras non ante libero. Fusce ut ipsum sollicitudin, aliquam tellus elementum, ultricies velit. Nullam rutrum nisl auctor urna gravida 
+            accumsan. Aenean leo massa, varius eget tincidunt convallis, imperdiet commodo ligula. Fusce volutpat rhoncus felis, et aliquam mi 
+            pellentesque vel. Sed ac congue nulla, accumsan dignissim leo. Aliquam erat volutpat. Ut ultrices ipsum et fringilla hendrerit. Aliquam erat. 
           </div>
         </div>
-      </footer>
+      </div>
     </div>
-    <!-- JavaScript Bundle with Popper -->		
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-  </body>
-</html>
+  </div>
+  <div class="col-md-1 col-sm-1"></div>
+{% endblock %}

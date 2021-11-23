@@ -22,13 +22,10 @@
               <a class="nav-link active" aria-current="page" href="{{url_for('main.index')}}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Ayuda</a>
+              <a class="nav-link" href="{{url_for('main.ayuda')}}">Ayuda</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Contacto</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Nosotros</a>
+              <a class="nav-link" href="{{url_for('main.nosotros')}}">Nosotros</a>
             </li>
             {% if current_user.is_authenticated and current_user.role == "admin" %}
             <li class="nav-item dropdown">
@@ -177,7 +174,6 @@
                     </div>
                     <div class="col-md-6 d-flex justify-content-end" role="alert">
                       <button type="button" class="btn btn-close" data-dismiss="alert" aria-label="Close">
-                        <!-- <span aria-hidden="true">&Chi;</span> -->
                       </button>
                     </div>
                   </div>
@@ -194,13 +190,13 @@
       <br/>
       <footer class="page-footer border-top pt-4 my-md-5 pt-md-5">
         <div class="row">
-          <div class="col-md-6 col-sm-1">
+          <div class="col-md-8 col-sm-1">
             <h5>Seguinos</h5>
             <ul class="list-unstyled text-small">
               <li>
-                <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
-                <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
-                <a class="text-muted" href="#"><img src="https://via.placeholder.com/30"></a>
+                <a class="text-muted" href="https://www.facebook.com/um.sanrafael/" target="_blank"><img src="https://img.icons8.com/ios-filled/30/000000/facebook--v1.png"/></a>
+                <a class="text-muted" href="https://www.instagram.com/umsedesanrafael/" target="_blank"><img src="https://img.icons8.com/ios-filled/30/000000/instagram-new.png"/></a>
+                <a class="text-muted" href="https://twitter.com/udemendoza" target="_blank"><img src="https://img.icons8.com/ios-glyphs/30/000000/twitter.png"/></a>
               </li>
             </ul>
           </div>
@@ -208,7 +204,7 @@
             <h5>Nosotros</h5>
             <ul class="list-unstyled text-small">
               <li>
-                <a class="text-muted text-decoration-none" href="#">¿Quiénes somos?</a>
+                <a class="text-muted text-decoration-none" href="{{url_for('main.nosotros')}}">¿Quiénes somos?</a>
               </li>
             </ul>
           </div>
@@ -216,24 +212,10 @@
             <h5>Ayuda</h5>
             <ul class="list-unstyled text-small">
               <li>
-                <a class="text-muted text-decoration-none" href="#">¿Cómo comprar?</a>
+                <a class="text-muted text-decoration-none" href="{{url_for('main.retiro')}}">Zona de retiro</a>
               </li>
               <li>
-                <a class="text-muted text-decoration-none" href="#">Preguntas frecuentes</a>
-              </li>
-              <li>
-                <a class="text-muted text-decoration-none" href="#">Arrepentimiento de compra</a>
-              </li>
-            </ul>
-          </div>
-          <div class="col-md-2 col-sm-1">
-            <h5>Contacto</h5>
-            <ul class="list-unstyled text-small">
-              <li>
-                <a class="text-muted text-decoration-none" href="#">Contacto compradores</a>
-              </li>
-              <li>
-                <a class="text-muted text-decoration-none" href="#">Contacto proveedores</a>
+                <a class="text-muted text-decoration-none" href="{{url_for('main.ayuda')}}">Preguntas frecuentes</a>
               </li>
             </ul>
           </div>
