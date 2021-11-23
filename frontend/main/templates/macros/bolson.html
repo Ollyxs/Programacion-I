@@ -81,7 +81,6 @@
 
 {% macro bolsones(bolson, user) %}
 <tr>
-  <!-- <th scope="row"><img src="https://via.placeholder.com/70x70"></th> -->
   <th>{{bolson.nombre}}</th>
   <td>{{bolson.fecha}}</td>
   {% if bolson.aprobado %}
@@ -100,7 +99,6 @@
 
 {% macro pendientes(bolson) %}
 <tr>
-  <!-- <th scope="row"><img src="https://via.placeholder.com/70x70"></th> -->
   <th>{{bolson.nombre}}</th>
   <td>{{bolson.fecha}}</td>
   <td style="color:red">No</td>

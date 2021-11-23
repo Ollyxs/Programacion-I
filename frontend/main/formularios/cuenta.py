@@ -36,9 +36,7 @@ class FormCuenta(FlaskForm):
     password = PasswordField("Contraseña",
         [
             validators.Required(message=mess),
-            # validators.EqualTo("confirmar", message="Las contraseñas no coinciden"),
             validators.Length(max=128, min=8, message="La contraseña debe tener entre 8 y 128 caracteres")
         ],
         )
-    # confirmar = PasswordField("Confirmar contraseña")#, render_kw={"value": "**********"})
     envio = SubmitField("Guardar cambios")
