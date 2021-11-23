@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, current_app, request
+from flask import Blueprint, render_template, redirect, url_for, current_app, request, flash
 from flask_login import login_required, LoginManager, current_user
 from .. formularios.compra import FormFilterCompra
 import requests, json
@@ -120,7 +120,6 @@ def retirado(id):
             data = json.dumps(data))
     if (r.status_code == 201):
         flash('Compra retirada.', 'success')
-        return redirect(url_for('compras.ver_todas'))
     return redirect(url_for('compras.ver_todas'))
 
 @compras.route('no-retirado/<int:id>')
@@ -139,7 +138,6 @@ def no_retirado(id):
             data = json.dumps(data))
     if (r.status_code == 201):
         flash('Compra no retirada.', 'warning')
-        return redirect(url_for('compras.ver_todas'))
     return redirect(url_for('compras.ver_todas'))
 
 @compras.route('/eliminar/<int:id>')
@@ -155,6 +153,6 @@ def eliminar(id):
             headers = headers)
     if r.status_code == 404:
         flash('Compra no encontrada.', 'danger')
-        return redirect(url_for('compras.ver_todas'))
-    flash('Compra eliminada.', 'success')
+    else:
+        flash('Compra eliminada.', 'success')
     return redirect(url_for('compras.ver_todas'))

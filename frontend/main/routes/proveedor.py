@@ -34,6 +34,7 @@ def registrar():
 
 @proveedores.route('/ver/<int:id>')
 def ver(id):
+    user = current_user
     auth = request.cookies['access_token']
     headers = {
             'content-type': "application/json",
@@ -44,7 +45,7 @@ def ver(id):
     if (r.status_code == 404):
         return redirect(url_for('proveedores.ver_todos'))
     proveedor = json.loads(r.text)
-    return render_template('modificar_proveedor.html', proveedor = proveedor)
+    return render_template('cliente.html', usuario = proveedor, user = user)
 
 
 @proveedores.route('/todos')

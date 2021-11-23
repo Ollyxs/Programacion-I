@@ -51,7 +51,7 @@ def ingresar():
         return redirect(url_for('main.index'))
     return render_template('ingresar.html', formulario=form)
 
-@usuarios.route('mi-cuenta/<int:id>')
+@usuarios.route('usuario/<int:id>')
 @login_required
 def ver_cliente(id):
     auth = request.cookies['access_token']
@@ -60,6 +60,21 @@ def ver_cliente(id):
             'authorization': "Bearer "+auth}
     r = requests.get(
             current_app.config["API_URL"]+'/cliente/'+str(id),
+            headers = headers)
+    if (r.status_code == 404):
+        return redirect(url_for('main.index'))
+    usuario = json.loads(r.text)
+    return render_template('cliente.html', usuario = usuario)
+
+@usuarios.route('usuario/<int:id>')
+@login_required
+def ver_proveedor(id):
+    auth = request.cookies['access_token']
+    headers = {
+            "content-type": "application/json",
+            'authorization': "Bearer "+auth}
+    r = requests.get(
+            current_app.config["API_URL"]+'/proveedor/'+str(id),
             headers = headers)
     if (r.status_code == 404):
         return redirect(url_for('main.index'))
@@ -102,7 +117,7 @@ def cliente(id):
     if (r.status_code == 404):
         flash('Usuario no encontrado.', 'danger')
         return redirect(url_for('main.index'))
-    return render_template('cliente.html', usuario=usuario, formulario=form)
+    return render_template('cuenta.html', usuario=usuario, formulario=form)
 
 
 @usuarios.route('proveedor/<int:id>', methods=['POST', 'GET'])
@@ -208,7 +223,7 @@ def admin(id):
     if (r.status_code == 404):
         flash('Usuario no encontrado.', 'danger')
         return redirect(url_for('main.index'))
-    return render_template('admin.html', usuario=usuario, formulario=form)
+    return render_template('cuenta.html', usuario=usuario, formulario=form)
 
 
 @usuarios.route('eliminar/<int:id>')

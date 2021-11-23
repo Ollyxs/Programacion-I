@@ -7,12 +7,13 @@ from main.auth.decorators import admin_required, admin_provider_required
 
 
 class Proveedor(Resource):
-    @admin_provider_required
+    # @admin_provider_required
     def get(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
-        userid = get_jwt_identity()
-        user = db.session.query(UsuarioModel).get_or_404(userid)
-        if proveedor.id == userid or user.role == 'admin' and proveedor.role == 'proveedor':
+        # userid = get_jwt_identity()
+        # user = db.session.query(UsuarioModel).get_or_404(userid)
+        # if proveedor.id == userid or user.role == 'admin' and proveedor.role == 'proveedor':
+        if proveedor.role == 'proveedor':
             return proveedor.to_json()
         else:
             return '', 404

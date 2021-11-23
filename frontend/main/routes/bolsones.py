@@ -250,9 +250,9 @@ def eliminar(id):
             headers = headers)
     if (r.status_code == 404):
         flash('Bolsón no encontrado.', 'danger')
-        return redirect(url_for('bolsones.ver_todos'))
+        return redirect(url_for('bolsones.ver_pendientes'))
     flash('Bolsón eliminado', 'success')
-    return redirect(url_for('bolsones.ver_todos'))
+    return redirect(url_for('bolsones.ver_pendientes'))
 
 @bolsones.route('aprobar/<int:id>')
 @login_required

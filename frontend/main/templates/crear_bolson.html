@@ -8,14 +8,14 @@
     <form method="POST" action="{{url_for('bolsones.crear')}}">
       <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
       <div class="d-flex justify-content-center p-2 bd-highlight border border-1">
-        <div class="d-flex p-2">
+        <!-- <div class="d-flex p-2">
           <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupFile01">
               <img src="https://via.placeholder.com/100x100">
             </label>
             <input type="file" class="form-control" style="display:none" id="inputGroupFile01" accept="image/*">
           </div>
-        </div>
+        </div> -->
         <div class="p-2">
           <div class="mb-3">
             {{MostrarCampo(form.nombre, class="form-control")}}

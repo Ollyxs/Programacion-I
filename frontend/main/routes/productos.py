@@ -10,13 +10,14 @@ productos = Blueprint('productos', __name__, url_prefix='/productos')
 
 @productos.route('/ver/<int:id>')
 def ver(id):
+    user = current_user
     r = requests.get(
             current_app.config['API_URL']+'/producto/'+str(id),
             headers = {"content-type": "application/json"})
     if (r.status_code == 404):
         return redirect(url_for('main.index'))
     producto = json.loads(r.text)
-    return render_template('producto.html', producto = producto)
+    return render_template('producto.html', producto = producto, user = user)
 
 @productos.route('/todos')
 @login_required
@@ -25,7 +26,7 @@ def ver_todos():
     filter = FormFilterProducto(request.args, meta={'csrf': False})
     data = {}
     data['page'] = 1
-    data['per_page'] = 4
+    data['per_page'] = 10
     if 'page' in request.args:
         data["page"] = request.args.get('page','')
     auth = request.cookies['access_token']
