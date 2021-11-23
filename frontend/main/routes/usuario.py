@@ -53,7 +53,7 @@ def ingresar():
 
 @usuarios.route('mi-cuenta/<int:id>')
 @login_required
-def mi_cuenta(id):
+def ver_cliente(id):
     auth = request.cookies['access_token']
     headers = {
             "content-type": "application/json",
@@ -61,13 +61,10 @@ def mi_cuenta(id):
     r = requests.get(
             current_app.config["API_URL"]+'/cliente/'+str(id),
             headers = headers)
-    r = requests.get(
-            current_app.config["API_URL"]+'/proveedor/'+str(id),
-            headers = headers)
     if (r.status_code == 404):
         return redirect(url_for('main.index'))
     usuario = json.loads(r.text)
-    return render_template('usuario.html', usuario = usuario)
+    return render_template('cliente.html', usuario = usuario)
 
 @usuarios.route('cuenta/<int:id>', methods=['POST', 'GET'])
 @login_required
@@ -105,7 +102,7 @@ def cliente(id):
     if (r.status_code == 404):
         flash('Usuario no encontrado.', 'danger')
         return redirect(url_for('main.index'))
-    return render_template('admin.html', usuario=usuario, formulario=form)
+    return render_template('cliente.html', usuario=usuario, formulario=form)
 
 
 @usuarios.route('proveedor/<int:id>', methods=['POST', 'GET'])
@@ -144,7 +141,7 @@ def proveedor(id):
     if (r.status_code == 404):
         flash('Usuario no encontrado.', 'danger')
         return redirect(url_for('main.index'))
-    return render_template('admin.html', usuario=usuario, formulario=form)
+    return render_template('proveedor.html', usuario=usuario, formulario=form)
 
 
 @usuarios.route('/clientes')
@@ -174,21 +171,6 @@ def ver_clientes():
     pagination["current_page"] = json.loads(r.text)["page"]
     return render_template('clientes_admin.html', clientes = clientes, pagination = pagination, filter = filter)
 
-
-# @usuarios.route('admin/<int:id>')
-# @login_required
-# def mi_cuenta_admin(id):
-#     auth = request.cookies['access_token']
-#     headers = {
-#             "content-type": "application/json",
-#             'authorization': "Bearer "+auth}
-#     r = requests.get(
-#             current_app.config["API_URL"]+'/admin/'+str(id),
-#             headers = headers)
-#     if (r.status_code == 404):
-#         return redirect(url_for('main.index'))
-#     usuario = json.loads(r.text)
-#     return render_template('admin.html', usuario = usuario)
 
 @usuarios.route('admin/<int:id>', methods=['POST', 'GET'])
 @login_required
@@ -228,6 +210,7 @@ def admin(id):
         return redirect(url_for('main.index'))
     return render_template('admin.html', usuario=usuario, formulario=form)
 
+
 @usuarios.route('eliminar/<int:id>')
 @login_required
 @admin_client_required
@@ -244,6 +227,7 @@ def eliminar(id):
         return redirect(url_for('usuarios.ver_clientes'))
     flash('Usuario eliminado', 'success')
     return redirect(url_for('usuarios.ver_clientes'))
+
 
 @usuarios.route('enviar-promocion')
 @login_required

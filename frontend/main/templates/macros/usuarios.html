@@ -1,7 +1,7 @@
 {% macro usuario_datos(usuario) %}
 <div class="col-md-6 col-sm-1 border border-1">
   <div style="padding: 30px">
-    <h3>Datos Personales</h3>
+    <h3>Datos cliente</h3>
     <div class="d-flex">
       <div class"col-md-4">
         <div class="mb-3">
@@ -12,10 +12,6 @@
           <h5>Email</h5>
           <p>{{usuario.email}}</p>
         </div>
-        <!-- <div class="mb-3">
-          <h5>Contraseña</h5>
-          <p>{{usuario.password}}</p>
-        </div> -->
       </div>
       <div class="col-md-4"></div>
       <div class="col-md-4">
@@ -72,7 +68,7 @@
   <td>{{proveedor.apellido}}</td>
   <td>{{proveedor.email}}</td>
   <td>{{proveedor.telefono}}</td>
-  <td><a href="{{url_for('proveedores.ver', id=proveedor.id)}}" class="btn btn-primary">Editar</a></td>
+  <td><a href="{{url_for('usuarios.proveedor', id=proveedor.id)}}" class="btn btn-primary">Editar</a></td>
   <td>
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#proveedor{{proveedor.id}}">
       Eliminar
@@ -102,7 +98,7 @@
   <td>{{cliente.apellido}}</td>
   <td>{{cliente.email}}</td>
   <td>{{cliente.telefono}}</td>
-  <td><a href="#" class="btn btn-primary">Editar</a></td>
+  <td><a href="{{url_for('usuarios.ver_cliente', id=cliente.id)}}" class="btn btn-primary">Ver</a></td>
   <td>
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cliente{{cliente.id}}">
       Eliminar
@@ -128,37 +124,91 @@
 
 {% from 'macros/form_macros.html' import MostrarCampo, MostrarEnvio %}
 {% macro admin(usuario, formulario) %}
-      <form method="POST" action="{{url_for('usuarios.admin')}}">
-        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-        <div class="row mb-3">
-          <div class="col">
-            {{MostrarCampo(formulario.nombre, class="form-control", value="{{usuario.nombre}}")}}
-          </div>
-          <div class="col">
-            {{MostrarCampo(formulario.apellido, class="form-control")}}
+<form method="POST" action="{{url_for('usuarios.admin')}}">
+  <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+  <div class="row mb-3">
+    <div class="col">
+      {{MostrarCampo(formulario.nombre, class="form-control", value="{{usuario.nombre}}")}}
+    </div>
+    <div class="col">
+      {{MostrarCampo(formulario.apellido, class="form-control")}}
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col">
+      {{MostrarCampo(formulario.email, class="form-control")}}
+    </div>
+    <div class="col">
+      {{MostrarCampo(formulario.telefono, class="form-control")}}
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col">
+      {{MostrarCampo(formulario.password, class="form-control")}}
+    </div>
+    <div class="col">
+      {{MostrarCampo(formulario.confirmar, class="form-control")}}
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col d-flex justify-content-end mt-4">
+      {{MostrarEnvio(formulario.envio, class="btn btn-primary m-1")}}
+      <button class="btn btn-primary m-1" type="button" onclick="history.back()">Volver</button>
+    </div>
+  </div>
+</form>
+{% endmacro %}
+
+{% macro perfil(usuario, formulario) %}
+<input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+<div class="row mb-3">
+  <div class="col">
+    {{MostrarCampo(formulario.nombre, class="form-control", value=usuario.nombre)}}
+  </div>
+  <div class="col">
+    {{MostrarCampo(formulario.apellido, class="form-control", value=usuario.apellido)}}
+  </div>
+</div>
+<div class="row mb-3">
+  <div class="col">
+    {{MostrarCampo(formulario.email, class="form-control", value=usuario.email)}}
+  </div>
+  <div class="col">
+    {{MostrarCampo(formulario.telefono, class="form-control", value=usuario.telefono)}}
+  </div>
+</div>
+<div class="row mb-3">
+</div>
+<div class="row mb-3">
+  <div class="col d-flex justify-content-end mt-4">
+    <div class="col-md-2 col-sm-1 d-flex justify-content-end">
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Guardar cambios
+      </button>
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Guardar cambios</h5>
+            </div>
+            <div class="modal-body">
+              Ingrese su contraseña para modificar su perfil.
+              </br>
+              </br>
+              {{MostrarCampo(formulario.password, class="form-control", value=usuario.password)}}
+            </div>
+            <div class="modal-footer">
+              {{MostrarEnvio(formulario.envio, class="btn btn-primary m-1")}}
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
           </div>
         </div>
-        <div class="row mb-3">
-          <div class="col">
-            {{MostrarCampo(formulario.email, class="form-control")}}
-          </div>
-          <div class="col">
-            {{MostrarCampo(formulario.telefono, class="form-control")}}
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col">
-            {{MostrarCampo(formulario.password, class="form-control")}}
-          </div>
-          <div class="col">
-            {{MostrarCampo(formulario.confirmar, class="form-control")}}
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col d-flex justify-content-end mt-4">
-            {{MostrarEnvio(formulario.envio, class="btn btn-primary m-1")}}
-            <button class="btn btn-primary m-1" type="button" onclick="history.back()">Volver</button>
-          </div>
-        </div>
-      </form>
+      </div>
+    </div>
+    {#{MostrarEnvio(formulario.envio, class="btn btn-primary m-1")}#}
+    <button class="btn btn-primary m-1" type="button" onclick="history.back()">Volver</button>
+  </div>
+</div>
 {% endmacro %}

@@ -9,5 +9,7 @@
 <div class="row">
   </br>
 </div>
-{{ macro.eliminar_cuenta(usuario) }}
+{% if current_user.role == 'cliente' %}
+  {{ macro.eliminar_cuenta(usuario) }}
+{% endif %}
 {% endblock %}

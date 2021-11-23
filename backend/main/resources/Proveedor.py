@@ -30,9 +30,10 @@ class Proveedor(Resource):
     @admin_provider_required
     def put(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
-        proveedorid = get_jwt_identity()
-        if proveedor.id == proveedorid and proveedor.role == 'proveedor':
-            if proveedor.validate_pass(request.get_json().get("contra")):
+        userid = get_jwt_identity()
+        user = db.session.query(UsuarioModel).get_or_404(userid)
+        if proveedor.id == userid or user.role == 'admin' and proveedor.role == 'proveedor':
+            if user.validate_pass(request.get_json().get("contra")):
                 data = request.get_json().items()
                 for key, value in data:
                     setattr(proveedor, key, value)

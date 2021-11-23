@@ -7,11 +7,9 @@
   <div class="col-md-10 col-sm-1 border border-1">
     <div style="padding: 30px">
       <h3>Mi cuenta</h3>
-      {% if current_user.role == 'admin' %}
-      <form method="POST" action="{{url_for('usuarios.admin', id=usuario.id)}}">
-      {% elif current_user.role == 'cliente' %}
-      <form method="POST" action="{{url_for('usuarios.cliente', id=usuario.id)}}">
-      {% endif %}
+      {% if current_user.role == 'admin' or current_user.role == 'proveedor' %}
+      <form method="POST" action="{{url_for('usuarios.proveedor', id=usuario.id)}}">
+      {{formulario.csrf_token()}}
       {{ macro.perfil(usuario, formulario)}}
       </form>
     </div>
